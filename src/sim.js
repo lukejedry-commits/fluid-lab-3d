@@ -20,6 +20,7 @@ class Sim {
     this.rho = o.rho ?? 1000; this.g = o.g ?? 9.81;
     this.frame = o.frame ?? 1 / 60; this.maxSub = o.maxSub ?? 8; this.cfl = o.cfl ?? 1;
     this.tol = o.tol ?? 1e-8; this.jitter = o.jitter ?? 0.1; this.rand = mulberry32(o.seed ?? 12345);
+    this.subMul = o.subMul ?? 1; // T2 half-dt info row: multiply the substep count (cap applies before)
     this.sepFrac = o.sepFrac ?? 0.5; this.sepIters = o.sepIters ?? 1;
     this.s = this.h / 2;                    // particle spacing (2x2x2 per cell)
     this.pr = 0.25 * this.s;                // wall clearance radius
@@ -226,6 +227,9 @@ class Sim {
   extrapolate() {
     for (let a = 0; a < 3; a++) {
       const V = this.vel[a], ok = this.valid[a], D = this.D[a], P = this.P[a], st = [1, P[0], P[0] * P[1]];
+      // PHYSICS_SPEC 7.4 (NM): Jacobi layers. Each layer reads only the known set from BEFORE the
+      // layer (ok snapshot + src copy): layer 1 sees original fluid faces (and walls), layer 2 sees
+      // those plus layer 1, never a value filled earlier in the same pass -> order-independent.
       for (let layer = 0; layer < 2; layer++) {
         const nv = Uint8Array.from(ok), src = Float64Array.from(V);
         for (let k = 0; k < D[2]; k++) for (let j = 0; j < D[1]; j++) for (let i = 0; i < D[0]; i++) {
@@ -345,10 +349,10 @@ class Sim {
   /** advance one frame: n = min(maxSub, ceil(frame/dt_cfl)) equal substeps */
   advanceFrame() {
     const dtc = this.cflDt(), need = Math.max(1, Math.ceil(this.frame / dtc - 1e-12)), n = Math.min(this.maxSub, need);
-    const dt = this.frame / n, cflUsed = dt * (this.maxSpeed() + Math.sqrt(this.g * this.h)) / this.h;
+    const dt = this.frame / (n * this.subMul), cflUsed = dt * (this.maxSpeed() + Math.sqrt(this.g * this.h)) / this.h;
     const capFlag = need > this.maxSub && cflUsed > 1;
     this.frameLog = this.frameLog || []; this.frameLog.push({ frame: this.frameLog.length + 1, t0: this.t, nSub: n, cflUsed, capBinds: capFlag });
-    const recs = []; for (let s = 0; s < n; s++) recs.push(this.substep(dt, n)); return recs;
+    const recs = []; for (let s = 0; s < n * this.subMul; s++) recs.push(this.substep(dt, n * this.subMul)); return recs;
   }
   substep(dt, nSub) {
     const st = {}; const tot = () => { const e = this.particleEnergy(); return e.ke + e.pe; };
