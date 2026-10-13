@@ -12,7 +12,7 @@ const { pcgSolve } = require('./pcg');
 
 function mulberry32(a) { return function () { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 
-const STAGES = ['p2g', 'ghost', 'gravity', 'pressure', 'g2p', 'advect', 'pushout'];
+const STAGES = ['p2g', 'ghost', 'gravity', 'pressure', 'g2p', 'extension', 'advect', 'pushout'];
 
 class Sim {
   constructor(o) {
@@ -119,9 +119,9 @@ class Sim {
       const st = [1, P[0], P[0] * P[1]];
       for (let k = 0; k < D[2]; k++) for (let j = 0; j < D[1]; j++) for (let i = 0; i < D[0]; i++) {
         const f = this.idx(a, i, j, k);
-        if (!FM.isGhost(M[f], this.mRef)) continue;
+        if (!FM.isGhost(M[f])) continue;
         let sm = 0, sv = 0;
-        for (let b = 0; b < 3; b++) for (const sg of [-1, 1]) { const g = f + sg * st[b]; if (!FM.isGhost(M[g], this.mRef) && M[g] > 0) { sm += M[g]; sv += M[g] * src[g]; } }
+        for (let b = 0; b < 3; b++) for (const sg of [-1, 1]) { const g = f + sg * st[b]; if (FM.carriesFluid(M[g])) { sm += M[g]; sv += M[g] * src[g]; } }
         if (sm > 0) { V[f] = sv / sm; nG++; }
       }
     }
@@ -143,11 +143,31 @@ class Sim {
   }
   /** ghost-fluid fraction: distance from fluid cell centre to surface / h = f_c - 1/2,
    *  f_c = min(1, particles/8) the cell fill fraction. Clamped to [THETA_MIN, 1]. */
-  theta(cnt) { const f = Math.min(1, cnt / 8); return Math.max(0.05, Math.min(1, f - 0.5)); }
+  /** PHYSICS_SPEC sec. 7 item 2. A surface cell (has an in-box neighbour with no particles)
+   *  with fill f < 1/2 counts as air; every other cell with particles is fluid. */
+  classify(cnt) {
+    const { nx, ny, nz } = this, fluid = new Uint8Array(this.nCells);
+    for (let k = 0; k < nz; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
+      const c = i + nx * (j + ny * k); if (!(cnt[c] > 0)) continue;
+      const f = Math.min(1, cnt[c] / 8);
+      if (f < 0.5) {
+        const surf = (i > 0 && !cnt[c - 1]) || (i < nx - 1 && !cnt[c + 1]) || (j > 0 && !cnt[c - nx]) || (j < ny - 1 && !cnt[c + nx]) || (k > 0 && !cnt[c - nx * ny]) || (k < nz - 1 && !cnt[c + nx * ny]);
+        if (surf) continue;
+      }
+      fluid[c] = 1;
+    }
+    this.fluid = fluid; return fluid;
+  }
+  /** theta for the face between fluid cell c and non-fluid cell a:
+   *  a holds particles (f_a < 1/2 surface cell) -> theta = f_a + 1/2; else theta = f_c - 1/2. Clamp [0.05,1]. */
+  thetaOf(cnt, c, a) {
+    const t = cnt[a] > 0 ? Math.min(1, cnt[a] / 8) + 0.5 : Math.min(1, cnt[c] / 8) - 0.5;
+    return Math.max(0.05, Math.min(1, t));
+  }
   project(dt) {
-    const { nx, ny, nz } = this, cnt = this.markCells();
+    const { nx, ny, nz } = this, cnt = this.markCells(), FL = this.classify(cnt);
     const uid = new Int32Array(this.nCells).fill(-1); const cells = [];
-    for (let c = 0; c < this.nCells; c++) if (cnt[c] > 0) { uid[c] = cells.length; cells.push(c); }
+    for (let c = 0; c < this.nCells; c++) if (FL[c]) { uid[c] = cells.length; cells.push(c); }
     const m = cells.length;
     const sys = { m, diag: new Float64Array(m), pX: new Int32Array(m).fill(-1), pY: new Int32Array(m).fill(-1), pZ: new Int32Array(m).fill(-1), cX: new Float64Array(m), cY: new Float64Array(m), cZ: new Float64Array(m) };
     const b = new Float64Array(m); const n = [nx, ny, nz]; const cs = [1, nx, nx * ny];
@@ -168,8 +188,8 @@ class Sim {
           const f = side ? fhi : flo, frac = FM.faceFraction(this.mass[a][f]);
           if (frac === 0) continue;
           const cn = c + (side ? 1 : -1) * cs[a];
-          if (cnt[cn] > 0) { d += frac; if (side) { const arrP = a === 0 ? sys.pX : a === 1 ? sys.pY : sys.pZ; const arrC = a === 0 ? sys.cX : a === 1 ? sys.cY : sys.cZ; arrP[q] = uid[cn]; arrC[q] = -frac; } }
-          else d += frac / this.theta(cnt[c]);
+          if (FL[cn]) { d += frac; if (side) { const arrP = a === 0 ? sys.pX : a === 1 ? sys.pY : sys.pZ; const arrC = a === 0 ? sys.cX : a === 1 ? sys.cY : sys.cZ; arrP[q] = uid[cn]; arrC[q] = -frac; } }
+          else d += frac / this.thetaOf(cnt, c, cn);
         }
       }
       sys.diag[q] = d; b[q] = -div;
@@ -183,12 +203,12 @@ class Sim {
         const f = this.idx(a, i, j, k), ii = [i, j, k];
         if (ii[a] === 0 || ii[a] === n[a]) { valid[a][f] = 1; continue; } // wall
         const hi = i + nx * (j + ny * k), lo = hi - cs[a];
-        const fh = cnt[hi] > 0, fl = cnt[lo] > 0;
+        const fh = FL[hi] === 1, fl = FL[lo] === 1;
         if (!fh && !fl) continue;
         valid[a][f] = 1;
         if (FM.faceFraction(M[f]) === 0) { V[f] = 0; continue; }
-        const pH = fh ? ph[uid[hi]] : ph[uid[lo]] * (this.theta(cnt[lo]) - 1) / this.theta(cnt[lo]);
-        const pL = fl ? ph[uid[lo]] : ph[uid[hi]] * (this.theta(cnt[hi]) - 1) / this.theta(cnt[hi]);
+        const pH = fh ? ph[uid[hi]] : ph[uid[lo]] * (this.thetaOf(cnt, lo, hi) - 1) / this.thetaOf(cnt, lo, hi);
+        const pL = fl ? ph[uid[lo]] : ph[uid[hi]] * (this.thetaOf(cnt, hi, lo) - 1) / this.thetaOf(cnt, hi, lo);
         V[f] -= pH - pL;
       } }
     // diagnostics: max |div u| after projection (1/s)
@@ -199,10 +219,10 @@ class Sim {
     // physical pressure per cell (Pa), NaN for non-fluid
     const pres = new Float64Array(this.nCells).fill(NaN); const sc = this.rho * this.h / dt;
     for (let q = 0; q < m; q++) pres[cells[q]] = ph[q] * sc;
-    this.lastP = pres; this.extrapolate();
+    this.lastP = pres;
     return { iters: r.iters, relRes: r.relRes, trueRelRes: r.trueRelRes, bNorm: r.bNorm, maxDivDt: maxDiv * dt, fluidCells: m };
   }
-  /** fill faces not adjacent to fluid (2 layers) + padding, so G2P never reads unprojected data */
+  /** velocity extension: fill faces not adjacent to fluid (2 layers, 26-connected) + padding, so G2P never reads unprojected data */
   extrapolate() {
     for (let a = 0; a < 3; a++) {
       const V = this.vel[a], ok = this.valid[a], D = this.D[a], P = this.P[a], st = [1, P[0], P[0] * P[1]];
@@ -210,7 +230,12 @@ class Sim {
         const nv = Uint8Array.from(ok), src = Float64Array.from(V);
         for (let k = 0; k < D[2]; k++) for (let j = 0; j < D[1]; j++) for (let i = 0; i < D[0]; i++) {
           const f = this.idx(a, i, j, k); if (ok[f]) continue; let s = 0, c = 0;
-          for (let b = 0; b < 3; b++) for (const sg of [-1, 1]) { const g = f + sg * st[b]; if (ok[g]) { s += src[g]; c++; } }
+          // 26-connected layers: in 3D the 1.5-cell quadratic stencil of a corner particle
+          // reaches faces 3 axis-steps from the nearest fluid face but only 1-2 diagonal steps.
+          for (let dz = -1; dz <= 1; dz++) for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+            if (!dx && !dy && !dz) continue;
+            const ii = i + dx, jj = j + dy, kk = k + dz; if (ii < 0 || jj < 0 || kk < 0 || ii >= D[0] || jj >= D[1] || kk >= D[2]) continue;
+            const g = f + dx * st[0] + dy * st[1] + dz * st[2]; if (ok[g]) { s += src[g]; c++; } }
           if (c) { V[f] = s / c; nv[f] = 1; }
         }
         ok.set(nv);
@@ -223,6 +248,22 @@ class Sim {
           V[this.idx(a, ...ia)] = b === a ? 0 : V[this.idx(a, ...ib1)]; } }
     }
   }
+  /** particle KE that G2P would produce from the current grid (no state change) */
+  g2pKE() {
+    const h = this.h, ih = 1 / h, W = new Float64Array(9), B = [0, 0, 0]; let ke = 0;
+    for (let p = 0; p < this.count; p++) for (let a = 0; a < 3; a++) {
+      const V = this.vel[a], P = this.P[a], off = [a === 0 ? 0 : 0.5, a === 1 ? 0 : 0.5, a === 2 ? 0 : 0.5];
+      for (let b = 0; b < 3; b++) { const f = this.x[3 * p + b] * ih - off[b]; const base = Math.floor(f - 0.5); B[b] = base; Sim.w3(f - base, W, 3 * b); }
+      let v = 0;
+      for (let kk = 0; kk < 3; kk++) { const k = Math.min(Math.max(B[2] + kk, -1), P[2] - 2);
+        for (let jj = 0; jj < 3; jj++) { const j = Math.min(Math.max(B[1] + jj, -1), P[1] - 2); const wjk = W[3 + jj] * W[6 + kk];
+          for (let ii = 0; ii < 3; ii++) { const i = Math.min(Math.max(B[0] + ii, -1), P[0] - 2); v += W[ii] * wjk * V[(i + 1) + P[0] * ((j + 1) + P[1] * (k + 1))]; } } }
+      ke += v * v;
+    }
+    return 0.5 * this.mp * ke;
+  }
+  /** zero every face not adjacent to fluid (and the padding): the "no extension" grid */
+  zeroInvalid() { for (let a = 0; a < 3; a++) { const V = this.vel[a], ok = this.valid[a]; for (let f = 0; f < V.length; f++) if (!ok[f]) V[f] = 0; } }
   // ---------------- G2P (APIC) ----------------
   g2p() {
     const h = this.h, ih = 1 / h, W = new Float64Array(9), B = [0, 0, 0], Dinv = 4 / (h * h);
@@ -303,8 +344,11 @@ class Sim {
   cflDt() { return this.cfl * this.h / (this.maxSpeed() + Math.sqrt(this.g * this.h)); }
   /** advance one frame: n = min(maxSub, ceil(frame/dt_cfl)) equal substeps */
   advanceFrame() {
-    const n = Math.min(this.maxSub, Math.max(1, Math.ceil(this.frame / this.cflDt() - 1e-12)));
-    const recs = []; for (let s = 0; s < n; s++) recs.push(this.substep(this.frame / n, n)); return recs;
+    const dtc = this.cflDt(), need = Math.max(1, Math.ceil(this.frame / dtc - 1e-12)), n = Math.min(this.maxSub, need);
+    const dt = this.frame / n, cflUsed = dt * (this.maxSpeed() + Math.sqrt(this.g * this.h)) / this.h;
+    const capFlag = need > this.maxSub && cflUsed > 1;
+    this.frameLog = this.frameLog || []; this.frameLog.push({ frame: this.frameLog.length + 1, t0: this.t, nSub: n, cflUsed, capBinds: capFlag });
+    const recs = []; for (let s = 0; s < n; s++) recs.push(this.substep(dt, n)); return recs;
   }
   substep(dt, nSub) {
     const st = {}; const tot = () => { const e = this.particleEnergy(); return e.ke + e.pe; };
@@ -313,15 +357,23 @@ class Sim {
     const nGhost = this.ghostFill(); let g2 = this.gridKE(); st.ghost = g2 - g; g = g2;
     this.applyGravity(dt); g2 = this.gridKE(); st.gravity = g2 - g; g = g2;
     const pr = this.project(dt); g2 = this.gridKE(); st.pressure = g2 - g; g = g2;
-    this.g2p(); let e = tot(); st.g2p = e - (g + pe0);
+    // velocity extension as its own stage, measured on what the particles pick up in G2P:
+    //   g2p       = KE_p(G2P from grid with non-fluid faces zeroed) - grid energy
+    //   extension = KE_p(G2P from extended grid) - KE_p(G2P from zeroed grid)
+    this.zeroInvalid(); const keNoExt = this.g2pKE();
+    this.extrapolate();
+    this.g2p(); let e = tot(); st.g2p = keNoExt + pe0 - (g + pe0); st.extension = e - (keNoExt + pe0);
     this.advect(dt); let e2 = tot(); st.advect = e2 - e; e = e2;
     const nWall = this.wallStrip(); const nSep = this.separate(); e2 = tot(); st.pushout = e2 - e;
     for (const k of STAGES) this.stageCum[k] += st[k];
+    const Pz0 = this._lastPz ?? this.momentum().Pz;
     this.t += dt; this.step++;
     const pe = this.particleEnergy();
     const rec = { step: this.step, t: this.t, dt, nSub, cflDt: this.cflDt(), E: pe.ke + pe.pe, KE: pe.ke, PE: pe.pe, stage: st, stageCum: { ...this.stageCum },
       pcgIters: pr.iters, pcgRelRes: pr.relRes, pcgTrueRelRes: pr.trueRelRes, rhsNorm: pr.bNorm, maxDivDt: pr.maxDivDt, fluidCells: pr.fluidCells,
       nGhost, nWall, nSep, maxU: this.maxSpeed(), mass: this.count * this.mp, ...this.momentum() };
+    rec.dPzdt = (rec.Pz - Pz0) / dt; this._lastPz = rec.Pz;
+    if (this.onSubstep) this.onSubstep(this, rec);
     this.log.push(rec); return rec;
   }
   momentum() {

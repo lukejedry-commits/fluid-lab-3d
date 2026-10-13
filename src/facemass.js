@@ -11,10 +11,13 @@
  *                       Unit density on every fluid-carrying face (see devlog: the 2D
  *                       rho0/max(rho_f,0.1 rho0) scale makes hydrostatics depend on
  *                       particle jitter, so it was not carried over).
- *  isGhost(m_f, mRef) : 0 < m_f < GHOST_CUTOFF * mRef  -> mass-weighted ghost fill.
+ *  isGhost(m_f)       : m_f == 0 -> mass-weighted ghost fill from fluid-carrying
+ *                       neighbours (PHYSICS_SPEC sec. 7 item 1: a fluid face below the 5%
+ *                       cutoff keeps its own transferred velocity). GHOST_CUTOFF is kept as
+ *                       the documented sec. 7 item 3 constant but no longer gates the fill.
  */
 const GHOST_CUTOFF = 0.05; // fraction of a full face mass (rho h^3)
 function carriesFluid(mf) { return mf > 0; }
 function faceFraction(mf) { return mf > 0 ? 1 : 0; }
-function isGhost(mf, mRef) { return mf > 0 && mf < GHOST_CUTOFF * mRef; }
+function isGhost(mf) { return mf === 0; }
 module.exports = { GHOST_CUTOFF, carriesFluid, faceFraction, isGhost };

@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 STAGES = ["p2g", "ghost", "gravity", "pressure", "g2p", "advect", "pushout"]
 src, out, title = sys.argv[1], sys.argv[2], sys.argv[3]
 rows = list(csv.DictReader(open(src)))
+STAGES = [k[2:] for k in rows[0].keys() if k.startswith("d_")]  # from the log (includes "extension" when present)
 t = [float(r["t"]) for r in rows]
 E = [float(r["E"]) for r in rows]; E0 = E[0] - sum(float(rows[0]["d_" + s]) for s in STAGES)
 fig, ax = plt.subplots(3, 1, figsize=(9, 11), sharex=True)
