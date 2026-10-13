@@ -46,7 +46,7 @@ All checks measured in 64-bit before any float32 store. Outputs go to step-named
 - 2026-10-13 (NM, new rows): pressure-stage energy change <= 0 at every step (T3); velocity extension gets its own energy stage; CFL used is logged per frame, and any frame where the 8-substep cap binds with CFL > 1 is flagged.
 - 2026-10-13 (T1b, required in Gate 1, frozen before any run): pool with the surface partway through a cell, H fixed in physical units, N = 8, 16, 32, 64. Reference depth H_eff = (particle count x particle volume)/(L W), reported next to nominal H. Graded after 10 s of settling:
   - T1b.u: max|u| < 1e-3 sqrt(g H_eff).
-  - T1b.floor (amended 2026-10-13, NM): momentum balance (floor force + dP_z/dt) vs M g, with dP_z/dt from the same step's 64-bit momentum change: rel. error <= 1e-6 at every graded step and every N. Raw floor force is reported, not graded.
+  - T1b.floor (amended 2026-10-13, NM): momentum balance (floor force - dP_z/dt) vs M g, z up (sign corrected 2026-10-13), with dP_z/dt from the same step's 64-bit momentum change: rel. error <= 1e-6 at every graded step and every N. Raw floor force is reported, not graded.
   - T1b.wall: side-wall force vs 1/2 rho g H_eff^2 x width: <= 1% at N = 64, and envelope order (max error over each consecutive pair) >= 0.8 over the four grids, unless every error is under the 1e-10 floor.
   - T1b.p: pressure vs rho g (H_eff - z) in interior cells below the surface cell row: <= 1% at N = 64.
   - T1b.E: E(t) never rises above E0 by more than 1e-6 |E0|; any rise is a FAIL, logged with its stage.
