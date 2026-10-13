@@ -64,3 +64,19 @@ T1 and T2 must pass before any other test runs. The rest follow: T3, T4, T5, C1,
 - PCG iteration counts.
 - The maximum of |∇·u| after projection.
 - Total mass and volume.
+
+## 7. Implementation choices accepted at Gate 1 (2026-10-13, Physics and NM review)
+1. **Fluid faces.** A face carries fluid if m_f > 0. That one rule decides where gravity applies and which faces enter the pressure solve. Ghost fill touches only faces with m_f = 0. A fluid face below the 5% cutoff keeps its own transferred velocity.
+2. **Surface offset.** θ is the distance from the last fluid cell centre to the surface, divided by h.
+   - In a surface cell with fill fraction f ≥ ½, the cell counts as fluid and θ = f − ½.
+   - In a surface cell with f < ½, the cell counts as air, and the fluid cell below gets θ = f + ½.
+   - θ is clamped to [0.05, 1]. With the surface exactly on a face (f = 1), θ = ½ and p_ghost = −p, which matches family C.
+3. **Ghost-fill cutoff.** 5% of a full face mass, with its own C3 regression test.
+4. **Velocity extension.** Two layers, logged as its **own energy stage** and measured on what the particles pick up in grid to particle.
+5. **Family D.** Run at N = 16 to 256. Report the maximum over interior points alongside the graded centre point.
+6. **Substeps.** Each 1/60 s frame is split evenly, at most 8. The CFL number used is logged every frame, and frames where the cap binds with CFL > 1 are flagged.
+7. **Precision.** Particles are stored in 64-bit.
+
+**Units.** The code runs at ρ = 1. Every force check is quoted against ρgH·LW in those same units.
+
+**T1b (surface off a grid face).** Same as T1, but with H = 10.4h at every resolution. This case exercises θ and the ghost-fluid correction, which is where the 2D excess of about 1% came from. It is graded on the frozen size limit and order gate. T1 itself, with the surface on a face, is graded as the exact equilibrium under Validation's 1e−10 floor.

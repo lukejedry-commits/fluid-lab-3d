@@ -41,4 +41,13 @@ All checks measured in 64-bit before any float32 store. Outputs go to step-named
 - 2026-10-13 (NM): P.A/B/C solve at tolerance 1e-12 (mode tests only; production stays 1e-8); the 1e-7 match is unchanged. Reason: error <= cond(~1.7e3 at N=64) x tolerance.
 - 2026-10-13 (NM): P.res iteration jump is measured against the median of the previous 20 steps (the first 20 steps are logged, not graded).
 - 2026-10-13: T1/T3 energy reads (E(t) - E0)/|E0| <= 1e-6 (same as before, wording only).
+- 2026-10-13 (T1 force order): the order is fitted only if the force error e is above the floor 1e-10 x rho g H L W (or 1e-10 x the side-wall reference) at every resolution. If e stays at or below that floor at every resolution, the row passes as an exact discrete equilibrium, and the floor itself becomes a regression assert. The 1% size limit is unchanged. Measured: 4e-13 and 1.2e-12 (floor, wall).
+- 2026-10-13 (P.D): unchanged; FAIL stands until the N=256 run. Max order over interior points is reported alongside, not graded in place of the centre point.
+- 2026-10-13 (NM, new rows): pressure-stage energy change <= 0 at every step (T3); velocity extension gets its own energy stage; CFL used is logged per frame, and any frame where the 8-substep cap binds with CFL > 1 is flagged.
+- 2026-10-13 (T1b, required in Gate 1, frozen before any run): pool with the surface partway through a cell, H fixed in physical units, N = 8, 16, 32, 64. Reference depth H_eff = (particle count x particle volume)/(L W), reported next to nominal H. Graded after 10 s of settling:
+  - T1b.u: max|u| < 1e-3 sqrt(g H_eff).
+  - T1b.floor: floor force vs total weight M g (exact in steady state for any surface treatment): rel. error <= 1e-6 at every N.
+  - T1b.wall: side-wall force vs 1/2 rho g H_eff^2 x width: <= 1% at N = 64, and envelope order (max error over each consecutive pair) >= 0.8 over the four grids, unless every error is under the 1e-10 floor.
+  - T1b.p: pressure vs rho g (H_eff - z) in interior cells below the surface cell row: <= 1% at N = 64.
+  - T1b.E: E(t) never rises above E0 by more than 1e-6 |E0|; any rise is a FAIL, logged with its stage.
 No gate loosened.
