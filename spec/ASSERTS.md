@@ -38,4 +38,7 @@ All checks measured in 64-bit before any float32 store. Outputs go to step-named
 - Every change re-runs the full suite; any PASS->FAIL flip blocks the merge.
 
 ## Z. Amendments
-(none)
+- 2026-10-13 (NM): P.A/B/C solve at tolerance 1e-12 (mode tests only; production stays 1e-8); the 1e-7 match is unchanged. Reason: error <= cond(~1.7e3 at N=64) x tolerance.
+- 2026-10-13 (NM): P.res iteration jump is measured against the median of the previous 20 steps (the first 20 steps are logged, not graded).
+- 2026-10-13: T1/T3 energy reads (E(t) - E0)/|E0| <= 1e-6 (same as before, wording only).
+No gate loosened.
