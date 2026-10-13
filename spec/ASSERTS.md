@@ -50,4 +50,5 @@ All checks measured in 64-bit before any float32 store. Outputs go to step-named
   - T1b.wall: side-wall force vs 1/2 rho g H_eff^2 x width: <= 1% at N = 64, and envelope order (max error over each consecutive pair) >= 0.8 over the four grids, unless every error is under the 1e-10 floor.
   - T1b.p: pressure vs rho g (H_eff - z) in interior cells below the surface cell row: <= 1% at N = 64.
   - T1b.E: E(t) never rises above E0 by more than 1e-6 |E0|; any rise is a FAIL, logged with its stage.
+- 2026-10-13 (gate clarifications after Gate 1 handoff): (a) T1b.wall is graded as the integral of the piecewise-linear pressure up to the ghost-fluid surface z_c + theta h; that surface height is reported next to H_eff at every N. The plain cell-sum is info only. (b) Every energy limit uses potential energy measured from the floor, z = 0, so E0 = K0 + M g z_com,0; the datum is written in each report header.
 No gate loosened.
