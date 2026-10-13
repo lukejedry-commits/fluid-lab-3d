@@ -1,0 +1,333 @@
+'use strict';
+/**
+ * Fluid Lab 3D v1 (CPU): APIC/MAC free-surface liquid in an open box.
+ * Update order per substep (PHYSICS_SPEC sec. 2):
+ *  P2G (APIC, quadratic B-spline) -> ghost fill (mass-weighted) -> gravity ->
+ *  pressure (PCG/MIC(0), walls u.n=0, free surface p=0 ghost-fluid) -> G2P (APIC) ->
+ *  RK2 advection -> push-out (wall strip + equal-and-opposite separation clip).
+ * All grid data, sums and diagnostics are Float64.
+ */
+const FM = require('./facemass');
+const { pcgSolve } = require('./pcg');
+
+function mulberry32(a) { return function () { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+
+const STAGES = ['p2g', 'ghost', 'gravity', 'pressure', 'g2p', 'advect', 'pushout'];
+
+class Sim {
+  constructor(o) {
+    this.nx = o.nx; this.ny = o.ny; this.nz = o.nz; this.h = o.h;
+    this.rho = o.rho ?? 1000; this.g = o.g ?? 9.81;
+    this.frame = o.frame ?? 1 / 60; this.maxSub = o.maxSub ?? 8; this.cfl = o.cfl ?? 1;
+    this.tol = o.tol ?? 1e-8; this.jitter = o.jitter ?? 0.1; this.rand = mulberry32(o.seed ?? 12345);
+    this.sepFrac = o.sepFrac ?? 0.5; this.sepIters = o.sepIters ?? 1;
+    this.s = this.h / 2;                    // particle spacing (2x2x2 per cell)
+    this.pr = 0.25 * this.s;                // wall clearance radius
+    this.mp = this.rho * this.h ** 3 / 8;   // particle mass
+    this.mRef = this.rho * this.h ** 3;     // full face mass
+    this.L = [this.nx * this.h, this.ny * this.h, this.nz * this.h];
+    const n = [this.nx, this.ny, this.nz];
+    this.D = []; this.P = []; this.vel = []; this.mass = []; this.valid = [];
+    for (let a = 0; a < 3; a++) {
+      const D = n.map((v, b) => v + (a === b ? 1 : 0));
+      const P = D.map((v) => v + 2);
+      this.D.push(D); this.P.push(P);
+      const sz = P[0] * P[1] * P[2];
+      this.vel.push(new Float64Array(sz)); this.mass.push(new Float64Array(sz)); this.valid.push(new Uint8Array(sz));
+    }
+    this.nCells = this.nx * this.ny * this.nz;
+    this.count = 0; this.cap = 0; this.alloc(1024);
+    this.t = 0; this.step = 0; this.log = []; this.lastP = null;
+    this.stageCum = Object.fromEntries(STAGES.map((k) => [k, 0]));
+  }
+  alloc(cap) {
+    const grow = (old, k) => { const a = new Float64Array(cap * k); if (old) a.set(old); return a; };
+    this.x = grow(this.x, 3); this.v = grow(this.v, 3); this.C = grow(this.C, 9); this.cap = cap;
+  }
+  idx(a, i, j, k) { const P = this.P[a]; return (i + 1) + P[0] * ((j + 1) + P[1] * (k + 1)); }
+  addParticle(x, y, z, vx = 0, vy = 0, vz = 0) {
+    if (this.count >= this.cap) this.alloc(this.cap * 2);
+    const i = this.count++;
+    this.x[3 * i] = x; this.x[3 * i + 1] = y; this.x[3 * i + 2] = z;
+    this.v[3 * i] = vx; this.v[3 * i + 1] = vy; this.v[3 * i + 2] = vz;
+  }
+  /** seed 2x2x2 jittered particles in every cell of [i0,i1)x[j0,j1)x[k0,k1) */
+  seedBlock(i0, i1, j0, j1, k0, k1, vel = [0, 0, 0]) {
+    const h = this.h, J = this.jitter * this.s;
+    for (let k = k0; k < k1; k++) for (let j = j0; j < j1; j++) for (let i = i0; i < i1; i++)
+      for (let c = 0; c < 8; c++) {
+        const ox = (c & 1) + 0.5, oy = ((c >> 1) & 1) + 0.5, oz = ((c >> 2) & 1) + 0.5;
+        this.addParticle((i + ox / 2) * h + J * (2 * this.rand() - 1), (j + oy / 2) * h + J * (2 * this.rand() - 1),
+          (k + oz / 2) * h + J * (2 * this.rand() - 1), vel[0], vel[1], vel[2]);
+      }
+  }
+  // ---------------- energy (64-bit) ----------------
+  particleEnergy() {
+    let ke = 0, pe = 0; const { v, x, count } = this;
+    for (let i = 0; i < count; i++) { ke += v[3 * i] ** 2 + v[3 * i + 1] ** 2 + v[3 * i + 2] ** 2; pe += x[3 * i + 2]; }
+    return { ke: 0.5 * this.mp * ke, pe: this.mp * this.g * pe };
+  }
+  gridKE() {
+    let e = 0;
+    for (let a = 0; a < 3; a++) { const D = this.D[a], V = this.vel[a], M = this.mass[a];
+      for (let k = 0; k < D[2]; k++) for (let j = 0; j < D[1]; j++) for (let i = 0; i < D[0]; i++) { const f = this.idx(a, i, j, k); e += M[f] * V[f] * V[f]; } }
+    return 0.5 * e;
+  }
+  // ---------------- P2G ----------------
+  static w3(d, out, o) { out[o] = 0.5 * (1.5 - d) ** 2; out[o + 1] = 0.75 - (d - 1) ** 2; out[o + 2] = 0.5 * (d - 0.5) ** 2; }
+  p2g() {
+    const h = this.h, ih = 1 / h, mp = this.mp, W = new Float64Array(9), B = [0, 0, 0];
+    for (let a = 0; a < 3; a++) {
+      this.vel[a].fill(0); this.mass[a].fill(0);
+      const V = this.vel[a], M = this.mass[a], P = this.P[a];
+      const off = [a === 0 ? 0 : 0.5, a === 1 ? 0 : 0.5, a === 2 ? 0 : 0.5];
+      for (let p = 0; p < this.count; p++) {
+        for (let b = 0; b < 3; b++) { const f = this.x[3 * p + b] * ih - off[b]; const base = Math.floor(f - 0.5); B[b] = base; Sim.w3(f - base, W, 3 * b); }
+        const vp = this.v[3 * p + a], c0 = this.C[9 * p + 3 * a], c1 = this.C[9 * p + 3 * a + 1], c2 = this.C[9 * p + 3 * a + 2];
+        const xp = this.x[3 * p], yp = this.x[3 * p + 1], zp = this.x[3 * p + 2];
+        for (let kk = 0; kk < 3; kk++) { const k = B[2] + kk; if (k < -1 || k > P[2] - 2) continue; const dz = (k + off[2]) * h - zp;
+          for (let jj = 0; jj < 3; jj++) { const j = B[1] + jj; if (j < -1 || j > P[1] - 2) continue; const dy = (j + off[1]) * h - yp; const wjk = W[3 + jj] * W[6 + kk];
+            for (let ii = 0; ii < 3; ii++) { const i = B[0] + ii; if (i < -1 || i > P[0] - 2) continue; const dx = (i + off[0]) * h - xp;
+              const w = W[ii] * wjk * mp, f = (i + 1) + P[0] * ((j + 1) + P[1] * (k + 1));
+              M[f] += w; V[f] += w * (vp + c0 * dx + c1 * dy + c2 * dz); } } }
+      }
+      this.foldPad(a);
+      for (let f = 0; f < V.length; f++) V[f] = M[f] > 0 ? V[f] / M[f] : 0;
+    }
+  }
+  /** fold padding (outside-box) mass+momentum onto the image face inside the box (2D foldGhostFaces). */
+  foldPad(a) {
+    const V = this.vel[a], M = this.mass[a], D = this.D[a];
+    for (let b = 0; b < 3; b++) {
+      const r = [[-1, D[0]], [-1, D[1]], [-1, D[2]]];
+      for (let c = 0; c < b; c++) r[c] = [0, D[c] - 1];
+      const [o1, o2] = [0, 1, 2].filter((c) => c !== b);
+      for (let s1 = r[o1][0]; s1 <= r[o1][1]; s1++) for (let s2 = r[o2][0]; s2 <= r[o2][1]; s2++) {
+        for (const [from, to] of [[-1, 0], [D[b], D[b] - 1]]) {
+          const ia = [0, 0, 0], ib = [0, 0, 0]; ia[o1] = ib[o1] = s1; ia[o2] = ib[o2] = s2; ia[b] = from; ib[b] = to;
+          const fa = this.idx(a, ...ia), fb = this.idx(a, ...ib);
+          V[fb] += V[fa]; M[fb] += M[fa]; V[fa] = 0; M[fa] = 0;
+        }
+      }
+    }
+  }
+  // ---------------- ghost fill ----------------
+  ghostFill() {
+    let nG = 0;
+    for (let a = 0; a < 3; a++) {
+      const V = this.vel[a], M = this.mass[a], D = this.D[a], P = this.P[a], src = Float64Array.from(V);
+      const st = [1, P[0], P[0] * P[1]];
+      for (let k = 0; k < D[2]; k++) for (let j = 0; j < D[1]; j++) for (let i = 0; i < D[0]; i++) {
+        const f = this.idx(a, i, j, k);
+        if (!FM.isGhost(M[f], this.mRef)) continue;
+        let sm = 0, sv = 0;
+        for (let b = 0; b < 3; b++) for (const sg of [-1, 1]) { const g = f + sg * st[b]; if (!FM.isGhost(M[g], this.mRef) && M[g] > 0) { sm += M[g]; sv += M[g] * src[g]; } }
+        if (sm > 0) { V[f] = sv / sm; nG++; }
+      }
+    }
+    return nG;
+  }
+  // ---------------- gravity (same rule as the pressure faces) ----------------
+  applyGravity(dt) {
+    const V = this.vel[2], M = this.mass[2];
+    for (let f = 0; f < V.length; f++) if (FM.carriesFluid(M[f])) V[f] -= this.g * dt;
+  }
+  // ---------------- pressure ----------------
+  markCells() {
+    const cnt = new Int32Array(this.nCells), ih = 1 / this.h, { nx, ny, nz } = this;
+    for (let p = 0; p < this.count; p++) {
+      const i = Math.min(nx - 1, Math.max(0, Math.floor(this.x[3 * p] * ih))), j = Math.min(ny - 1, Math.max(0, Math.floor(this.x[3 * p + 1] * ih))), k = Math.min(nz - 1, Math.max(0, Math.floor(this.x[3 * p + 2] * ih)));
+      cnt[i + nx * (j + ny * k)]++;
+    }
+    this.cellCount = cnt; return cnt;
+  }
+  /** ghost-fluid fraction: distance from fluid cell centre to surface / h = f_c - 1/2,
+   *  f_c = min(1, particles/8) the cell fill fraction. Clamped to [THETA_MIN, 1]. */
+  theta(cnt) { const f = Math.min(1, cnt / 8); return Math.max(0.05, Math.min(1, f - 0.5)); }
+  project(dt) {
+    const { nx, ny, nz } = this, cnt = this.markCells();
+    const uid = new Int32Array(this.nCells).fill(-1); const cells = [];
+    for (let c = 0; c < this.nCells; c++) if (cnt[c] > 0) { uid[c] = cells.length; cells.push(c); }
+    const m = cells.length;
+    const sys = { m, diag: new Float64Array(m), pX: new Int32Array(m).fill(-1), pY: new Int32Array(m).fill(-1), pZ: new Int32Array(m).fill(-1), cX: new Float64Array(m), cY: new Float64Array(m), cZ: new Float64Array(m) };
+    const b = new Float64Array(m); const n = [nx, ny, nz]; const cs = [1, nx, nx * ny];
+    // walls: zero normal flow
+    for (let a = 0; a < 3; a++) { const D = this.D[a];
+      for (let s1 = 0; s1 < D[(a + 1) % 3]; s1++) for (let s2 = 0; s2 < D[(a + 2) % 3]; s2++) for (const e of [0, D[a] - 1]) {
+        const ii = [0, 0, 0]; ii[a] = e; ii[(a + 1) % 3] = s1; ii[(a + 2) % 3] = s2; this.vel[a][this.idx(a, ...ii)] = 0; } }
+    const faceOf = (a, i, j, k, side) => { const ii = [i, j, k]; ii[a] += side; return this.idx(a, ...ii); }; // side 0: low face, 1: high face
+    for (let q = 0; q < m; q++) {
+      const c = cells[q], i = c % nx, j = ((c / nx) | 0) % ny, k = (c / (nx * ny)) | 0, ijk = [i, j, k];
+      let d = 0, div = 0;
+      for (let a = 0; a < 3; a++) {
+        const flo = faceOf(a, i, j, k, 0), fhi = faceOf(a, i, j, k, 1);
+        div += this.vel[a][fhi] - this.vel[a][flo];
+        for (const side of [0, 1]) {
+          const nb = ijk[a] + (side ? 1 : -1);
+          if (nb < 0 || nb >= n[a]) continue; // wall: Neumann
+          const f = side ? fhi : flo, frac = FM.faceFraction(this.mass[a][f]);
+          if (frac === 0) continue;
+          const cn = c + (side ? 1 : -1) * cs[a];
+          if (cnt[cn] > 0) { d += frac; if (side) { const arrP = a === 0 ? sys.pX : a === 1 ? sys.pY : sys.pZ; const arrC = a === 0 ? sys.cX : a === 1 ? sys.cY : sys.cZ; arrP[q] = uid[cn]; arrC[q] = -frac; } }
+          else d += frac / this.theta(cnt[c]);
+        }
+      }
+      sys.diag[q] = d; b[q] = -div;
+    }
+    const r = pcgSolve(sys, b, { tol: this.tol });
+    const ph = r.p;
+    // velocity update with the same coefficients
+    const valid = this.valid; for (let a = 0; a < 3; a++) valid[a].fill(0);
+    for (let a = 0; a < 3; a++) { const D = this.D[a], V = this.vel[a], M = this.mass[a];
+      for (let k = 0; k < D[2]; k++) for (let j = 0; j < D[1]; j++) for (let i = 0; i < D[0]; i++) {
+        const f = this.idx(a, i, j, k), ii = [i, j, k];
+        if (ii[a] === 0 || ii[a] === n[a]) { valid[a][f] = 1; continue; } // wall
+        const hi = i + nx * (j + ny * k), lo = hi - cs[a];
+        const fh = cnt[hi] > 0, fl = cnt[lo] > 0;
+        if (!fh && !fl) continue;
+        valid[a][f] = 1;
+        if (FM.faceFraction(M[f]) === 0) { V[f] = 0; continue; }
+        const pH = fh ? ph[uid[hi]] : ph[uid[lo]] * (this.theta(cnt[lo]) - 1) / this.theta(cnt[lo]);
+        const pL = fl ? ph[uid[lo]] : ph[uid[hi]] * (this.theta(cnt[hi]) - 1) / this.theta(cnt[hi]);
+        V[f] -= pH - pL;
+      } }
+    // diagnostics: max |div u| after projection (1/s)
+    let maxDiv = 0;
+    for (let q = 0; q < m; q++) { const c = cells[q], i = c % nx, j = ((c / nx) | 0) % ny, k = (c / (nx * ny)) | 0; let dv = 0;
+      for (let a = 0; a < 3; a++) dv += this.vel[a][faceOf(a, i, j, k, 1)] - this.vel[a][faceOf(a, i, j, k, 0)];
+      maxDiv = Math.max(maxDiv, Math.abs(dv) / this.h); }
+    // physical pressure per cell (Pa), NaN for non-fluid
+    const pres = new Float64Array(this.nCells).fill(NaN); const sc = this.rho * this.h / dt;
+    for (let q = 0; q < m; q++) pres[cells[q]] = ph[q] * sc;
+    this.lastP = pres; this.extrapolate();
+    return { iters: r.iters, relRes: r.relRes, trueRelRes: r.trueRelRes, bNorm: r.bNorm, maxDivDt: maxDiv * dt, fluidCells: m };
+  }
+  /** fill faces not adjacent to fluid (2 layers) + padding, so G2P never reads unprojected data */
+  extrapolate() {
+    for (let a = 0; a < 3; a++) {
+      const V = this.vel[a], ok = this.valid[a], D = this.D[a], P = this.P[a], st = [1, P[0], P[0] * P[1]];
+      for (let layer = 0; layer < 2; layer++) {
+        const nv = Uint8Array.from(ok), src = Float64Array.from(V);
+        for (let k = 0; k < D[2]; k++) for (let j = 0; j < D[1]; j++) for (let i = 0; i < D[0]; i++) {
+          const f = this.idx(a, i, j, k); if (ok[f]) continue; let s = 0, c = 0;
+          for (let b = 0; b < 3; b++) for (const sg of [-1, 1]) { const g = f + sg * st[b]; if (ok[g]) { s += src[g]; c++; } }
+          if (c) { V[f] = s / c; nv[f] = 1; }
+        }
+        ok.set(nv);
+      }
+      // padding: tangential = copy (free-slip image), normal beyond wall = 0
+      for (let b = 0; b < 3; b++) { const r = [[-1, D[0]], [-1, D[1]], [-1, D[2]]]; const [o1, o2] = [0, 1, 2].filter((c) => c !== b);
+        for (let s1 = r[o1][0]; s1 <= r[o1][1]; s1++) for (let s2 = r[o2][0]; s2 <= r[o2][1]; s2++) for (const [pad, img] of [[-1, 0], [D[b], D[b] - 1]]) {
+          const ia = [0, 0, 0], ib = [0, 0, 0]; ia[o1] = ib[o1] = s1; ia[o2] = ib[o2] = s2; ia[b] = pad; ib[b] = img;
+          const ib1 = ib.map((v, c) => Math.min(Math.max(v, 0), D[c] - 1));
+          V[this.idx(a, ...ia)] = b === a ? 0 : V[this.idx(a, ...ib1)]; } }
+    }
+  }
+  // ---------------- G2P (APIC) ----------------
+  g2p() {
+    const h = this.h, ih = 1 / h, W = new Float64Array(9), B = [0, 0, 0], Dinv = 4 / (h * h);
+    for (let p = 0; p < this.count; p++) {
+      const xp = this.x[3 * p], yp = this.x[3 * p + 1], zp = this.x[3 * p + 2];
+      for (let a = 0; a < 3; a++) {
+        const V = this.vel[a], P = this.P[a], off = [a === 0 ? 0 : 0.5, a === 1 ? 0 : 0.5, a === 2 ? 0 : 0.5];
+        for (let b = 0; b < 3; b++) { const f = this.x[3 * p + b] * ih - off[b]; const base = Math.floor(f - 0.5); B[b] = base; Sim.w3(f - base, W, 3 * b); }
+        let v = 0, c0 = 0, c1 = 0, c2 = 0;
+        for (let kk = 0; kk < 3; kk++) { const k = Math.min(Math.max(B[2] + kk, -1), P[2] - 2); const dz = (B[2] + kk + off[2]) * h - zp;
+          for (let jj = 0; jj < 3; jj++) { const j = Math.min(Math.max(B[1] + jj, -1), P[1] - 2); const dy = (B[1] + jj + off[1]) * h - yp; const wjk = W[3 + jj] * W[6 + kk];
+            for (let ii = 0; ii < 3; ii++) { const i = Math.min(Math.max(B[0] + ii, -1), P[0] - 2); const dx = (B[0] + ii + off[0]) * h - xp;
+              const w = W[ii] * wjk, u = V[(i + 1) + P[0] * ((j + 1) + P[1] * (k + 1))];
+              v += w * u; c0 += w * u * dx; c1 += w * u * dy; c2 += w * u * dz; } } }
+        this.v[3 * p + a] = v; this.C[9 * p + 3 * a] = c0 * Dinv; this.C[9 * p + 3 * a + 1] = c1 * Dinv; this.C[9 * p + 3 * a + 2] = c2 * Dinv;
+      }
+    }
+  }
+  // ---------------- RK2 advection in the grid field (trilinear) ----------------
+  sample(a, x, y, z) {
+    const ih = 1 / this.h, V = this.vel[a], P = this.P[a], D = this.D[a];
+    const f = [x * ih - (a === 0 ? 0 : 0.5), y * ih - (a === 1 ? 0 : 0.5), z * ih - (a === 2 ? 0 : 0.5)];
+    const i0 = [0, 0, 0], t = [0, 0, 0];
+    for (let b = 0; b < 3; b++) { let q = Math.floor(f[b]); q = Math.min(Math.max(q, -1), D[b] - 1); i0[b] = q; t[b] = Math.min(Math.max(f[b] - q, 0), 1); }
+    let s = 0;
+    for (let c = 0; c < 8; c++) { const di = c & 1, dj = (c >> 1) & 1, dk = (c >> 2) & 1;
+      const w = (di ? t[0] : 1 - t[0]) * (dj ? t[1] : 1 - t[1]) * (dk ? t[2] : 1 - t[2]); if (w === 0) continue;
+      s += w * V[(i0[0] + di + 1) + P[0] * ((i0[1] + dj + 1) + P[1] * (i0[2] + dk + 1))]; }
+    return s;
+  }
+  advect(dt) {
+    for (let p = 0; p < this.count; p++) {
+      const x = this.x[3 * p], y = this.x[3 * p + 1], z = this.x[3 * p + 2];
+      const mx = x + 0.5 * dt * this.sample(0, x, y, z), my = y + 0.5 * dt * this.sample(1, x, y, z), mz = z + 0.5 * dt * this.sample(2, x, y, z);
+      this.x[3 * p] = x + dt * this.sample(0, mx, my, mz); this.x[3 * p + 1] = y + dt * this.sample(1, mx, my, mz); this.x[3 * p + 2] = z + dt * this.sample(2, mx, my, mz);
+    }
+  }
+  // ---------------- push-out ----------------
+  /** item 1: clamp to the box and strip the into-wall normal velocity (only the into-wall part). */
+  wallStrip() {
+    let n = 0;
+    for (let p = 0; p < this.count; p++) for (let b = 0; b < 3; b++) {
+      const lo = this.pr, hi = this.L[b] - this.pr, q = 3 * p + b;
+      if (this.x[q] < lo) { this.x[q] = lo; if (this.v[q] < 0) this.v[q] = 0; n++; }
+      else if (this.x[q] > hi) { this.x[q] = hi; if (this.v[q] > 0) this.v[q] = 0; n++; }
+    }
+    return n;
+  }
+  /** item 2: pair separation; one shared push d (i -= d, j += d), shrunk per axis to what BOTH
+   *  particles can move inside the box, so it stays exactly equal and opposite. */
+  separate() {
+    const minD = this.sepFrac * this.s, minD2 = minD * minD, X = this.x, n = this.count;
+    const hn = this.L.map((l) => Math.max(1, Math.floor(l / minD))), cs = this.L.map((l, b) => l / hn[b]);
+    const nC = hn[0] * hn[1] * hn[2], start = new Int32Array(nC + 1), cellOf = new Int32Array(n), ids = new Int32Array(n);
+    for (let p = 0; p < n; p++) { const c = [0, 1, 2].map((b) => Math.min(hn[b] - 1, Math.max(0, Math.floor(X[3 * p + b] / cs[b])))); cellOf[p] = c[0] + hn[0] * (c[1] + hn[1] * c[2]); start[cellOf[p]]++; }
+    let acc = 0; for (let c = 0; c < nC; c++) { acc += start[c]; start[c] = acc; } start[nC] = acc;
+    for (let p = 0; p < n; p++) ids[--start[cellOf[p]]] = p;
+    let pushes = 0; const lo = this.pr, his = this.L.map((l) => l - this.pr), d = [0, 0, 0];
+    for (let it = 0; it < this.sepIters; it++) for (let i = 0; i < n; i++) {
+      const c = cellOf[i], cx = c % hn[0], cy = ((c / hn[0]) | 0) % hn[1], cz = (c / (hn[0] * hn[1])) | 0;
+      for (let zz = Math.max(0, cz - 1); zz <= Math.min(hn[2] - 1, cz + 1); zz++) for (let yy = Math.max(0, cy - 1); yy <= Math.min(hn[1] - 1, cy + 1); yy++) for (let xx = Math.max(0, cx - 1); xx <= Math.min(hn[0] - 1, cx + 1); xx++) {
+        const cc = xx + hn[0] * (yy + hn[1] * zz);
+        for (let s = start[cc]; s < start[cc + 1]; s++) { const j = ids[s]; if (j <= i) continue;
+          let d2 = 0; for (let b = 0; b < 3; b++) { d[b] = X[3 * j + b] - X[3 * i + b]; d2 += d[b] * d[b]; }
+          if (d2 >= minD2) continue;
+          if (d2 < 1e-24) { d[0] = 0.5 * minD; d[1] = d[2] = 0; } else { const dd = Math.sqrt(d2), k = 0.5 * (minD - dd) / dd; for (let b = 0; b < 3; b++) d[b] *= k; }
+          for (let b = 0; b < 3; b++) { const xi = X[3 * i + b], xj = X[3 * j + b], hi = his[b];
+            if (d[b] > 0) { const li = xi - Math.min(xi, lo), lj = Math.max(xj, hi) - xj; d[b] = Math.min(d[b], li, lj); }
+            else if (d[b] < 0) { const li = Math.max(xi, hi) - xi, lj = xj - Math.min(xj, lo); d[b] = -Math.min(-d[b], li, lj); }
+            X[3 * i + b] -= d[b]; X[3 * j + b] += d[b]; }
+          pushes++; }
+      }
+    }
+    return pushes;
+  }
+  // ---------------- step ----------------
+  maxSpeed() { let m = 0; for (let p = 0; p < this.count; p++) m = Math.max(m, Math.hypot(this.v[3 * p], this.v[3 * p + 1], this.v[3 * p + 2])); return m; }
+  cflDt() { return this.cfl * this.h / (this.maxSpeed() + Math.sqrt(this.g * this.h)); }
+  /** advance one frame: n = min(maxSub, ceil(frame/dt_cfl)) equal substeps */
+  advanceFrame() {
+    const n = Math.min(this.maxSub, Math.max(1, Math.ceil(this.frame / this.cflDt() - 1e-12)));
+    const recs = []; for (let s = 0; s < n; s++) recs.push(this.substep(this.frame / n, n)); return recs;
+  }
+  substep(dt, nSub) {
+    const st = {}; const tot = () => { const e = this.particleEnergy(); return e.ke + e.pe; };
+    const E0 = tot(), pe0 = this.particleEnergy().pe;
+    this.p2g(); let g = this.gridKE(); st.p2g = g + pe0 - E0;
+    const nGhost = this.ghostFill(); let g2 = this.gridKE(); st.ghost = g2 - g; g = g2;
+    this.applyGravity(dt); g2 = this.gridKE(); st.gravity = g2 - g; g = g2;
+    const pr = this.project(dt); g2 = this.gridKE(); st.pressure = g2 - g; g = g2;
+    this.g2p(); let e = tot(); st.g2p = e - (g + pe0);
+    this.advect(dt); let e2 = tot(); st.advect = e2 - e; e = e2;
+    const nWall = this.wallStrip(); const nSep = this.separate(); e2 = tot(); st.pushout = e2 - e;
+    for (const k of STAGES) this.stageCum[k] += st[k];
+    this.t += dt; this.step++;
+    const pe = this.particleEnergy();
+    const rec = { step: this.step, t: this.t, dt, nSub, cflDt: this.cflDt(), E: pe.ke + pe.pe, KE: pe.ke, PE: pe.pe, stage: st, stageCum: { ...this.stageCum },
+      pcgIters: pr.iters, pcgRelRes: pr.relRes, pcgTrueRelRes: pr.trueRelRes, rhsNorm: pr.bNorm, maxDivDt: pr.maxDivDt, fluidCells: pr.fluidCells,
+      nGhost, nWall, nSep, maxU: this.maxSpeed(), mass: this.count * this.mp, ...this.momentum() };
+    this.log.push(rec); return rec;
+  }
+  momentum() {
+    let px = 0, py = 0, pz = 0, cz = 0;
+    for (let p = 0; p < this.count; p++) { px += this.v[3 * p]; py += this.v[3 * p + 1]; pz += this.v[3 * p + 2]; cz += this.x[3 * p + 2]; }
+    return { Px: px * this.mp, Py: py * this.mp, Pz: pz * this.mp, wCom: pz / this.count, zCom: cz / this.count };
+  }
+}
+module.exports = { Sim, STAGES };

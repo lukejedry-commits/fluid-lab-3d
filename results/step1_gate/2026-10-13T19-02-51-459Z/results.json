@@ -1,0 +1,275 @@
+[
+ {
+  "id": "P.A max rel Linf over 6 solves (worst A_dirichlet_213 N=16)",
+  "measured": "2.417e-13",
+  "threshold": "<= 1e-7",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "P.B max rel Linf over 9 solves (worst B_neumann_210 N=16)",
+  "measured": "2.850e-13",
+  "threshold": "<= 1e-7",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "P.C max rel Linf over 9 solves (worst C_mixed_202 N=32)",
+  "measured": "2.510e-13",
+  "threshold": "<= 1e-7",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "P.res mode solves: max final true residual / ||rhs|| (solve tol 1e-12)",
+  "measured": "4.011e-12",
+  "threshold": "<= 1e-8",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "P.D order at (0.5, 0.5, 0.25), N=16/32/64/128",
+  "measured": "2.000, 2.000, 2.000",
+  "threshold": "each in [1.8, 2.2]",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "P.D series truncation / discretization error at (0.5, 0.5, 0.25) (K=41 vs K=801)",
+  "measured": "0.000e+0",
+  "threshold": "< 1e-2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "P.D order at (0.5, 0.5, 0.5), N=16/32/64/128",
+  "measured": "1.707, 1.934, 1.984",
+  "threshold": "each in [1.8, 2.2]",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "id": "P.D series truncation / discretization error at (0.5, 0.5, 0.5) (K=41 vs K=801)",
+  "measured": "0.000e+0",
+  "threshold": "< 1e-2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "P.D order at (0.25, 0.5, 0.25), N=16/32/64/128",
+  "measured": "2.010, 2.002, 2.001",
+  "threshold": "each in [1.8, 2.2]",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "P.D series truncation / discretization error at (0.25, 0.5, 0.25) (K=41 vs K=801)",
+  "measured": "0.000e+0",
+  "threshold": "< 1e-2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "P.D order at (0.25, 0.75, 0.75), N=16/32/64/128",
+  "measured": "1.973, 1.993, 1.998",
+  "threshold": "each in [1.8, 2.2]",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "P.D series truncation / discretization error at (0.25, 0.75, 0.75) (K=41 vs K=801)",
+  "measured": "0.000e+0",
+  "threshold": "< 1e-2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "T1 N=8 (h/H=1/8): max|u| at t=10.000 s",
+  "measured": "5.632e-10",
+  "threshold": "< 2.215e-3 (1e-3 sqrt(gH))",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "T1 N=8: pressure profile max rel err, interior cells",
+  "measured": "2.361e-10",
+  "threshold": "<= 1e-2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "T1 N=8: max_t (E-E0)/|E0|",
+  "measured": "-7.787e-15",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "P.res T1 N=8: max final true residual / ||rhs|| over 600 solves",
+  "measured": "6.408e-9",
+  "threshold": "<= 1e-8",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "P.res T1 N=8: max iters / median(prev 20) (steps > 20)",
+  "measured": "1.000 at step 21",
+  "threshold": "<= 2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "P.div T1 N=8: max |div u| * dt over all projections",
+  "measured": "4.529e-10",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "T1 N=16 (h/H=1/16): max|u| at t=10.000 s",
+  "measured": "8.434e-10",
+  "threshold": "< 2.215e-3 (1e-3 sqrt(gH))",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "T1 N=16: pressure profile max rel err, interior cells",
+  "measured": "5.266e-10",
+  "threshold": "<= 1e-2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "T1 N=16: max_t (E-E0)/|E0|",
+  "measured": "3.976e-13",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "P.res T1 N=16: max final true residual / ||rhs|| over 600 solves",
+  "measured": "6.694e-9",
+  "threshold": "<= 1e-8",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "P.res T1 N=16: max iters / median(prev 20) (steps > 20)",
+  "measured": "1.000 at step 21",
+  "threshold": "<= 2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "P.div T1 N=16: max |div u| * dt over all projections",
+  "measured": "1.526e-9",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "T1 N=32 (h/H=1/32): max|u| at t=10.000 s",
+  "measured": "1.200e-9",
+  "threshold": "< 2.215e-3 (1e-3 sqrt(gH))",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "T1 N=32: pressure profile max rel err, interior cells",
+  "measured": "2.833e-10",
+  "threshold": "<= 1e-2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "T1 N=32: max_t (E-E0)/|E0|",
+  "measured": "3.950e-14",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "P.res T1 N=32: max final true residual / ||rhs|| over 600 solves",
+  "measured": "8.637e-9",
+  "threshold": "<= 1e-8",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "P.res T1 N=32: max iters / median(prev 20) (steps > 20)",
+  "measured": "1.000 at step 21",
+  "threshold": "<= 2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "P.div T1 N=32: max |div u| * dt over all projections",
+  "measured": "6.248e-9",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "T1 floor force: fitted order of e(h) over h/H=1/8,1/16,1/32",
+  "measured": "0.500 (e = 8.398e-13, 6.141e-13, 4.198e-13)",
+  "threshold": ">= 0.8",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "id": "T1 floor force: e at h/H=1/32",
+  "measured": "4.198e-13",
+  "threshold": "<= 1e-2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "T1 side wall force: fitted order of e(h) over h/H=1/8,1/16,1/32",
+  "measured": "0.437 (e = 2.119e-12, 1.464e-12, 1.157e-12)",
+  "threshold": ">= 0.8",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "id": "T1 side wall force: e at h/H=1/32",
+  "measured": "1.157e-12",
+  "threshold": "<= 1e-2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "T2 COM vertical acceleration (linear fit of w_com, 49 substeps, t<=0.400 s; a=9.810000000)",
+  "measured": "1.286e-14",
+  "threshold": "|a-g|/g <= 1e-3",
+  "pass": true,
+  "note": "min particle z at end 0.401 m: no floor contact"
+ },
+ {
+  "id": "T2 horizontal momentum max_t max(|Px|,|Py|) / (1e-8 M g t)",
+  "measured": "1.536e-9",
+  "threshold": "<= 1",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "P.res T2: max final true residual / ||rhs|| over 49 solves",
+  "measured": "6.349e-9",
+  "threshold": "<= 1e-8",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "P.res T2: max iters / median(prev 20) (steps > 20)",
+  "measured": "1.000 at step 21",
+  "threshold": "<= 2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "id": "P.div T2: max |div u| * dt over all projections",
+  "measured": "1.470e-16",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": ""
+ }
+]
