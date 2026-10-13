@@ -1,0 +1,103 @@
+[
+ {
+  "id": "A_dirichlet_111",
+  "p": "sin(1pi x)sin(1pi y)sin(1pi z)",
+  "bc": "p=0 all faces",
+  "lam": -29.608813203268074,
+  "lam_d": {
+   "16": -29.51380930063803,
+   "32": -29.585039326022333,
+   "64": -29.60286830168328
+  }
+ },
+ {
+  "id": "A_dirichlet_213",
+  "p": "sin(2pi x)sin(1pi y)sin(3pi z)",
+  "bc": "p=0 all faces",
+  "lam": -138.174461615251,
+  "lam_d": {
+   "16": -135.099174288864,
+   "32": -137.39961792996107,
+   "64": -137.98037223710514
+  }
+ },
+ {
+  "id": "B_neumann_100",
+  "p": "cos(1pi x)cos(0pi y)cos(0pi z)",
+  "bc": "dp/dn=0 all faces; solution pinned to zero mean (compatibility: integral of f = 0 holds since mode is not (0,0,0))",
+  "lam": -9.869604401089358,
+  "lam_d": {
+   "16": -9.83793643354601,
+   "32": -9.861679775340777,
+   "64": -9.86762276722776
+  }
+ },
+ {
+  "id": "B_neumann_111",
+  "p": "cos(1pi x)cos(1pi y)cos(1pi z)",
+  "bc": "dp/dn=0 all faces; solution pinned to zero mean (compatibility: integral of f = 0 holds since mode is not (0,0,0))",
+  "lam": -29.608813203268074,
+  "lam_d": {
+   "16": -29.51380930063803,
+   "32": -29.585039326022333,
+   "64": -29.60286830168328
+  }
+ },
+ {
+  "id": "B_neumann_210",
+  "p": "cos(2pi x)cos(1pi y)cos(0pi z)",
+  "bc": "dp/dn=0 all faces; solution pinned to zero mean (compatibility: integral of f = 0 holds since mode is not (0,0,0))",
+  "lam": -49.34802200544679,
+  "lam_d": {
+   "16": -48.81161578776719,
+   "32": -49.21342550952482,
+   "64": -49.314341868590866
+  }
+ },
+ {
+  "id": "C_mixed_001",
+  "p": "cos(0pi x)cos(0pi y)cos(1pi z/2)",
+  "bc": "dp/dn=0 on 4 walls and floor; p=0 at top z=c (face-centred Dirichlet)",
+  "lam": -2.4674011002723395,
+  "lam_d": {
+   "16": -2.4654199438351942,
+   "32": -2.46690569180694,
+   "64": -2.4672772406950285
+  }
+ },
+ {
+  "id": "C_mixed_111",
+  "p": "cos(1pi x)cos(1pi y)cos(1pi z/2)",
+  "bc": "dp/dn=0 on 4 walls and floor; p=0 at top z=c (face-centred Dirichlet)",
+  "lam": -22.206609902451056,
+  "lam_d": {
+   "16": -22.141292810927215,
+   "32": -22.190265242488493,
+   "64": -22.20252277515055
+  }
+ },
+ {
+  "id": "C_mixed_202",
+  "p": "cos(2pi x)cos(0pi y)cos(3pi z/2)",
+  "bc": "dp/dn=0 on 4 walls and floor; p=0 at top z=c (face-centred Dirichlet)",
+  "lam": -61.68502750680849,
+  "lam_d": {
+   "16": -61.020227459330236,
+   "32": -61.51825332631261,
+   "64": -61.643297989532854
+  }
+ },
+ {
+  "id": "D_oneface",
+  "p": "sum_{l,m odd} 64/(pi^6 l^3 m^3) sin(l pi x) sin(m pi y) sinh(pi sqrt(l^2+m^2)(1-z))/sinh(pi sqrt(l^2+m^2))",
+  "bc": "p=0 on 5 faces; p(x,y,0)=x(1-x)y(1-y)",
+  "values": {
+   "(0.5, 0.5, 0.0)": 0.06249899589394259,
+   "(0.5, 0.5, 0.25)": 0.021507611078873303,
+   "(0.5, 0.5, 0.5)": 0.007101931021771208,
+   "(0.25, 0.5, 0.25)": 0.015481310647992979,
+   "(0.25, 0.75, 0.75)": 0.0010614447878557164
+  },
+  "check_floor_exact": 0.0625
+ }
+]
