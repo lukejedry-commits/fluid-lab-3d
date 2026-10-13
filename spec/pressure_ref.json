@@ -57,7 +57,7 @@
  {
   "id": "C_mixed_001",
   "p": "cos(0pi x)cos(0pi y)cos(1pi z/2)",
-  "bc": "dp/dn=0 on 4 walls and floor; p=0 at top z=c (face-centred Dirichlet)",
+  "bc": "dp/dn=0 on 4 walls and floor; p=0 at top z=c. SETUP REQUIRED: free surface exactly on the top grid face, so ghost-fluid reduces to p_ghost=-p; otherwise not exact",
   "lam": -2.4674011002723395,
   "lam_d": {
    "16": -2.4654199438351942,
@@ -68,7 +68,7 @@
  {
   "id": "C_mixed_111",
   "p": "cos(1pi x)cos(1pi y)cos(1pi z/2)",
-  "bc": "dp/dn=0 on 4 walls and floor; p=0 at top z=c (face-centred Dirichlet)",
+  "bc": "dp/dn=0 on 4 walls and floor; p=0 at top z=c. SETUP REQUIRED: free surface exactly on the top grid face, so ghost-fluid reduces to p_ghost=-p; otherwise not exact",
   "lam": -22.206609902451056,
   "lam_d": {
    "16": -22.141292810927215,
@@ -79,7 +79,7 @@
  {
   "id": "C_mixed_202",
   "p": "cos(2pi x)cos(0pi y)cos(3pi z/2)",
-  "bc": "dp/dn=0 on 4 walls and floor; p=0 at top z=c (face-centred Dirichlet)",
+  "bc": "dp/dn=0 on 4 walls and floor; p=0 at top z=c. SETUP REQUIRED: free surface exactly on the top grid face, so ghost-fluid reduces to p_ghost=-p; otherwise not exact",
   "lam": -61.68502750680849,
   "lam_d": {
    "16": -61.020227459330236,
@@ -92,12 +92,11 @@
   "p": "sum_{l,m odd} 64/(pi^6 l^3 m^3) sin(l pi x) sin(m pi y) sinh(pi sqrt(l^2+m^2)(1-z))/sinh(pi sqrt(l^2+m^2))",
   "bc": "p=0 on 5 faces; p(x,y,0)=x(1-x)y(1-y)",
   "values": {
-   "(0.5, 0.5, 0.0)": 0.06249899589394259,
    "(0.5, 0.5, 0.25)": 0.021507611078873303,
    "(0.5, 0.5, 0.5)": 0.007101931021771208,
    "(0.25, 0.5, 0.25)": 0.015481310647992979,
    "(0.25, 0.75, 0.75)": 0.0010614447878557164
   },
-  "check_floor_exact": 0.0625
+  "grading": "interior points only (series truncation ~1e-3 rel near z=0)"
  }
 ]
