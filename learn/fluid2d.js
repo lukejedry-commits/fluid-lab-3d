@@ -6,9 +6,12 @@
 
 const GRID_W = 64, GRID_H = 48;  // number of cells across and down
 const CELL = 1 / GRID_H;         // size of one cell (the box is 1 unit tall)
-const GRAVITY = -9.8;            // pull downwards (units per second squared)
+// Default settings. Each world keeps its own copy (w.gravity, w.flip,
+// w.maxSweeps) so sliders, or test code, can change them while it runs.
+const GRAVITY = 9.8;             // pull downwards (units per second squared)
 const FLIP_RATIO = 0.9;          // 0 = smooth/syrupy (PIC), 1 = lively/noisy (FLIP)
 const MAX_SWEEPS = 200;          // most times we repeat the "no squashing" fix
+const STIR_MAX = 4;              // fastest a finger-stir can push the water (m/s)
 const PRESSURE_TOLERANCE = 1e-4; // "good enough": leftover squash below this (m/s)
 const AIR = 0, WATER = 1, WALL = 2;
 
@@ -24,6 +27,8 @@ function createWorld() {
     uWeight: new Float32Array((GRID_W + 1) * GRID_H),
     vWeight: new Float32Array(GRID_W * (GRID_H + 1)),
     type: new Uint8Array(GRID_W * GRID_H),                 // AIR, WATER or WALL
+    gravity: GRAVITY, flip: FLIP_RATIO, maxSweeps: MAX_SWEEPS,  // controls
+    stir: { x: 0, y: 0, vx: 0, vy: 0, active: false },    // finger/mouse stir
   };
   // Dam break: a block of water in the bottom-left, 2x2 particles per cell.
   for (let i = 1; i < GRID_W * 0.4; i++)
@@ -84,7 +89,7 @@ function particlesToGrid(w) {
 // STEP 2 - Gravity. Speed up every vertical edge that touches water downwards
 // a little (edges in empty air have no water to pull on).
 function applyGravity(w, dt) {
-  for (let k = 0; k < w.v.length; k++) if (w.vWeight[k] > 0) w.v[k] += GRAVITY * dt;
+  for (let k = 0; k < w.v.length; k++) if (w.vWeight[k] > 0) w.v[k] -= w.gravity * dt;
 }
 
 // STEP 3 - Pressure solve: make the water incompressible (unsquashable).
@@ -93,7 +98,7 @@ function applyGravity(w, dt) {
 // difference equally back through the cell's open (non-wall) sides. Fixing
 // one cell slightly upsets its neighbours, so we sweep the grid again and
 // again (Gauss-Seidel), each time a bit closer. We stop once the worst cell is
-// below PRESSURE_TOLERANCE, or after MAX_SWEEPS as a safety limit. Walls block flow.
+// below PRESSURE_TOLERANCE, or after w.maxSweeps as a safety limit. Walls block flow.
 function solvePressure(w) {
   const U = (i, j) => i + j * (GRID_W + 1), V = (i, j) => i + j * GRID_W;
   const open = (i, j) => (w.type[i + j * GRID_W] !== WALL ? 1 : 0);
@@ -103,7 +108,7 @@ function solvePressure(w) {
       if (w.type[i + j * GRID_W] !== WALL) continue;
       w.u[U(i, j)] = 0; w.u[U(i + 1, j)] = 0; w.v[V(i, j)] = 0; w.v[V(i, j + 1)] = 0;
     }
-  for (let sweep = 0; sweep < MAX_SWEEPS; sweep++) {
+  for (let sweep = 0; sweep < w.maxSweeps; sweep++) {
     let worst = 0;                               // biggest divergence seen this sweep
     for (let i = 1; i < GRID_W - 1; i++)
       for (let j = 1; j < GRID_H - 1; j++) {
@@ -119,14 +124,14 @@ function solvePressure(w) {
       }
     w.sweeps = sweep + 1;                        // how many sweeps it took (for curious readers)
     if (worst < PRESSURE_TOLERANCE) break;
-    if (sweep === MAX_SWEEPS - 1) w.hitSweepCap = true;  // gave up before "good enough"
+    if (sweep === w.maxSweeps - 1) w.hitSweepCap = true;  // gave up before "good enough"
   }
 }
 
 // STEP 4 - Grid to particles (G2P).
 // PIC: particle takes the grid speed directly (stable but loses swirls).
 // FLIP: particle only adds the CHANGE in grid speed (keeps detail, can be noisy).
-// We blend the two with FLIP_RATIO.
+// We blend the two with w.flip (0..1).
 function gridToParticles(w) {
   const sample = (arr, px, py, ox, oy, nx, ny) => {
     let s = 0;
@@ -139,8 +144,8 @@ function gridToParticles(w) {
     const vNew = sample(w.v, px, py, 0.5, 0, GRID_W, GRID_H + 1);
     const du = uNew - sample(w.uOld, px, py, 0, 0.5, GRID_W + 1, GRID_H);
     const dv = vNew - sample(w.vOld, px, py, 0.5, 0, GRID_W, GRID_H + 1);
-    w.vx[p] = FLIP_RATIO * (w.vx[p] + du) + (1 - FLIP_RATIO) * uNew;
-    w.vy[p] = FLIP_RATIO * (w.vy[p] + dv) + (1 - FLIP_RATIO) * vNew;
+    w.vx[p] = w.flip * (w.vx[p] + du) + (1 - w.flip) * uNew;
+    w.vy[p] = w.flip * (w.vy[p] + dv) + (1 - w.flip) * vNew;
   }
 }
 
@@ -159,10 +164,34 @@ function moveParticles(w, dt) {
 // step = ONE substep: the five steps above, in order.
 function step(w, dt = 1 / 240) {
   particlesToGrid(w);
+  if (w.stirNow) { stirGrid(w); w.stirNow = false; }
   applyGravity(w, dt);
   solvePressure(w);
   gridToParticles(w);
   moveParticles(w, dt);
+}
+
+// STIR: nudge GRID speeds within 3 cells of the finger toward the finger's
+// speed (capped at STIR_MAX). It happens on the grid, before the pressure
+// solve, so the water still can't be squashed. Particles feel it in step 4.
+function stirGrid(w) {
+  const st = w.stir, sp = Math.hypot(st.vx, st.vy), scale = sp > STIR_MAX ? STIR_MAX / sp : 1;
+  const nudge = (arr, nx, ny, ox, oy, target) => {
+    for (let i = 0; i < nx; i++) for (let j = 0; j < ny; j++) {
+      const d = Math.hypot((i + ox) * CELL - st.x, (j + oy) * CELL - st.y) / (3 * CELL);
+      if (d < 1) arr[i + j * nx] += (1 - d) * (target - arr[i + j * nx]);
+    } };
+  nudge(w.u, GRID_W + 1, GRID_H, 0, 0.5, st.vx * scale);
+  nudge(w.v, GRID_W, GRID_H + 1, 0.5, 0, st.vy * scale);
+}
+
+// DROP: add a round blob of water (2x2 particles per cell) centred at (cx, cy).
+function addBlob(w, cx, cy, radius = 4 * CELL) {
+  for (let x = cx - radius; x <= cx + radius; x += CELL / 2)
+    for (let y = cy - radius; y <= cy + radius; y += CELL / 2) {
+      const inside = x > 1.1 * CELL && x < (GRID_W - 1.1) * CELL && y > 1.1 * CELL && y < (GRID_H - 1.1) * CELL;
+      if (inside && Math.hypot(x - cx, y - cy) <= radius) { w.x.push(x); w.y.push(y); w.vx.push(0); w.vy.push(0); }
+    }
 }
 
 // One frame (1/240 s by default). The "CFL rule": no particle may move more
@@ -173,10 +202,11 @@ const MAX_SUBSTEPS = 8;
 function frame(w, frameDt = 1 / 240) {
   let fastest = 0;
   for (let p = 0; p < w.x.length; p++) fastest = Math.max(fastest, Math.hypot(w.vx[p], w.vy[p]));
+  if (w.stir.active) { fastest = Math.max(fastest, Math.min(STIR_MAX, Math.hypot(w.stir.vx, w.stir.vy))); w.stirNow = true; }
   const n = Math.min(MAX_SUBSTEPS, Math.max(1, Math.ceil((fastest * frameDt) / CELL)));
   w.hitSweepCap = false; w.substeps = n;
   for (let i = 0; i < n; i++) step(w, frameDt / n);
 }
 
 // Let Node.js (tests) use this file too; browsers simply skip this.
-if (typeof module !== 'undefined') module.exports = { createWorld, step, frame, GRID_W, GRID_H, CELL };
+if (typeof module !== 'undefined') module.exports = { createWorld, step, frame, addBlob, GRID_W, GRID_H, CELL };

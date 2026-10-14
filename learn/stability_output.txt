@@ -1,0 +1,5 @@
+PASS  all values finite
+PASS  particles inside tank (3500 of 3500)
+FAIL  max|u| 8.081 m/s (limit 8)
+PASS  max substeps 2 (limit 8)
+INFO  frames with hitSweepCap: 0 of 480

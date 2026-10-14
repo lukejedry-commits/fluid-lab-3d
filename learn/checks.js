@@ -1,4 +1,4 @@
-// Three checks with exact answers for learn/fluid2d.js.
+// Exact checks with exact answers for learn/fluid2d.js.
 // Run: node checks.js [path to fluid2d.js]
 const path = process.argv[2] || '/workspace/fluid-lab-3d/learn/fluid2d.js';
 const { createWorld, step, GRID_W, GRID_H, CELL } = require(path);
@@ -22,6 +22,11 @@ const empty = () => { const w = createWorld(); w.x = []; w.y = []; w.vx = []; w.
   check('free fall path', worst < 1e-5, `max |y - exact| = ${worst.toExponential(2)} (limit 1e-5)`);
   check('free fall landing', Math.abs(tLand - tTheory) <= dt,
     `landed at ${tLand.toFixed(4)} s, sqrt(2h/g) = ${tTheory.toFixed(4)} s (limit one step, ${dt.toFixed(4)} s)`);
+  // 5. After landing it rests inside the bottom cell: floor <= y <= 2*CELL for 1 s (inclusive).
+  let lo = Infinity, hi = -Infinity;
+  for (let k = 0; k < 120; k++) { step(w, dt); lo = Math.min(lo, w.y[0]); hi = Math.max(hi, w.y[0]); }
+  check('drop rest height', lo >= floor && hi <= 2 * CELL,
+    `y in [${lo.toFixed(7)}, ${hi.toFixed(7)}] (limit [${floor.toFixed(7)}, ${(2*CELL).toFixed(7)}])`);
 }
 
 // 2. A still pool stays still. Limit: speeds under 1% of the shallow-wave speed sqrt(gH).
