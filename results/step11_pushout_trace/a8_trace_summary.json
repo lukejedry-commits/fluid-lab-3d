@@ -1,0 +1,26 @@
+{
+ "A": 8,
+ "steps": 152,
+ "positiveSteps": 0,
+ "negativeSteps": 79,
+ "dKE_total": {
+  "min": -1.663576651156351e-7,
+  "max": 0
+ },
+ "dKE_correction": {
+  "min": 0,
+  "max": 0
+ },
+ "dKE_wallStrip": {
+  "min": -1.663576651156351e-7,
+  "max": 0
+ },
+ "dKE_separate": {
+  "min": 0,
+  "max": 0
+ },
+ "maxAbs": 1.663576651156351e-7,
+ "anyComponentRaised": false,
+ "anyVChangedNotZeroed": false,
+ "stepsWithZeroing": 79
+}
