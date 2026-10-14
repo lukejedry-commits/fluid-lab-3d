@@ -87,7 +87,7 @@ T1 and T2 must pass before any other test runs. The rest follow: T3, T4, T5, C1,
 
 ### 7.7 Surface θ by column volume (frozen in Validation section Z; ASSERTS whole-file md5 da859722…)
 Status: the default reverted to the count-based θ (section Z 038c3d37…, graded bit-identical to 1e6089c). Column-volume θ stays behind thetaMode, pending the push-out trigger.
-Push-out trigger (planned): the 0.1% quantile of the t=0 nearest-neighbour distance distribution of the frozen seed (jitter 0.5, seed logged). It is posted, with its ratio to h, before the run. The graded check is that step 1 moves at most 0.1% of particles, with C3.separation limits unchanged.
+Push-out trigger (frozen, Z 1e9f9e61…): 0.0611 h = 9.5463e-4 m, the 0.1% quantile of the t=0 nearest-neighbour distance distribution of the frozen seed (jitter 0.5, seed logged). It is posted, with its ratio to h, before the run. The graded check is that step 1 moves at most 0.1% of particles by pair separation, with C3.separation limits unchanged. The wall clamp is graded separately: its largest move must stay at or below 1e-6·h per step.
 Count-based θ jumps by 1/8 whenever a particle crosses a face. That is a sudden 0.25h height bump, and it kicks still water (step 18: 8.13e-2 m/s at the step-2 solve). So θ comes from the volume of fluid in each column instead:
 - For each surface cell, H = h·Σ n_k/8, summing raw counts over the contiguous fluid run below it, down to the first air or solid cell. Overhangs and detached sheets use their own run.
 - Smooth H with a fixed 3×3 lateral kernel, only between neighbours whose surface cell is in the same row k. Columns at walls are mirrored. Anywhere else, use the count-based θ.

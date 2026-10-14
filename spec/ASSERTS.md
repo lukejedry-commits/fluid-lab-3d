@@ -159,3 +159,11 @@ U_R = 2.11781302 m/s, frame = 1/60 s. a=16: short W=3, q=0.0337317, limit 1.0337
 - Order (NM): push-out trigger first, then C3.separation rerun with count theta, then (only if still failing) the fallback-cell map at steps 1-2 (info, Physics).
 - Push-out trigger d_trig: the 0.1% quantile of the t=0 nearest-neighbour distances on the frozen seed (jitter 0.5, logged seed). The value and d_trig/h are posted and committed BEFORE any run. Graded consistency: the fraction of particles moved at step 1 of C3.separation is <= 0.1% (a quantile cannot give exactly 0). Also graded: C3.separation energy and max|u| (unchanged limits), Gate 1 0 flips, T3 rows, T4 ceilings, tilted tank, energy bookkeeping 1e-12.
 - Info: push-out move fraction per step in T3 and C3.separation.
+
+### Z amendment 2026-10-14o (trigger wording)
+- d_trig = 9.5463e-4 m = 0.0611 h (seed 3232, jitter 0.5), posted before any run (de5b902).
+- The step-1 <= 0.1% check counts PAIR-SEPARATION moves only.
+- Wall clamp: graded max displacement per step <= 1e-6 h in C3.separation (it can't cross a cell line or stir anything; this guards against a real source hiding there). Info: per-step max and count.
+- Revert check: the full Gate 1 must be bit-identical to 1e6089c (run as part of the graded suite).
+- 14o clarification (NM): the revert commit b29c99e must be bit-identical to 1e6089c on the full Gate 1. For the trigger commit, any run where the OLD 0.25h trigger fired 0 times at every step must be bit-identical (the new trigger is smaller, so it can't fire there). Every other run (including T3, T4, C3.separation and the tilted tank) is graded against its frozen limits. Fire counts per run are logged.
+- PHYSICS_SPEC reference: d107f6e5.
