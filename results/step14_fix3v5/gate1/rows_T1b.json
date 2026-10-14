@@ -1,0 +1,442 @@
+[
+ {
+  "part": "T1b",
+  "id": "T1b N=8: ghost-fluid surface z_c + theta h (mean [min,max] over columns) vs H_eff",
+  "measured": "0.164062500000 [0.164062500000, 0.164062500000] vs 0.164062500000; rel diff 0.000e+0",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "T1b N=8: H nominal / H_eff (H/h = 2.60, top-cell particles 5/8)",
+  "measured": "0.1625 / 0.1640625",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "T1b.u N=8: max|u| after 10 s",
+  "measured": "3.441e-10",
+  "threshold": "< 1.269e-3",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "T1b.floor N=8: max over all 600 steps of signed (F_floor - dPz/dt)/Mg - 1 [graded]; signed (F_floor + dPz/dt)/Mg - 1 [info] = 5.115e-12 (step 1)",
+  "measured": "5.115e-12 (step 1)",
+  "threshold": "|.| <= 1e-6 every step",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "T1b N=8: raw floor force |F - Mg|/(Mg), max over steps / at end",
+  "measured": "5.115e-12 / 3.093e-12",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "T1b.E N=8: max (E-E0)/|E0|",
+  "measured": "1.842e-2",
+  "threshold": "<= 1e-6",
+  "pass": false,
+  "note": "stage gravity"
+ },
+ {
+  "part": "T1b",
+  "id": "T1b N=8: side-wall rel err: graded theta-aware integral / plain cell-sum (info)",
+  "measured": "1.242e-11 / 2.041e-2",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "P.res T1b N=8: max final true residual / ||rhs|| (600 solves)",
+  "measured": "2.711e-9",
+  "threshold": "<= 1e-8",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "P.res T1b N=8: max iters / median(prev 20), steps > 20",
+  "measured": "1.000 (step 21)",
+  "threshold": "<= 2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "P.div T1b N=8: max |div u| * dt",
+  "measured": "1.897e-10",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "NM T1b N=8: pressure-stage dE > 0 (graded in T3)",
+  "measured": "0 of 600 steps; max 0.000e+0 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "NM T1b N=8: CFL used per frame",
+  "measured": "max 0.2088, min 0.2088; frames with 8-cap binding and CFL>1: 0",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "NM T1b N=8: extension-stage |dE| per step (own stage)",
+  "measured": "max 0.000e+0 J, cumulative 0.000e+0 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "T1b N=16: ghost-fluid surface z_c + theta h (mean [min,max] over columns) vs H_eff",
+  "measured": "0.164062500000 [0.164062500000, 0.164062500000] vs 0.164062500000; rel diff 0.000e+0",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "T1b N=16: H nominal / H_eff (H/h = 5.20, top-cell particles 2/8)",
+  "measured": "0.1625 / 0.1640625",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "T1b.u N=16: max|u| after 10 s",
+  "measured": "1.335e-9",
+  "threshold": "< 1.269e-3",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "T1b.floor N=16: max over all 600 steps of signed (F_floor - dPz/dt)/Mg - 1 [graded]; signed (F_floor + dPz/dt)/Mg - 1 [info] = 1.436e-11 (step 1)",
+  "measured": "1.436e-11 (step 1)",
+  "threshold": "|.| <= 1e-6 every step",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "T1b N=16: raw floor force |F - Mg|/(Mg), max over steps / at end",
+  "measured": "1.436e-11 / 4.612e-12",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "T1b.E N=16: max (E-E0)/|E0|",
+  "measured": "-3.514e-4",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": "steps with any rise, by largest stage: {\"gravity\":288}"
+ },
+ {
+  "part": "T1b",
+  "id": "T1b N=16: side-wall rel err: graded theta-aware integral / plain cell-sum (info)",
+  "measured": "1.655e-11 / 2.268e-3",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "P.res T1b N=16: max final true residual / ||rhs|| (600 solves)",
+  "measured": "6.416e-9",
+  "threshold": "<= 1e-8",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "P.res T1b N=16: max iters / median(prev 20), steps > 20",
+  "measured": "1.000 (step 21)",
+  "threshold": "<= 2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "P.div T1b N=16: max |div u| * dt",
+  "measured": "1.827e-9",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "NM T1b N=16: pressure-stage dE > 0 (graded in T3)",
+  "measured": "0 of 600 steps; max 0.000e+0 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "NM T1b N=16: CFL used per frame",
+  "measured": "max 0.2953, min 0.2953; frames with 8-cap binding and CFL>1: 0",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "NM T1b N=16: extension-stage |dE| per step (own stage)",
+  "measured": "max 0.000e+0 J, cumulative 0.000e+0 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "T1b N=32: ghost-fluid surface z_c + theta h (mean [min,max] over columns) vs H_eff",
+  "measured": "0.162109375000 [0.162109375000, 0.162109375000] vs 0.162109375000; rel diff 0.000e+0",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "T1b N=32: H nominal / H_eff (H/h = 10.40, top-cell particles 3/8)",
+  "measured": "0.1625 / 0.162109375",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "T1b.u N=32: max|u| after 10 s",
+  "measured": "1.416e-9",
+  "threshold": "< 1.261e-3",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "T1b.floor N=32: max over all 600 steps of signed (F_floor - dPz/dt)/Mg - 1 [graded]; signed (F_floor + dPz/dt)/Mg - 1 [info] = 6.395e-12 (step 1)",
+  "measured": "6.395e-12 (step 1)",
+  "threshold": "|.| <= 1e-6 every step",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "T1b N=32: raw floor force |F - Mg|/(Mg), max over steps / at end",
+  "measured": "6.395e-12 / 9.078e-13",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "T1b.E N=32: max (E-E0)/|E0|",
+  "measured": "2.251e-12",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": "steps with any rise, by largest stage: {\"gravity\":397}"
+ },
+ {
+  "part": "T1b",
+  "id": "T1b N=32: side-wall rel err: graded theta-aware integral / plain cell-sum (info)",
+  "measured": "8.284e-12 / 1.306e-3",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "P.res T1b N=32: max final true residual / ||rhs|| (600 solves)",
+  "measured": "6.437e-9",
+  "threshold": "<= 1e-8",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "P.res T1b N=32: max iters / median(prev 20), steps > 20",
+  "measured": "1.000 (step 21)",
+  "threshold": "<= 2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "P.div T1b N=32: max |div u| * dt",
+  "measured": "8.448e-9",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "NM T1b N=32: pressure-stage dE > 0 (graded in T3)",
+  "measured": "0 of 600 steps; max 0.000e+0 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "NM T1b N=32: CFL used per frame",
+  "measured": "max 0.4176, min 0.4176; frames with 8-cap binding and CFL>1: 0",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "NM T1b N=32: extension-stage |dE| per step (own stage)",
+  "measured": "max 0.000e+0 J, cumulative 0.000e+0 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "T1b N=64: ghost-fluid surface z_c + theta h (mean [min,max] over columns) vs H_eff",
+  "measured": "0.162109375000 [0.162109375000, 0.162109375000] vs 0.162109375000; rel diff 0.000e+0",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "T1b N=64: H nominal / H_eff (H/h = 20.80, top-cell particles 6/8)",
+  "measured": "0.1625 / 0.162109375",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "T1b.u N=64: max|u| after 10 s",
+  "measured": "1.675e-9",
+  "threshold": "< 1.261e-3",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "T1b.floor N=64: max over all 600 steps of signed (F_floor - dPz/dt)/Mg - 1 [graded]; signed (F_floor + dPz/dt)/Mg - 1 [info] = -8.084e-13 (step 1)",
+  "measured": "-8.084e-13 (step 1)",
+  "threshold": "|.| <= 1e-6 every step",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "T1b N=64: raw floor force |F - Mg|/(Mg), max over steps / at end",
+  "measured": "8.084e-13 / 6.009e-13",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "T1b.E N=64: max (E-E0)/|E0|",
+  "measured": "1.090e-12",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": "steps with any rise, by largest stage: {\"gravity\":321}"
+ },
+ {
+  "part": "T1b",
+  "id": "T1b N=64: side-wall rel err: graded theta-aware integral / plain cell-sum (info)",
+  "measured": "8.895e-13 / 1.452e-4",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "P.res T1b N=64: max final true residual / ||rhs|| (600 solves)",
+  "measured": "6.712e-9",
+  "threshold": "<= 1e-8",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "P.res T1b N=64: max iters / median(prev 20), steps > 20",
+  "measured": "1.000 (step 21)",
+  "threshold": "<= 2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "P.div T1b N=64: max |div u| * dt",
+  "measured": "1.335e-8",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "NM T1b N=64: pressure-stage dE > 0 (graded in T3)",
+  "measured": "0 of 600 steps; max 0.000e+0 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "NM T1b N=64: CFL used per frame",
+  "measured": "max 0.5906, min 0.5906; frames with 8-cap binding and CFL>1: 0",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "NM T1b N=64: extension-stage |dE| per step (own stage)",
+  "measured": "max 0.000e+0 J, cumulative 0.000e+0 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "T1b.wall N=64: side-wall force rel err vs 1/2 rho g H_eff^2 W",
+  "measured": "8.895e-13",
+  "threshold": "<= 1e-2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "T1b.wall envelope order: e = 1.242e-11, 1.655e-11, 8.284e-12, 8.895e-13",
+  "measured": "all < 1e-10 floor: order skipped",
+  "threshold": "order >= 0.8 unless all < 1e-10",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1b",
+  "id": "T1b.p N=64: pressure rel err, interior cells below surface row",
+  "measured": "6.534e-10 (73036 cells)",
+  "threshold": "<= 1e-2",
+  "pass": true,
+  "note": ""
+ }
+]

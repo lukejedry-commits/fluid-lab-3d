@@ -1,0 +1,12 @@
+{
+ "part": "modes",
+ "calls": 0,
+ "solves": 0,
+ "moved": 0,
+ "maxMove": 0,
+ "maxAbsDPE": 0,
+ "nonzeroDPE": 0,
+ "nAboveDeadMax": 0,
+ "maxAbsTargetPerCell": 0,
+ "bySetup": {}
+}

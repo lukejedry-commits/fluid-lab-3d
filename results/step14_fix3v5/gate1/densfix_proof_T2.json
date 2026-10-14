@@ -1,0 +1,20 @@
+{
+ "part": "T2",
+ "calls": 147,
+ "solves": 30,
+ "moved": 122880,
+ "maxMove": 0.000009987327076872989,
+ "maxAbsDPE": 0.000016770277213140616,
+ "nonzeroDPE": 30,
+ "nAboveDeadMax": 0,
+ "maxAbsTargetPerCell": 0.003060011193995806,
+ "bySetup": {
+  "24x24x64": {
+   "calls": 147,
+   "moved": 122880,
+   "maxMove": 0.000009987327076872989,
+   "maxAbsDPE": 0.000016770277213140616,
+   "maxAbsEbarT4": 0.008060011193995806
+  }
+ }
+}

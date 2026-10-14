@@ -1,0 +1,41 @@
+{
+ "part": "T1b",
+ "calls": 2400,
+ "solves": 912,
+ "moved": 4161024,
+ "maxMove": 0.00021492292707012665,
+ "maxAbsDPE": 0.05347657318252885,
+ "nonzeroDPE": 912,
+ "nAboveDeadMax": 0,
+ "maxAbsTargetPerCell": 0.017193736919599814,
+ "bySetup": {
+  "8x8x6": {
+   "calls": 600,
+   "moved": 806400,
+   "maxMove": 0.00021492292707012665,
+   "maxAbsDPE": 0.05347657318252885,
+   "maxAbsEbarT4": 0.022193736919599815
+  },
+  "16x16x10": {
+   "calls": 600,
+   "moved": 3354624,
+   "maxMove": 0.000046685755486345105,
+   "maxAbsDPE": 0.011584513287644427,
+   "maxAbsEbarT4": 0.008734816136901673
+  },
+  "32x32x18": {
+   "calls": 600,
+   "moved": 0,
+   "maxMove": 0,
+   "maxAbsDPE": 0,
+   "maxAbsEbarT4": 0.00047622590836795804
+  },
+  "64x64x34": {
+   "calls": 600,
+   "moved": 0,
+   "maxMove": 0,
+   "maxAbsDPE": 0,
+   "maxAbsEbarT4": 0.0011641042463555386
+  }
+ }
+}
