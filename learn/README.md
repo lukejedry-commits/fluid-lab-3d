@@ -8,7 +8,7 @@ Double-click `index.html` (or drag it into Chrome/Firefox). That's it: no server
 Press **Reset** to drop the water again. Dots are coloured by speed: blue = slow, red = fast.
 Headless test in Node: `node learn/test_headless.js` (400 steps, checks particle count and NaN).
 
-## The five steps (in `fluid2d.js`, function `step`)
+## The five steps (in `fluid2d.js`, function `step`; `frame` repeats it 1-8 times)
 
 **1. Particles to grid (`particlesToGrid`).** The water is a few thousand particles, but it is
 much easier to make water behave on a regular grid of boxes. So each frame every particle
@@ -40,4 +40,4 @@ up inside a wall, we put it back at the wall and stop its speed into the wall.
 - There is no particle-spacing or density correction, so particles can bunch into lines and the
   water volume slowly drifts. The real sim adds both.
 - Gauss-Seidel stops at max |divergence| < 1e-4 m/s or 200 sweeps, so it is close to, not exactly, incompressible.
-- Each `step` is one 1/240 s frame (4 per drawn frame), split into 1-8 substeps so no particle moves more than one cell per substep (CFL rule). If even 8 is not enough the rule is broken for that frame. `w.substeps` and `w.hitSweepCap` (pressure ran out of sweeps) are set every frame.
+- `step(w, dt)` is exactly one substep. `frame(w)` is one 1/240 s frame (4 per drawn frame), split into 1-8 substeps so no particle moves more than one cell per substep (CFL rule). If even 8 is not enough the rule is broken for that frame. `w.substeps` and `w.hitSweepCap` (pressure ran out of sweeps) are set every frame.

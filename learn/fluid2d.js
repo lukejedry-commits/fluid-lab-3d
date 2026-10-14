@@ -156,8 +156,8 @@ function moveParticles(w, dt) {
   }
 }
 
-// One small "substep": the five steps above, in order.
-function substep(w, dt) {
+// step = ONE substep: the five steps above, in order.
+function step(w, dt = 1 / 240) {
   particlesToGrid(w);
   applyGravity(w, dt);
   solvePressure(w);
@@ -170,13 +170,13 @@ function substep(w, dt) {
 // (at most MAX_SUBSTEPS). w.hitSweepCap tells you if the pressure fix ever
 // ran out of sweeps during this frame.
 const MAX_SUBSTEPS = 8;
-function step(w, frameDt = 1 / 240) {
+function frame(w, frameDt = 1 / 240) {
   let fastest = 0;
   for (let p = 0; p < w.x.length; p++) fastest = Math.max(fastest, Math.hypot(w.vx[p], w.vy[p]));
   const n = Math.min(MAX_SUBSTEPS, Math.max(1, Math.ceil((fastest * frameDt) / CELL)));
   w.hitSweepCap = false; w.substeps = n;
-  for (let i = 0; i < n; i++) substep(w, frameDt / n);
+  for (let i = 0; i < n; i++) step(w, frameDt / n);
 }
 
 // Let Node.js (tests) use this file too; browsers simply skip this.
-if (typeof module !== 'undefined') module.exports = { createWorld, step, substep, GRID_W, GRID_H, CELL };
+if (typeof module !== 'undefined') module.exports = { createWorld, step, frame, GRID_W, GRID_H, CELL };

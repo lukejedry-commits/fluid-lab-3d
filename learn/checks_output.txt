@@ -1,4 +1,4 @@
-FAIL  free fall path: max |y - exact| = 2.72e-3 (limit 1e-5)
-FAIL  free fall landing: landed at 1.2333 s, sqrt(2h/g) = 0.3987 s (limit one step, 0.0083 s)
+PASS  free fall path: max |y - exact| = 1.87e-7 (limit 1e-5)
+PASS  free fall landing: landed at 0.4000 s, sqrt(2h/g) = 0.3987 s (limit one step, 0.0083 s)
 PASS  still pool: peak speed over 2 s = 4.10e-5 m/s (limit 2.02e-2)
 PASS  water conserved: 3500 particles, all inside the tank for 400 steps
