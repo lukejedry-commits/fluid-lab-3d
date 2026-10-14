@@ -128,3 +128,8 @@ U_R = 2.11781302 m/s, frame = 1/60 s. a=16: short W=3, q=0.0337317, limit 1.0337
 ### Z amendment 2026-10-14j (Lead calls on fix 3 closure)
 - If v6 fails T4: alpha sweep {0.1, 0.2, 0.3}, the full suite at both resolutions, INFO. Selection rule, frozen now: choose the SMALLEST alpha that passes every graded row (including T4, the still pool at all N, both Ritter windows, energy and the target sum) at BOTH a=8 and a=16, as one value. If none passes, no alpha is frozen and the Lead decides on a limitation write-up. Nothing outside the grid, and no per-resolution alpha.
 - C3.separation: before any fix, a per-step energy-by-stage trace over 2 s (graded later; this one is info) identifying which stage carries the +2e-6|E0| rise and the max|u| growth.
+
+### Z amendment 2026-10-14k (v1 limitation, pending the Lead's call)
+- No alpha qualified under 14j. Code frozen at alpha = 0.1.
+- If the Lead ships T4 as a limitation: T4 stays reported as FAIL against 1% (never relabelled PASS) and gains a graded regression ceiling: T4 <= 2.60% at a=16 and <= 2.70% at a=8 (step 15 values 2.46/2.59 plus a 0.1-point margin), so the limitation can't silently grow. The write-up gives the peak frame and both resolutions.
+- C3.separation info for the next step: per step, the fluid/air flip count, plus the pressure-stage dE in BOTH the theta weighting and the face-mass weighting (NM). Diagnosis only; no fix until it's ruled.
