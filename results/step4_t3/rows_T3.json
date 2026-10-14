@@ -1,0 +1,354 @@
+[
+ {
+  "part": "T3",
+  "id": "T3 Ritter: max front speed over all 226 substep samples (front = max particle x; at t=0.5125 s, Z=15.885)",
+  "measured": "2.0534 m/s (0.9696 of limit)",
+  "threshold": "< 2 sqrt(g 2a) = 2.1178 m/s",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3.E: max (E-E0)/|E0| over all steps (PE datum floor z=0)",
+  "measured": "-1.731e-2 (t=0.0167 s)",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": "steps where E rose, by largest stage: {}"
+ },
+ {
+  "part": "T3",
+  "id": "T3 pressure-stage dE <= 0 at every step (NM)",
+  "measured": "0 of 226 steps > 0; max stage dE -4.444e-5 J",
+  "threshold": "<= 0 every step",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3 stage p2g: cumulative dE / max |dE| per step / steps with dE>0",
+  "measured": "1.129e-2 J / 1.507e-4 J / 225",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3 stage ghost: cumulative dE / max |dE| per step / steps with dE>0",
+  "measured": "0.000e+0 J / 0.000e+0 J / 0",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3 stage gravity: cumulative dE / max |dE| per step / steps with dE>0",
+  "measured": "2.159e-1 J / 4.990e-3 J / 226",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3 stage pressure: cumulative dE / max |dE| per step / steps with dE>0",
+  "measured": "-3.619e-2 J / 1.355e-3 J / 0",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3 stage g2p: cumulative dE / max |dE| per step / steps with dE>0",
+  "measured": "-7.878e+0 J / 7.066e-2 J / 0",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3 stage extension: cumulative dE / max |dE| per step / steps with dE>0",
+  "measured": "7.864e+0 J / 7.065e-2 J / 226",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3 stage advect: cumulative dE / max |dE| per step / steps with dE>0",
+  "measured": "-1.970e-1 J / 7.246e-3 J / 0",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3 stage pushout: cumulative dE / max |dE| per step / steps with dE>0",
+  "measured": "1.232e-4 J / 7.054e-7 J / 225",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T4 particle count exact (65536)",
+  "measured": "65536",
+  "threshold": "== 65536",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T4 density-estimated volume, max |V-V0|/V0 over the T3 run",
+  "measured": "1.665e-1",
+  "threshold": "<= 1e-2",
+  "pass": false,
+  "note": "V0 = 3.733178e-4 m^3, estimator sum_c min(n_c,8) h^3/8"
+ },
+ {
+  "part": "T3",
+  "id": "T3 info: energy loss E0-E_end vs sum_k 0.5 M g^2 dt_k^2",
+  "measured": "1.954e-2 J vs 2.588e-2 J; ratio 0.7550 (226 substeps)",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3.mm time shift applied (T_sim = t sqrt(2g/a) + shift, so T=1.19 at Z=1.44); Z = (max particle x from back wall)/a, starts at 1",
+  "measured": "0.3417",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": "raw T at Z=1.44 = 0.8483"
+ },
+ {
+  "part": "T3",
+  "id": "T3.mm Z=1.11: T_sim vs T_mean (release dominated)",
+  "measured": "0.686 vs 0.41 (67.42%)",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3.mm Z=1.22: T_sim vs T_mean (release dominated)",
+  "measured": "0.882 vs 0.84 (4.99%)",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3.mm Z=1.44 (shift anchor)",
+  "measured": "1.190 vs 1.19",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3.mm Z=1.67: |T_sim - T_mean|/T_mean (T_sim 1.457, T_mean 1.43)",
+  "measured": "1.88%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3.mm Z=1.89: |T_sim - T_mean|/T_mean (T_sim 1.681, T_mean 1.63)",
+  "measured": "3.14%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3.mm Z=2.11: |T_sim - T_mean|/T_mean (T_sim 1.886, T_mean 1.83)",
+  "measured": "3.07%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3.mm Z=2.33: |T_sim - T_mean|/T_mean (T_sim 2.078, T_mean 1.98)",
+  "measured": "4.93%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3.mm Z=2.56: |T_sim - T_mean|/T_mean (T_sim 2.267, T_mean 2.2)",
+  "measured": "3.04%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3.mm Z=2.78: |T_sim - T_mean|/T_mean (T_sim 2.440, T_mean 2.32)",
+  "measured": "5.17%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3.mm Z=3: |T_sim - T_mean|/T_mean (T_sim 2.607, T_mean 2.51)",
+  "measured": "3.85%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3.mm Z=3.22: |T_sim - T_mean|/T_mean (T_sim 2.768, T_mean 2.65)",
+  "measured": "4.43%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3.mm Z=3.44: |T_sim - T_mean|/T_mean (T_sim 2.923, T_mean 2.83)",
+  "measured": "3.30%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3.mm Z=3.67: |T_sim - T_mean|/T_mean (T_sim 3.082, T_mean 2.97)",
+  "measured": "3.78%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3.mm Z=3.89: |T_sim - T_mean|/T_mean (T_sim 3.230, T_mean 3.11)",
+  "measured": "3.85%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3.mm Z=4.11: |T_sim - T_mean|/T_mean (T_sim 3.373, T_mean 3.33)",
+  "measured": "1.29%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3.mm Z=5: |T_sim - T_mean|/T_mean (T_sim 3.931, T_mean 4.02)",
+  "measured": "2.22%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3.mm Z=5.89: |T_sim - T_mean|/T_mean (T_sim 4.461, T_mean 4.44)",
+  "measured": "0.48%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3.mm Z=7: |T_sim - T_mean|/T_mean (T_sim 5.094, T_mean 5.09)",
+  "measured": "0.08%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3.mm Z=8: |T_sim - T_mean|/T_mean (T_sim 5.649, T_mean 5.69)",
+  "measured": "0.71%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3.mm Z=9: |T_sim - T_mean|/T_mean (T_sim 6.197, T_mean 6.3)",
+  "measured": "1.63%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3.mm Z=10: |T_sim - T_mean|/T_mean (T_sim 6.740, T_mean 6.83)",
+  "measured": "1.31%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3.mm Z=11: |T_sim - T_mean|/T_mean (T_sim 7.277, T_mean 7.44)",
+  "measured": "2.19%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3.mm Z=12: |T_sim - T_mean|/T_mean (T_sim 7.809, T_mean 8.08)",
+  "measured": "3.35%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3.mm Z=13: |T_sim - T_mean|/T_mean (T_sim 8.336, T_mean 8.67)",
+  "measured": "3.85%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3.mm Z=14: |T_sim - T_mean|/T_mean (T_sim 8.860, T_mean 9.31)",
+  "measured": "4.84%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "P.res T3: max final true residual / ||rhs|| (226 solves)",
+  "measured": "9.990e-9",
+  "threshold": "<= 1e-8",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "P.res T3: max iters / median(prev 20), steps > 20",
+  "measured": "1.048 (step 107)",
+  "threshold": "<= 2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "P.div T3: max |div u| * dt",
+  "measured": "8.261e-9",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T3",
+  "id": "T3 CFL used per frame",
+  "measured": "max 1.2997, min 0.8016; frames with 8-cap binding and CFL>1: 22 of 31",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ }
+]

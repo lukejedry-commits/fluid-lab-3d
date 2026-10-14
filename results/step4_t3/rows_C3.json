@@ -1,0 +1,58 @@
+[
+ {
+  "part": "C3",
+  "id": "C3.ghost [fix ON (production), expect PASS]: max |u_f - U| over 720 m_f=0 faces next to fluid faces",
+  "measured": "2.776e-16",
+  "threshold": "<= 1e-12",
+  "pass": true,
+  "note": "test verdict PASS; row passes when verdict == expected"
+ },
+ {
+  "part": "C3",
+  "id": "C3.wall [fix ON (production), expect PASS]: max distance outside [r, L-r]; into-wall v stripped & tangential kept",
+  "measured": "0.000e+0 m; v ok true",
+  "threshold": "<= 0 and v ok",
+  "pass": true,
+  "note": "test verdict PASS"
+ },
+ {
+  "part": "C3",
+  "id": "C3.sep-clip [fix ON (production), expect PASS]: wall pair stays in box (max outside), COM change, interior pair distance",
+  "measured": "0.000e+0 m; 0.000e+0 m; 1.250e-2 vs 1.250e-2",
+  "threshold": "outside <= 0, dCOM <= 1e-15, d >= minD",
+  "pass": true,
+  "note": "test verdict PASS"
+ },
+ {
+  "part": "C3",
+  "id": "C3.ghost [fix REMOVED, expect FAIL]: max |u_f - U| over 720 m_f=0 faces next to fluid faces",
+  "measured": "3.000e-1",
+  "threshold": "<= 1e-12",
+  "pass": true,
+  "note": "test verdict FAIL; row passes when verdict == expected"
+ },
+ {
+  "part": "C3",
+  "id": "C3.wall [fix REMOVED, expect FAIL]: max distance outside [r, L-r]; into-wall v stripped & tangential kept",
+  "measured": "1.575e-2 m; v ok false",
+  "threshold": "<= 0 and v ok",
+  "pass": true,
+  "note": "test verdict FAIL"
+ },
+ {
+  "part": "C3",
+  "id": "C3.sep-clip [fix REMOVED, expect FAIL]: wall pair stays in box (max outside), COM change, interior pair distance",
+  "measured": "6.100e-3 m; 0.000e+0 m; 1.250e-2 vs 1.250e-2",
+  "threshold": "outside <= 0, dCOM <= 1e-15, d >= minD",
+  "pass": true,
+  "note": "test verdict FAIL"
+ },
+ {
+  "part": "C3",
+  "id": "C3.sep [separation REMOVED (sepIters 0), expect FAIL]: interior pair distance vs minD",
+  "measured": "1.000e-3 vs 1.250e-2",
+  "threshold": ">= minD",
+  "pass": true,
+  "note": "test verdict FAIL"
+ }
+]

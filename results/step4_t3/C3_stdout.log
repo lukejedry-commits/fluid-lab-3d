@@ -1,0 +1,7 @@
+PASS C3.ghost [fix ON (production), expect PASS]: max |u_f - U| over 720 m_f=0 faces next to fluid faces : 2.776e-16 vs <= 1e-12 (test verdict PASS; row passes when verdict == expected)
+PASS C3.wall [fix ON (production), expect PASS]: max distance outside [r, L-r]; into-wall v stripped & tangential kept : 0.000e+0 m; v ok true vs <= 0 and v ok (test verdict PASS)
+PASS C3.sep-clip [fix ON (production), expect PASS]: wall pair stays in box (max outside), COM change, interior pair distance : 0.000e+0 m; 0.000e+0 m; 1.250e-2 vs 1.250e-2 vs outside <= 0, dCOM <= 1e-15, d >= minD (test verdict PASS)
+PASS C3.ghost [fix REMOVED, expect FAIL]: max |u_f - U| over 720 m_f=0 faces next to fluid faces : 3.000e-1 vs <= 1e-12 (test verdict FAIL; row passes when verdict == expected)
+PASS C3.wall [fix REMOVED, expect FAIL]: max distance outside [r, L-r]; into-wall v stripped & tangential kept : 1.575e-2 m; v ok false vs <= 0 and v ok (test verdict FAIL)
+PASS C3.sep-clip [fix REMOVED, expect FAIL]: wall pair stays in box (max outside), COM change, interior pair distance : 6.100e-3 m; 0.000e+0 m; 1.250e-2 vs 1.250e-2 vs outside <= 0, dCOM <= 1e-15, d >= minD (test verdict FAIL)
+PASS C3.sep [separation REMOVED (sepIters 0), expect FAIL]: interior pair distance vs minD : 1.000e-3 vs 1.250e-2 vs >= minD (test verdict FAIL)
