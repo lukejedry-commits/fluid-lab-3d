@@ -8,7 +8,8 @@ const GRID_W = 64, GRID_H = 48;  // number of cells across and down
 const CELL = 1 / GRID_H;         // size of one cell (the box is 1 unit tall)
 const GRAVITY = -9.8;            // pull downwards (units per second squared)
 const FLIP_RATIO = 0.9;          // 0 = smooth/syrupy (PIC), 1 = lively/noisy (FLIP)
-const PRESSURE_ITERS = 40;       // how many times we repeat the "no squashing" fix
+const MAX_SWEEPS = 200;          // most times we repeat the "no squashing" fix
+const TOLERANCE = 1e-4;          // "good enough": leftover squash below this (m/s)
 const AIR = 0, WATER = 1, WALL = 2;
 
 // "MAC grid": horizontal speeds (u) live on the LEFT/RIGHT edges of each cell,
@@ -82,8 +83,9 @@ function applyGravity(w, dt) {
 // For every water cell we measure the "divergence": total flow OUT minus flow IN.
 // Real water can't gain or lose volume, so it must be 0. We push the
 // difference equally back through the cell's open (non-wall) sides. Fixing
-// one cell slightly upsets its neighbours, so we sweep the grid many times
-// (Gauss-Seidel); each sweep gets closer. Walls block flow; air is ignored.
+// one cell slightly upsets its neighbours, so we sweep the grid again and
+// again (Gauss-Seidel), each time a bit closer. We stop once the worst cell is
+// below TOLERANCE, or after MAX_SWEEPS as a safety limit. Walls block flow.
 function solvePressure(w) {
   const U = (i, j) => i + j * (GRID_W + 1), V = (i, j) => i + j * GRID_W;
   const open = (i, j) => (w.type[i + j * GRID_W] !== WALL ? 1 : 0);
@@ -93,7 +95,8 @@ function solvePressure(w) {
       if (w.type[i + j * GRID_W] !== WALL) continue;
       w.u[U(i, j)] = 0; w.u[U(i + 1, j)] = 0; w.v[V(i, j)] = 0; w.v[V(i, j + 1)] = 0;
     }
-  for (let iter = 0; iter < PRESSURE_ITERS; iter++)
+  for (let sweep = 0; sweep < MAX_SWEEPS; sweep++) {
+    let worst = 0;                               // biggest divergence seen this sweep
     for (let i = 1; i < GRID_W - 1; i++)
       for (let j = 1; j < GRID_H - 1; j++) {
         if (w.type[i + j * GRID_W] !== WATER) continue;
@@ -101,10 +104,14 @@ function solvePressure(w) {
         const sides = sl + sr + sb + st;
         if (sides === 0) continue;
         const divergence = w.u[U(i + 1, j)] - w.u[U(i, j)] + w.v[V(i, j + 1)] - w.v[V(i, j)];
+        worst = Math.max(worst, Math.abs(divergence));
         const fix = (1.9 * divergence) / sides;   // 1.9 = "over-relax" to converge faster
         w.u[U(i, j)] += sl * fix;  w.u[U(i + 1, j)] -= sr * fix;
         w.v[V(i, j)] += sb * fix;  w.v[V(i, j + 1)] -= st * fix;
       }
+    w.sweeps = sweep + 1;                        // how many sweeps it took (for curious readers)
+    if (worst < TOLERANCE) break;
+  }
 }
 
 // STEP 4 - Grid to particles (G2P).
