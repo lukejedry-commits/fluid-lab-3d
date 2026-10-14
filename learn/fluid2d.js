@@ -9,7 +9,7 @@ const CELL = 1 / GRID_H;         // size of one cell (the box is 1 unit tall)
 const GRAVITY = -9.8;            // pull downwards (units per second squared)
 const FLIP_RATIO = 0.9;          // 0 = smooth/syrupy (PIC), 1 = lively/noisy (FLIP)
 const MAX_SWEEPS = 200;          // most times we repeat the "no squashing" fix
-const TOLERANCE = 1e-4;          // "good enough": leftover squash below this (m/s)
+const PRESSURE_TOLERANCE = 1e-4; // "good enough": leftover squash below this (m/s)
 const AIR = 0, WATER = 1, WALL = 2;
 
 // "MAC grid": horizontal speeds (u) live on the LEFT/RIGHT edges of each cell,
@@ -93,7 +93,7 @@ function applyGravity(w, dt) {
 // difference equally back through the cell's open (non-wall) sides. Fixing
 // one cell slightly upsets its neighbours, so we sweep the grid again and
 // again (Gauss-Seidel), each time a bit closer. We stop once the worst cell is
-// below TOLERANCE, or after MAX_SWEEPS as a safety limit. Walls block flow.
+// below PRESSURE_TOLERANCE, or after MAX_SWEEPS as a safety limit. Walls block flow.
 function solvePressure(w) {
   const U = (i, j) => i + j * (GRID_W + 1), V = (i, j) => i + j * GRID_W;
   const open = (i, j) => (w.type[i + j * GRID_W] !== WALL ? 1 : 0);
@@ -118,7 +118,8 @@ function solvePressure(w) {
         w.v[V(i, j)] += sb * fix;  w.v[V(i, j + 1)] -= st * fix;
       }
     w.sweeps = sweep + 1;                        // how many sweeps it took (for curious readers)
-    if (worst < TOLERANCE) break;
+    if (worst < PRESSURE_TOLERANCE) break;
+    if (sweep === MAX_SWEEPS - 1) w.hitSweepCap = true;  // gave up before "good enough"
   }
 }
 
@@ -155,10 +156,8 @@ function moveParticles(w, dt) {
   }
 }
 
-// One full simulation step: the five steps above, in order.
-// Time step: the fastest water (~3.8 m/s at the dam-break front) must move
-// less than one cell per step ("CFL rule"): 3.8 * (1/240) = 0.016 < CELL = 0.021.
-function step(w, dt = 1 / 240) {
+// One small "substep": the five steps above, in order.
+function substep(w, dt) {
   particlesToGrid(w);
   applyGravity(w, dt);
   solvePressure(w);
@@ -166,5 +165,18 @@ function step(w, dt = 1 / 240) {
   moveParticles(w, dt);
 }
 
+// One frame (1/240 s by default). The "CFL rule": no particle may move more
+// than one cell per substep, so fast water gets more, smaller substeps
+// (at most MAX_SUBSTEPS). w.hitSweepCap tells you if the pressure fix ever
+// ran out of sweeps during this frame.
+const MAX_SUBSTEPS = 8;
+function step(w, frameDt = 1 / 240) {
+  let fastest = 0;
+  for (let p = 0; p < w.x.length; p++) fastest = Math.max(fastest, Math.hypot(w.vx[p], w.vy[p]));
+  const n = Math.min(MAX_SUBSTEPS, Math.max(1, Math.ceil((fastest * frameDt) / CELL)));
+  w.hitSweepCap = false; w.substeps = n;
+  for (let i = 0; i < n; i++) substep(w, frameDt / n);
+}
+
 // Let Node.js (tests) use this file too; browsers simply skip this.
-if (typeof module !== 'undefined') module.exports = { createWorld, step, GRID_W, GRID_H, CELL };
+if (typeof module !== 'undefined') module.exports = { createWorld, step, substep, GRID_W, GRID_H, CELL };

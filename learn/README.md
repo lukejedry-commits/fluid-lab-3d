@@ -40,4 +40,4 @@ up inside a wall, we put it back at the wall and stop its speed into the wall.
 - There is no particle-spacing or density correction, so particles can bunch into lines and the
   water volume slowly drifts. The real sim adds both.
 - Gauss-Seidel stops at max |divergence| < 1e-4 m/s or 200 sweeps, so it is close to, not exactly, incompressible.
-- Fixed time step 1/240 s (4 steps per drawn frame), chosen so the ~3.8 m/s dam-break front moves under one cell per step (CFL rule). There is no adaptive step.
+- Each `step` is one 1/240 s frame (4 per drawn frame), split into 1-8 substeps so no particle moves more than one cell per substep (CFL rule). If even 8 is not enough the rule is broken for that frame. `w.substeps` and `w.hitSweepCap` (pressure ran out of sweeps) are set every frame.
