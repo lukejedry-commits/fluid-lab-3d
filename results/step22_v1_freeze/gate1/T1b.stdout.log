@@ -1,0 +1,108 @@
+T1b N=8 frame 60/600 elapsed 1 s
+T1b N=8 frame 120/600 elapsed 1 s
+T1b N=8 frame 180/600 elapsed 1 s
+T1b N=8 frame 240/600 elapsed 1 s
+T1b N=8 frame 300/600 elapsed 2 s
+T1b N=8 frame 360/600 elapsed 2 s
+T1b N=8 frame 420/600 elapsed 2 s
+T1b N=8 frame 480/600 elapsed 2 s
+T1b N=8 frame 540/600 elapsed 3 s
+T1b N=8 frame 600/600 elapsed 3 s
+{"N":8,"h":0.0625,"Hnominal":0.1625,"Heff":0.1640625,"HoverH":2.6,"q":0.6000000000000001,"nTop":5,"particles":1344,"cells":[8,8,6],"maxU":2.9097520261465777e-10,"floorErr":3.349320967274611e-12,"wallErr":1.2017912688122793e-11,"wallErrMidpoint":0.020408163279408753,"pErr":3.366774883298888e-10,"pCells":36,"surfRow":2,"energy":{"worst":3.925331522473378e-11,"at":10.000000000000076,"stage":"-","riseStages":{"advect":600}},"wallSec":3.034}
+INFO T1b N=8: ghost-fluid surface z_c + theta h (mean [min,max] over columns) vs H_eff : 0.164062500000 [0.164062500000, 0.164062500000] vs 0.164062500000; rel diff 0.000e+0
+INFO T1b N=8: H nominal / H_eff (H/h = 2.60, top-cell particles 5/8) : 0.1625 / 0.1640625
+PASS T1b.u N=8: max|u| after 10 s : 2.910e-10 vs < 1.269e-3
+PASS T1b.floor N=8: max over all 600 steps of signed (F_floor - dPz/dt)/Mg - 1 [graded]; signed (F_floor + dPz/dt)/Mg - 1 [info] = 5.115e-12 (step 1) : 5.115e-12 (step 1) vs |.| <= 1e-6 every step
+INFO T1b N=8: raw floor force |F - Mg|/(Mg), max over steps / at end : 5.115e-12 / 3.349e-12
+PASS T1b.E N=8: max (E-E0)/|E0| : 3.925e-11 vs <= 1e-6 (steps with any rise, by largest stage: {"advect":600})
+INFO T1b N=8: side-wall rel err: graded theta-aware integral / plain cell-sum (info) : 1.202e-11 / 2.041e-2
+PASS P.res T1b N=8: max final true residual / ||rhs|| (600 solves) : 2.711e-9 vs <= 1e-8
+PASS P.res T1b N=8: max iters / median(prev 20), steps > 20 : 1.000 (step 21) vs <= 2
+PASS P.div T1b N=8: max |div u| * dt : 1.897e-10 vs <= 1e-6
+INFO NM T1b N=8: pressure-stage dE > 0 (graded in T3) : 0 of 600 steps; max 0.000e+0 J
+INFO NM T1b N=8: CFL used per frame : max 0.2088, min 0.2088; frames with 8-cap binding and CFL>1: 0
+INFO NM T1b N=8: extension-stage |dE| per step (own stage) : max 0.000e+0 J, cumulative 0.000e+0 J
+T1b N=16 frame 60/600 elapsed 2 s
+T1b N=16 frame 120/600 elapsed 4 s
+T1b N=16 frame 180/600 elapsed 7 s
+T1b N=16 frame 240/600 elapsed 9 s
+T1b N=16 frame 300/600 elapsed 11 s
+T1b N=16 frame 360/600 elapsed 13 s
+T1b N=16 frame 420/600 elapsed 15 s
+T1b N=16 frame 480/600 elapsed 17 s
+T1b N=16 frame 540/600 elapsed 19 s
+T1b N=16 frame 600/600 elapsed 21 s
+{"N":16,"h":0.03125,"Hnominal":0.1625,"Heff":0.1640625,"HoverH":5.2,"q":0.20000000000000018,"nTop":2,"particles":10752,"cells":[16,16,10],"maxU":1.3344599673270079e-9,"floorErr":4.5762845492207896e-12,"wallErr":1.6419414547854073e-11,"wallErrMidpoint":0.0022675736792068988,"pErr":6.212631558658463e-10,"pCells":588,"surfRow":5,"energy":{"worst":-1.3579710208769427e-14,"at":0.016666666666666666,"stage":"-","riseStages":{}},"wallSec":20.517}
+INFO T1b N=16: ghost-fluid surface z_c + theta h (mean [min,max] over columns) vs H_eff : 0.164062500000 [0.164062500000, 0.164062500000] vs 0.164062500000; rel diff 0.000e+0
+INFO T1b N=16: H nominal / H_eff (H/h = 5.20, top-cell particles 2/8) : 0.1625 / 0.1640625
+PASS T1b.u N=16: max|u| after 10 s : 1.334e-9 vs < 1.269e-3
+PASS T1b.floor N=16: max over all 600 steps of signed (F_floor - dPz/dt)/Mg - 1 [graded]; signed (F_floor + dPz/dt)/Mg - 1 [info] = 1.436e-11 (step 1) : 1.436e-11 (step 1) vs |.| <= 1e-6 every step
+INFO T1b N=16: raw floor force |F - Mg|/(Mg), max over steps / at end : 1.436e-11 / 4.576e-12
+PASS T1b.E N=16: max (E-E0)/|E0| : -1.358e-14 vs <= 1e-6 (steps with any rise, by largest stage: {})
+INFO T1b N=16: side-wall rel err: graded theta-aware integral / plain cell-sum (info) : 1.642e-11 / 2.268e-3
+PASS P.res T1b N=16: max final true residual / ||rhs|| (600 solves) : 6.416e-9 vs <= 1e-8
+PASS P.res T1b N=16: max iters / median(prev 20), steps > 20 : 1.000 (step 21) vs <= 2
+PASS P.div T1b N=16: max |div u| * dt : 1.827e-9 vs <= 1e-6
+INFO NM T1b N=16: pressure-stage dE > 0 (graded in T3) : 0 of 600 steps; max 0.000e+0 J
+INFO NM T1b N=16: CFL used per frame : max 0.2953, min 0.2953; frames with 8-cap binding and CFL>1: 0
+INFO NM T1b N=16: extension-stage |dE| per step (own stage) : max 0.000e+0 J, cumulative 0.000e+0 J
+T1b N=32 frame 60/600 elapsed 15 s
+T1b N=32 frame 120/600 elapsed 31 s
+T1b N=32 frame 180/600 elapsed 46 s
+T1b N=32 frame 240/600 elapsed 62 s
+T1b N=32 frame 300/600 elapsed 77 s
+T1b N=32 frame 360/600 elapsed 92 s
+T1b N=32 frame 420/600 elapsed 108 s
+T1b N=32 frame 480/600 elapsed 123 s
+T1b N=32 frame 540/600 elapsed 138 s
+T1b N=32 frame 600/600 elapsed 153 s
+{"N":32,"h":0.015625,"Hnominal":0.1625,"Heff":0.162109375,"HoverH":10.4,"q":0.40000000000000036,"nTop":3,"particles":84992,"cells":[32,32,18],"maxU":1.4163039296938566e-9,"floorErr":9.077544161713633e-13,"wallErr":8.284144680324781e-12,"wallErrMidpoint":0.0013064305334138458,"pErr":3.6643042104419533e-10,"pCells":7200,"surfRow":10,"energy":{"worst":2.2513364872722874e-12,"at":9.966666666666741,"stage":"-","riseStages":{"gravity+pressure":397}},"wallSec":153.151}
+INFO T1b N=32: ghost-fluid surface z_c + theta h (mean [min,max] over columns) vs H_eff : 0.162109375000 [0.162109375000, 0.162109375000] vs 0.162109375000; rel diff 0.000e+0
+INFO T1b N=32: H nominal / H_eff (H/h = 10.40, top-cell particles 3/8) : 0.1625 / 0.162109375
+PASS T1b.u N=32: max|u| after 10 s : 1.416e-9 vs < 1.261e-3
+PASS T1b.floor N=32: max over all 600 steps of signed (F_floor - dPz/dt)/Mg - 1 [graded]; signed (F_floor + dPz/dt)/Mg - 1 [info] = 6.395e-12 (step 1) : 6.395e-12 (step 1) vs |.| <= 1e-6 every step
+INFO T1b N=32: raw floor force |F - Mg|/(Mg), max over steps / at end : 6.395e-12 / 9.078e-13
+PASS T1b.E N=32: max (E-E0)/|E0| : 2.251e-12 vs <= 1e-6 (steps with any rise, by largest stage: {"gravity+pressure":397})
+INFO T1b N=32: side-wall rel err: graded theta-aware integral / plain cell-sum (info) : 8.284e-12 / 1.306e-3
+PASS P.res T1b N=32: max final true residual / ||rhs|| (600 solves) : 6.437e-9 vs <= 1e-8
+PASS P.res T1b N=32: max iters / median(prev 20), steps > 20 : 1.000 (step 21) vs <= 2
+PASS P.div T1b N=32: max |div u| * dt : 8.448e-9 vs <= 1e-6
+INFO NM T1b N=32: pressure-stage dE > 0 (graded in T3) : 0 of 600 steps; max 0.000e+0 J
+INFO NM T1b N=32: CFL used per frame : max 0.4176, min 0.4176; frames with 8-cap binding and CFL>1: 0
+INFO NM T1b N=32: extension-stage |dE| per step (own stage) : max 0.000e+0 J, cumulative 0.000e+0 J
+T1b N=64 frame 60/600 elapsed 128 s
+T1b N=64 frame 120/600 elapsed 255 s
+T1b N=64 frame 180/600 elapsed 385 s
+T1b N=64 frame 240/600 elapsed 516 s
+T1b N=64 frame 300/600 elapsed 647 s
+T1b N=64 frame 360/600 elapsed 778 s
+T1b N=64 frame 420/600 elapsed 909 s
+T1b N=64 frame 480/600 elapsed 1041 s
+T1b N=64 frame 540/600 elapsed 1174 s
+T1b N=64 frame 600/600 elapsed 1308 s
+{"N":64,"h":0.0078125,"Hnominal":0.1625,"Heff":0.162109375,"HoverH":20.8,"q":0.8000000000000007,"nTop":6,"particles":679936,"cells":[64,64,34],"maxU":1.6749042389714056e-9,"floorErr":6.009279904186864e-13,"wallErr":8.894689957794621e-13,"wallErrMidpoint":0.000145158949458885,"pErr":6.534493773716154e-10,"pCells":73036,"surfRow":20,"energy":{"worst":1.0896134571055271e-12,"at":9.983333333333409,"stage":"-","riseStages":{"gravity+pressure":321}},"wallSec":1307.596}
+INFO T1b N=64: ghost-fluid surface z_c + theta h (mean [min,max] over columns) vs H_eff : 0.162109375000 [0.162109375000, 0.162109375000] vs 0.162109375000; rel diff 0.000e+0
+INFO T1b N=64: H nominal / H_eff (H/h = 20.80, top-cell particles 6/8) : 0.1625 / 0.162109375
+PASS T1b.u N=64: max|u| after 10 s : 1.675e-9 vs < 1.261e-3
+PASS T1b.floor N=64: max over all 600 steps of signed (F_floor - dPz/dt)/Mg - 1 [graded]; signed (F_floor + dPz/dt)/Mg - 1 [info] = -8.084e-13 (step 1) : -8.084e-13 (step 1) vs |.| <= 1e-6 every step
+INFO T1b N=64: raw floor force |F - Mg|/(Mg), max over steps / at end : 8.084e-13 / 6.009e-13
+PASS T1b.E N=64: max (E-E0)/|E0| : 1.090e-12 vs <= 1e-6 (steps with any rise, by largest stage: {"gravity+pressure":321})
+INFO T1b N=64: side-wall rel err: graded theta-aware integral / plain cell-sum (info) : 8.895e-13 / 1.452e-4
+PASS P.res T1b N=64: max final true residual / ||rhs|| (600 solves) : 6.712e-9 vs <= 1e-8
+PASS P.res T1b N=64: max iters / median(prev 20), steps > 20 : 1.000 (step 21) vs <= 2
+PASS P.div T1b N=64: max |div u| * dt : 1.335e-8 vs <= 1e-6
+INFO NM T1b N=64: pressure-stage dE > 0 (graded in T3) : 0 of 600 steps; max 0.000e+0 J
+INFO NM T1b N=64: CFL used per frame : max 0.5906, min 0.5906; frames with 8-cap binding and CFL>1: 0
+INFO NM T1b N=64: extension-stage |dE| per step (own stage) : max 0.000e+0 J, cumulative 0.000e+0 J
+PASS T1b.wall N=64: side-wall force rel err vs 1/2 rho g H_eff^2 W : 8.895e-13 vs <= 1e-2
+PASS T1b.wall envelope order: e = 1.202e-11, 1.642e-11, 8.284e-12, 8.895e-13 : all < 1e-10 floor: order skipped vs order >= 0.8 unless all < 1e-10
+PASS T1b.p N=64: pressure rel err, interior cells below surface row : 6.534e-10 (73036 cells) vs <= 1e-2
+PASS [T1b] energy bookkeeping closure: max over 2400 substeps |sum stage dE - dE_total| / |E| (worst at 32x32x18 step 62) : 1.103e-16 vs <= 1e-12
+INFO [T1b] push-out moved fraction per step, sim 8x8x6 (600 steps): mean / max : 2.480e-6 / 1.488e-3
+INFO [T1b] push-out moved fraction per step, sim 16x16x10 (600 steps): mean / max : 7.444e-4 / 9.301e-4
+INFO [T1b] push-out moved fraction per step, sim 32x32x18 (600 steps): mean / max : 0.000e+0 / 0.000e+0
+INFO [T1b] push-out moved fraction per step, sim 64x64x34 (600 steps): mean / max : 0.000e+0 / 0.000e+0
+INFO [T1b] colvol surface cells on count-theta fallback per frame, sim 8x8x6 (600 frames): mean / max : 0.000e+0 / 0.000e+0
+INFO [T1b] colvol surface cells on count-theta fallback per frame, sim 16x16x10 (600 frames): mean / max : 0.000e+0 / 0.000e+0
+INFO [T1b] colvol surface cells on count-theta fallback per frame, sim 32x32x18 (600 frames): mean / max : 0.000e+0 / 0.000e+0
+INFO [T1b] colvol surface cells on count-theta fallback per frame, sim 64x64x34 (600 frames): mean / max : 0.000e+0 / 0.000e+0
