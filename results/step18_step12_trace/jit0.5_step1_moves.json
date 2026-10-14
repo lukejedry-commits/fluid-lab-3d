@@ -1,0 +1,82 @@
+[
+ {
+  "step": 1,
+  "stage": "advect",
+  "moved": 262144,
+  "maxDxOverH": 1.3524539266285274e-9,
+  "crossedCell": 0,
+  "crossedTouchingTopLayer": 0
+ },
+ {
+  "step": 1,
+  "stage": "wallStrip",
+  "moved": 2223,
+  "maxDxOverH": 1.9353117719500545e-10,
+  "crossedCell": 0,
+  "crossedTouchingTopLayer": 0
+ },
+ {
+  "step": 1,
+  "stage": "separate",
+  "moved": 59108,
+  "maxDxOverH": 0.13806331827547957,
+  "crossedCell": 1327,
+  "crossedTouchingTopLayer": 54
+ },
+ {
+  "step": 1,
+  "stage": "wallStrip",
+  "moved": 4454,
+  "maxDxOverH": 0.0000020349453095647174,
+  "crossedCell": 0,
+  "crossedTouchingTopLayer": 0
+ },
+ {
+  "step": 1,
+  "stage": "separate",
+  "moved": 42366,
+  "maxDxOverH": 0.050060835231988676,
+  "crossedCell": 48,
+  "crossedTouchingTopLayer": 1
+ },
+ {
+  "step": 1,
+  "stage": "densityCorrection",
+  "moved": 262144,
+  "maxDxOverH": 0.05005768451055559,
+  "crossedCell": 51,
+  "crossedTouchingTopLayer": 1
+ },
+ {
+  "step": 2,
+  "stage": "advect",
+  "moved": 262144,
+  "maxDxOverH": 0.0653928066444891,
+  "crossedCell": 44,
+  "crossedTouchingTopLayer": 33
+ },
+ {
+  "step": 2,
+  "stage": "wallStrip",
+  "moved": 2041,
+  "maxDxOverH": 0.001692303695457753,
+  "crossedCell": 0,
+  "crossedTouchingTopLayer": 0
+ },
+ {
+  "step": 2,
+  "stage": "separate",
+  "moved": 29784,
+  "maxDxOverH": 0.021689688925103923,
+  "crossedCell": 8,
+  "crossedTouchingTopLayer": 2
+ },
+ {
+  "step": 2,
+  "stage": "densityCorrection",
+  "moved": 0,
+  "maxDxOverH": 0,
+  "crossedCell": 0,
+  "crossedTouchingTopLayer": 0
+ }
+]
