@@ -24,7 +24,7 @@ class Sim {
     this.sepFrac = o.sepFrac ?? 0.5; this.sepIters = o.sepIters ?? 1;
     // C3 regression switches (defaults = production behaviour; tests turn one fix off to prove its test fails)
     this.useDensFix = o.densFix ?? true; this.densSign = o.densSign ?? 1; this.densTol = o.densTol ?? 1e-4; this.densCap = o.densCap ?? 0.1; this.densAlpha = o.densAlpha ?? 0.1; this.densDead = o.densDead ?? 0.2; // fix 3 v6
-    this.thetaMode = o.thetaMode ?? 'count'; // PHYSICS_SPEC 7.7 option 3 = 'smooth' (opt-in until Phase A passes); 'count' = 7.2 per-cell counts
+    this.thetaMode = o.thetaMode ?? 'colvol'; // PHYSICS_SPEC 7.7 (b2d23ec4) column volume, default after Phase B1 passed; 'count' = 7.2 per-cell counts; 'smooth' = Phase A splat (failed, kept for the record)
     this.useGhostFill = o.ghostFill ?? true; this.useWallStrip = o.wallStrip ?? true; this.useSepClip = o.sepClip ?? true;
     this.s = this.h / 2;                    // particle spacing (2x2x2 per cell)
     this.pr = 0.25 * this.s;                // wall clearance radius
@@ -162,7 +162,7 @@ class Sim {
       const i = Math.min(nx - 1, Math.max(0, Math.floor(this.x[3 * p] * ih))), j = Math.min(ny - 1, Math.max(0, Math.floor(this.x[3 * p + 1] * ih))), k = Math.min(nz - 1, Math.max(0, Math.floor(this.x[3 * p + 2] * ih)));
       cnt[i + nx * (j + ny * k)]++;
     }
-    this.cellCount = cnt; this._fsm = null; return cnt;
+    this.cellCount = cnt; this._fsm = null; this._colvol = null; return cnt;
   }
   /** ghost-fluid fraction: distance from fluid cell centre to surface / h = f_c - 1/2,
    *  f_c = min(1, particles/8) the cell fill fraction. Clamped to [THETA_MIN, 1]. */
@@ -188,8 +188,29 @@ class Sim {
    *  'smooth' (7.7 option 3): f~ = nbar/8 from the fix-3 P2G splat (quadratic B-spline, mirror-folded at walls);
    *  theta = f~_c + f~_a + f~_(a+d) - 1/2 along the face normal d = a - c (the smoothed fluid depth beyond c's centre).
    *  It equals the count formula wherever the splat equals the counts; it moves continuously with particle positions. */
+  /** 7.7 column volume. Surface cell c: fluid, cell above in box and non-fluid. Run = contiguous fluid cells from c down to the first
+   *  non-fluid cell or the floor, plus the particles of the cell above c (the partly filled non-fluid surface cell, as in 7.2).
+   *  H/h = k_bottom + sum n/8 (raw counts). H~ = mean of H over the 3x3 columns (walls mirrored: column -1 -> 0, n -> n-1) when every one
+   *  of them has a surface cell in the same row k; then theta = H~/h - (k + 1/2). Otherwise NaN -> count theta (fallback). */
+  colvolThetas(cnt) {
+    const { nx, ny, nz } = this, NN = nx * ny, FL = this.classify(cnt), Hs = new Float64Array(this.nCells).fill(NaN), out = new Float64Array(this.nCells).fill(NaN);
+    let nSurf = 0, nFall = 0;
+    for (let k = 0; k < nz - 1; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const c = i + nx * j + NN * k; if (!FL[c] || FL[c + NN]) continue;
+      let s = cnt[c + NN] / 8, kb = k; while (kb >= 0 && FL[i + nx * j + NN * kb]) { s += cnt[i + nx * j + NN * kb] / 8; kb--; }
+      Hs[c] = kb + 1 + s; }
+    const fold = (v, m) => (v < 0 ? -1 - v : v >= m ? 2 * m - 1 - v : v);
+    for (let k = 0; k < nz - 1; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const c = i + nx * j + NN * k; if (Number.isNaN(Hs[c])) continue; nSurf++;
+      let s = 0, ok = true; for (let dj = -1; dj <= 1 && ok; dj++) for (let di = -1; di <= 1; di++) { const v = Hs[fold(i + di, nx) + nx * fold(j + dj, ny) + NN * k]; if (Number.isNaN(v)) { ok = false; break; } s += v; }
+      if (ok) out[c] = s / 9 - (k + 0.5); else nFall++; }
+    this.colvolStats = { nSurf, nFall }; return out;
+  }
   thetaRaw(cnt, c, a) {
-    if (this.thetaMode === 'count') return cnt[a] > 0 ? Math.min(1, cnt[a] / 8) + 0.5 : Math.min(1, cnt[c] / 8) - 0.5;
+    const tCount = () => (cnt[a] > 0 ? Math.min(1, cnt[a] / 8) + 0.5 : Math.min(1, cnt[c] / 8) - 0.5);
+    if (this.thetaMode === 'count') return tCount();
+    if (this.thetaMode === 'colvol') { // PHYSICS_SPEC 7.7 (b2d23ec4): column volume, upward surface faces only
+      if (a !== c + this.nx * this.ny) return tCount();
+      const T = this._colvol || (this._colvol = this.colvolThetas(cnt)), v = T[c];
+      return Number.isNaN(v) ? tCount() : v; }
     const F = this._fsm || (this._fsm = this.splatCounts()), d = a - c, { nx, ny, nz } = this;
     const ax = Math.abs(d) === 1 ? 0 : Math.abs(d) === nx ? 1 : 2, co = [a % nx, ((a / nx) | 0) % ny, (a / (nx * ny)) | 0][ax] + Math.sign(d);
     const b = co >= 0 && co < [nx, ny, nz][ax] ? F[a + d] : 0;

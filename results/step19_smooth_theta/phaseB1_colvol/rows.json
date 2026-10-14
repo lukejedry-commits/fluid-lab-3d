@@ -1,0 +1,128 @@
+[
+ {
+  "name": "(1) T1 lattice N=8: max |theta_colvol - theta_count| over 64 faces (fallback 0/64)",
+  "value": "0.000e+0",
+  "limit": "<= 1e-12",
+  "pass": true
+ },
+ {
+  "name": "(1) T1 lattice N=16: max |theta_colvol - theta_count| over 256 faces (fallback 0/256)",
+  "value": "0.000e+0",
+  "limit": "<= 1e-12",
+  "pass": true
+ },
+ {
+  "name": "(1) T1 lattice N=32: max |theta_colvol - theta_count| over 1024 faces (fallback 0/1024)",
+  "value": "0.000e+0",
+  "limit": "<= 1e-12",
+  "pass": true
+ },
+ {
+  "name": "(1) T1 lattice N=64: max |theta_colvol - theta_count| over 4096 faces (fallback 0/4096)",
+  "value": "0.000e+0",
+  "limit": "<= 1e-12",
+  "pass": true
+ },
+ {
+  "name": "(1) T1b lattice N=8 (top cell 5): max |theta_colvol - theta_count| over 64 faces (fallback 0/64)",
+  "value": "0.000e+0",
+  "limit": "<= 1e-12",
+  "pass": true
+ },
+ {
+  "name": "(1) T1b lattice N=16 (top cell 2): max |theta_colvol - theta_count| over 256 faces (fallback 0/256)",
+  "value": "0.000e+0",
+  "limit": "<= 1e-12",
+  "pass": true
+ },
+ {
+  "name": "(1) T1b lattice N=32 (top cell 3): max |theta_colvol - theta_count| over 1024 faces (fallback 0/1024)",
+  "value": "0.000e+0",
+  "limit": "<= 1e-12",
+  "pass": true
+ },
+ {
+  "name": "(1) T1b lattice N=64 (top cell 6): max |theta_colvol - theta_count| over 4096 faces (fallback 0/4096)",
+  "value": "0.000e+0",
+  "limit": "<= 1e-12",
+  "pass": true
+ },
+ {
+  "name": "(2) flat fill f=0.25 (N=8..64, 5440 faces, fallback 0): max |(k+1/2+theta) - (K+f)| (theta unclamped; with the 7.2 [0.05,1] clamp: 0.000e+0)",
+  "value": "0.000e+0",
+  "limit": "<= 1e-12",
+  "pass": true
+ },
+ {
+  "name": "(2) flat fill f=0.5 (N=8..64, 5440 faces, fallback 0): max |(k+1/2+theta) - (K+f)| (theta unclamped; with the 7.2 [0.05,1] clamp: 5.000e-2)",
+  "value": "0.000e+0",
+  "limit": "<= 1e-12",
+  "pass": true
+ },
+ {
+  "name": "(2) flat fill f=0.75 (N=8..64, 5440 faces, fallback 0): max |(k+1/2+theta) - (K+f)| (theta unclamped; with the 7.2 [0.05,1] clamp: 0.000e+0)",
+  "value": "0.000e+0",
+  "limit": "<= 1e-12",
+  "pass": true
+ },
+ {
+  "name": "(3a) horizontal crossing (top face z=32h): max |d theta| colvol (classification unchanged true); count-based 1.250e-1",
+  "value": "0.000e+0",
+  "limit": "<= 1e-12",
+  "pass": true
+ },
+ {
+  "name": "(3a) horizontal crossing (interior face z=16h): max |d theta| colvol (classification unchanged true); count-based 0.000e+0",
+  "value": "0.000e+0",
+  "limit": "<= 1e-12",
+  "pass": true
+ },
+ {
+  "name": "(3b) lateral crossing (top row k=31): max |d theta| colvol (classification unchanged true)",
+  "value": "1.389e-2",
+  "limit": "<= 0.02",
+  "pass": true
+ },
+ {
+  "name": "(3b) lateral crossing (top row k=31): count-based must fail",
+  "value": "1.250e-1",
+  "limit": "> 0.02",
+  "pass": true
+ },
+ {
+  "name": "(3b) lateral crossing (interior k=15): max |d theta| colvol (classification unchanged true)",
+  "value": "1.389e-2",
+  "limit": "<= 0.02",
+  "pass": true
+ },
+ {
+  "name": "(3b) lateral crossing (interior k=15): count-based must fail",
+  "value": "0.000e+0",
+  "limit": "> 0.02",
+  "pass": false
+ },
+ {
+  "name": "(4) detached sheet (i=0..6, k=9 full + k=10 at f=0.25): theta from its own run = 0.75 (pool-included run would give -2.25)",
+  "value": "0.000e+0",
+  "limit": "<= 1e-12",
+  "pass": true
+ },
+ {
+  "name": "(4) sheet edge cells (i=7, neighbours at i=8 have no surface cell in row 9): fall back to count theta (16 cells)",
+  "value": "all fallback, theta == count",
+  "limit": "fallback",
+  "pass": true
+ },
+ {
+  "name": "(4) pool under the overhang (row k=5, all columns incl. under the sheet): theta from the pool run = 0.5",
+  "value": "0.000e+0",
+  "limit": "<= 1e-12",
+  "pass": true
+ },
+ {
+  "name": "(4) sheet underside face (downward, not a column surface): count theta",
+  "value": "0.5 vs count 0.5",
+  "limit": "equal",
+  "pass": true
+ }
+]
