@@ -21,7 +21,7 @@ class Sim {
     this.frame = o.frame ?? 1 / 60; this.maxSub = o.maxSub ?? 16; this.cfl = o.cfl ?? 1;
     this.tol = o.tol ?? 1e-8; this.jitter = o.jitter ?? 0.1; this.rand = mulberry32(o.seed ?? 12345);
     this.subMul = o.subMul ?? 1; // T2 half-dt info row: multiply the substep count (cap applies before)
-    this.sepTrig = o.sepTrig ?? 0.0611; this.sepFrac = 2 * this.sepTrig; this.sepIters = o.sepIters ?? 1; // Z 2026-10-14n/o: pair-separation trigger d_trig = 0.0611 h (was 0.25 h = sepFrac 0.5 x s); sepFrac kept for reporting only
+    this.sepTrig = o.sepTrig ?? 0.25; this.sepFrac = 2 * this.sepTrig; this.sepIters = o.sepIters ?? 1; // pair-separation trigger d_trig = sepTrig h; v1 = 0.25 h (0.0611 h trialled in step 21, not adopted); sepFrac kept for reporting only
     // C3 regression switches (defaults = production behaviour; tests turn one fix off to prove its test fails)
     this.useDensFix = o.densFix ?? true; this.densSign = o.densSign ?? 1; this.densTol = o.densTol ?? 1e-4; this.densCap = o.densCap ?? 0.1; this.densAlpha = o.densAlpha ?? 0.1; this.densDead = o.densDead ?? 0.2; // fix 3 v6
     this.thetaMode = o.thetaMode ?? 'count'; // Z 2026-10-14n: default reverted to count; 'colvol' (7.7 column volume) behind this flag; 'count' = 7.2 per-cell counts; 'smooth' = Phase A splat (failed, kept for the record)
