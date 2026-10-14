@@ -63,3 +63,16 @@ All checks measured in 64-bit before any float32 store. Outputs go to step-named
 - 2026-10-14 (C3.tilted_tank energy, NM): the total-energy row stays graded and stays FAIL while C3.separation fails; that fail is attributed to push-out, not bunching. Added graded row: the energy change summed over every stage except push-out must not rise above E0 by more than 1e-6 |E0|. Nothing removed.
 - 2026-10-14 (regression rows for fixes): C3.fix1 = a = 8 pressure-stage dE <= 0 in the face-mass measure on every step (failed on 42cf1bc with 2 positive steps, passes at 6c4214d). C3.fix2 (amended 2026-10-14, Lead/Physics/NM): n = outward normal into the wall, d = |x_wall - x_p|. After G2P, for every particle in a wall-adjacent cell, the at-wall value u_n + C_nn (x_wall - x_p) <= 1e-12 m/s at every step; it must be violated on 6c4214d. Clamp rule: adjust C_nn only (to give exactly 0 at the wall); change u_n only when d < 1e-3 h, and count those cases (info). The clamp stage's energy change is graded <= 0 every step, measured as grid kinetic energy after the next P2G with vs without the clamp (C changes only enter through P2G, so particle 1/2 m u^2 alone would read 0).
 No gate loosened.
+
+### Z amendment 2026-10-14b (Physics/NM ruling on fix 2)
+- C3.fix2 RETIRED (clamp reverted). The zero normal velocity at solid faces in G2P stays.
+- C3.revert: with the C_nn clamp removed, the results must match fix 1 (ff9836b) to roundoff (|delta| <= 1e-12 relative). That means Ritter (3-frame) 0.978 +/- 0.001 at a=16 and 0.911 at a=8, T4 14.27%, and T3.mm unchanged. Run with the OLD seeding. If zero normal velocity in G2P was not already in fix 1, the bit-for-bit match is replaced by: Ritter <= 1.0, T3.mm within tolerance, and T4 within 0.5 points of 14.27%, with the code difference stated. Order: revert, then C3.revert, then C3.seed, then fix 3. This gate must pass before fix 3 is applied.
+- C3.seed: at t=0 no particle lies within the wall clearance (1.95e-3 m) of any wall, so the jitter has to respect the clearance. Step 0 is NOT excluded, and push-out dE at step 0 is graded under the normal stage rule.
+- C3.fix3 (density correction, position-only):
+  * Each particle moves at most 0.1 h per step (graded max).
+  * The stage's dKE is 0 to roundoff (<= 1e-12 J), graded.
+  * The stage's dPE may be positive. Per-step values are reported.
+  * Cumulative stage dPE <= PE_pack(t), where PE_pack = PE(actual layer counts) - PE(uniform 8 per cell, same particles), measured at the same step. Graded every step.
+  * Total energy: (E - E0)/|E0| <= 1e-6 at every step (the existing limit, unchanged).
+  * T4 (interior mean within 1%) graded at the end of T3. T3.mm stays at its fix 1 worst or better. Ritter windowed <= 1.0 (upper bound only; slowing is guarded by T3.mm).
+  * The test must fail on the reverted code (T4 fails there already).

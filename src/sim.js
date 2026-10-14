@@ -304,24 +304,6 @@ class Sim {
         this.v[3 * p + a] = v; this.C[9 * p + 3 * a] = c0 * Dinv; this.C[9 * p + 3 * a + 1] = c1 * Dinv; this.C[9 * p + 3 * a + 2] = c2 * Dinv;
       }
     }
-    this.wallClamp();
-  }
-  /** FIX 2 (ASSERTS sec. Z, C3.fix2): for each particle in a wall-adjacent cell and each adjacent wall
-   *  (outward normal n into the wall, d = |x_wall - x_p|): if the particle's own field at the wall,
-   *  n.(u_n + C_nn (x_wall - x_p)), points into the wall, set C_nn so it is exactly 0 there.
-   *  Only when d < 1e-3 h is u_n changed instead (counted). Runs after the final G2P velocity. */
-  wallClamp() {
-    const h = this.h, n = [this.nx, this.ny, this.nz]; let nC = 0, nU = 0; const rec = this.clampRecord ? [] : null;
-    for (let p = 0; p < this.count; p++) for (let b = 0; b < 3; b++) {
-      const x = this.x[3 * p + b], cell = Math.floor(x / h);
-      for (const [hit, xw, sg] of [[cell <= 0, 0, -1], [cell >= n[b] - 1, this.L[b], 1]]) {
-        if (!hit) continue;
-        const qi = 3 * p + b, ci = 9 * p + 4 * b, dx = xw - x, at = this.v[qi] + this.C[ci] * dx;
-        if (sg * at <= 0) continue;
-        if (rec) rec.push([p, b, this.v[qi], this.C[ci]]);
-        if (Math.abs(dx) >= 1e-3 * h) { this.C[ci] = -this.v[qi] / dx; nC++; } else { this.v[qi] = -this.C[ci] * dx; nU++; }
-      } }
-    this.clampStats = { nC, nU }; if (rec) this.clampChanges = rec;
   }
   // ---------------- RK2 advection in the grid field (trilinear) ----------------
   sample(a, x, y, z) {
