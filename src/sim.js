@@ -23,7 +23,7 @@ class Sim {
     this.subMul = o.subMul ?? 1; // T2 half-dt info row: multiply the substep count (cap applies before)
     this.sepFrac = o.sepFrac ?? 0.5; this.sepIters = o.sepIters ?? 1;
     // C3 regression switches (defaults = production behaviour; tests turn one fix off to prove its test fails)
-    this.useDensFix = o.densFix ?? true; this.densSign = o.densSign ?? 1; this.densTol = o.densTol ?? 1e-4; this.densCap = o.densCap ?? 0.1; this.densAlpha = o.densAlpha ?? 0.1; this.densDead = o.densDead ?? 0.2; // fix 3 v2
+    this.useDensFix = o.densFix ?? true; this.densSign = o.densSign ?? 1; this.densTol = o.densTol ?? 1e-4; this.densCap = o.densCap ?? 0.1; this.densAlpha = o.densAlpha ?? 0.1; this.densDead = o.densDead ?? 0.2; // fix 3 v3
     this.useGhostFill = o.ghostFill ?? true; this.useWallStrip = o.wallStrip ?? true; this.useSepClip = o.sepClip ?? true;
     this.s = this.h / 2;                    // particle spacing (2x2x2 per cell)
     this.pr = 0.25 * this.s;                // wall clearance radius
@@ -384,9 +384,20 @@ class Sim {
    *  with phi = 0 in air, d(phi)/dn = 0 at solids, PCG/MIC(0) tol densTol, only on fluid regions touching air
    *  (others skipped, counted). dx = -alpha grad(phi) h on MAC faces, trilinear, |dx| capped at densCap h,
    *  then push-out (same stage). Velocities and C untouched. */
+  /** FIX 3 v3 (ASSERTS Z 2026-10-14e): nbar = P2G splat of particle positions (quadratic B-spline, the velocity
+   *  transfer kernel) to cell centres; weights that fall outside the box fold onto the mirror in-box cell. */
+  splatCounts() {
+    const { nx, ny, nz } = this, ih = 1 / this.h, out = new Float64Array(this.nCells), W = new Float64Array(9), B = [0, 0, 0], n = [nx, ny, nz];
+    const fold = (v, m) => (v < 0 ? -1 - v : v >= m ? 2 * m - 1 - v : v);
+    for (let p = 0; p < this.count; p++) {
+      for (let b = 0; b < 3; b++) { const f = this.x[3 * p + b] * ih - 0.5, base = Math.floor(f - 0.5); B[b] = base; Sim.w3(f - base, W, 3 * b); }
+      for (let kk = 0; kk < 3; kk++) { const k = fold(B[2] + kk, nz); for (let jj = 0; jj < 3; jj++) { const j = fold(B[1] + jj, ny), wjk = W[3 + jj] * W[6 + kk];
+        for (let ii = 0; ii < 3; ii++) out[fold(B[0] + ii, nx) + nx * (j + ny * k)] += W[ii] * wjk; } } }
+    return out;
+  }
   densityCorrection() {
     const { nx, ny, nz, h } = this, n = [nx, ny, nz], cs = [1, nx, nx * ny], N = this.nCells;
-    const cnt = this.markCells(), FL = this.classify(cnt), nbar = this.smoothedCounts(cnt);
+    const cnt = this.markCells(), FL = this.classify(cnt), nbar = this.splatCounts();
     const stats = { iters: 0, relRes: 0, regions: 0, skipped: 0, moved: 0, capped: 0, maxDx: 0, eSum: 0, nE: 0, nFluid: 0, nAboveDead: 0, nInterior: 0, floorE: [] };
     const reg = new Int32Array(N).fill(-1), air = []; const stack = [];
     const nb = (c, f) => { const i = c % nx, j = ((c / nx) | 0) % ny, k = (c / (nx * ny)) | 0, ijk = [i, j, k];
@@ -399,6 +410,17 @@ class Sim {
       if (airAdj) continue; stats.nInterior++; const e = nbar[c] / 8 - 1;
       if (c < nx * ny) stats.floorE.push(e);
       if (Math.abs(e) >= this.densDead) { E[c] = e; stats.nAboveDead++; } }
+    // v3 volume-neutral source (Z 2026-10-14e): after dead-band, per air-connected region subtract the mean of e
+    // over every fluid cell not adjacent to air from those same cells, so sum(e) = 0. Graded: |sum e| / n_region <= 1e-12.
+    const interior = new Uint8Array(N); for (let c = 0; c < N; c++) if (FL[c]) { let aa = false; nb(c, (m) => { if (!FL[m]) aa = true; }); interior[c] = aa ? 0 : 1; }
+    { const rs = new Float64Array(air.length), rn = new Float64Array(air.length), rN = new Float64Array(air.length);
+      for (let c = 0; c < N; c++) if (FL[c]) { rN[reg[c]]++; if (interior[c]) { rs[reg[c]] += E[c]; rn[reg[c]]++; } }
+      stats.ePreSum = 0; for (let c = 0; c < N; c++) if (E[c] !== 0) { stats.ePreSum += E[c]; stats.nE++; }
+      stats.ePreMean = stats.nE ? stats.ePreSum / stats.nE : 0; stats.regionShiftMax = 0;
+      for (let r = 0; r < air.length; r++) if (air[r] && rn[r] && rs[r] !== 0) stats.regionShiftMax = Math.max(stats.regionShiftMax, Math.abs(rs[r] / rn[r]));
+      for (let c = 0; c < N; c++) if (interior[c] && air[reg[c]] && rn[reg[c]]) E[c] -= rs[reg[c]] / rn[reg[c]];
+      const s2 = new Float64Array(air.length); for (let c = 0; c < N; c++) if (interior[c]) s2[reg[c]] += E[c];
+      stats.neutralMax = 0; for (let r = 0; r < air.length; r++) if (air[r] && rN[r]) stats.neutralMax = Math.max(stats.neutralMax, Math.abs(s2[r]) / rN[r]); }
     const uid = new Int32Array(N).fill(-1), cells = []; let anyE = false; const skippedWithE = new Set();
     for (let c = 0; c < N; c++) if (FL[c]) { if (air[reg[c]]) { uid[c] = cells.length; cells.push(c); if (E[c] !== 0) anyE = true; } else if (E[c] !== 0) skippedWithE.add(reg[c]); }
     stats.skipped = air.filter((x) => !x).length; stats.skippedWithExcess = skippedWithE.size;
@@ -412,8 +434,8 @@ class Sim {
       for (let a = 0; a < 3; a++) for (const side of [0, 1]) { const nbq = ijk[a] + (side ? 1 : -1); if (nbq < 0 || nbq >= n[a]) continue; // wall: Neumann
         const cn = c + (side ? 1 : -1) * cs[a]; d += 1;
         if (uid[cn] >= 0 && side) { (a === 0 ? sys.pX : a === 1 ? sys.pY : sys.pZ)[q] = uid[cn]; (a === 0 ? sys.cX : a === 1 ? sys.cY : sys.cZ)[q] = -1; } }
-      sys.diag[q] = d; b[q] = this.densSign * E[c]; if (E[c] !== 0) { stats.eSum += E[c]; stats.nE++; } } // A = -lap  =>  A phi = e  <=>  lap(phi) = -e
-    stats.eMean = stats.nE ? stats.eSum / stats.nE : 0;
+      sys.diag[q] = d; b[q] = this.densSign * E[c]; if (E[c] !== 0) { stats.eSum += E[c]; stats.nCorr = (stats.nCorr || 0) + 1; } } // A = -lap  =>  A phi = e  <=>  lap(phi) = -e
+    stats.eMean = stats.nE ? stats.ePreSum / stats.nE : 0; // mean e over cells above the dead-band, before the volume-neutral shift
     const r = pcgSolve(sys, b, { tol: this.densTol }); stats.iters = r.iters; stats.relRes = r.trueRelRes;
     const phi = (c) => (uid[c] >= 0 ? r.p[uid[c]] : 0), al = this.densAlpha;
     const disp = this.vel.map((v) => new Float64Array(v.length));
