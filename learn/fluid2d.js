@@ -156,7 +156,9 @@ function moveParticles(w, dt) {
 }
 
 // One full simulation step: the five steps above, in order.
-function step(w, dt = 1 / 120) {
+// Time step: the fastest water (~3.8 m/s at the dam-break front) must move
+// less than one cell per step ("CFL rule"): 3.8 * (1/240) = 0.016 < CELL = 0.021.
+function step(w, dt = 1 / 240) {
   particlesToGrid(w);
   applyGravity(w, dt);
   solvePressure(w);

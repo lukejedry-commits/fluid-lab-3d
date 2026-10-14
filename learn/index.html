@@ -20,7 +20,7 @@
     let world = createWorld();
     document.getElementById('reset').onclick = () => { world = createWorld(); };
     const params = new URLSearchParams(location.search);
-    for (let n = Number(params.get('warmup') || 0); n > 0; n--) step(world);
+    for (let n = Number(params.get('warmup') || 0); n > 0; n--) step(world);  // warmup = number of 1/240 s steps
 
     function draw() {
       ctx.fillStyle = '#000';
@@ -32,7 +32,7 @@
         ctx.fillRect(world.x[p] * scale - 2, canvas.height - world.y[p] * scale - 2, 4, 4);
       }
     }
-    function frame() { step(world); step(world); draw(); requestAnimationFrame(frame); }
+    function frame() { for (let s = 0; s < 4; s++) step(world); draw(); requestAnimationFrame(frame); }
     if (params.has('still')) draw(); else frame();
   </script>
 </body>

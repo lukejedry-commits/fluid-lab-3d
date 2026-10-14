@@ -18,13 +18,13 @@ and right edges of each cell and vertical speeds on the top and bottom edges (a 
 which makes measuring the flow in and out of a cell very simple.
 
 **2. Gravity (`applyGravity`).** Every vertical speed on the grid is nudged downwards by
-gravity × time step. That's all gravity is: a small change in speed each frame.
+gravity × time step, but only edges that touch water (empty air has nothing to pull). That's all gravity is: a small change in speed each frame.
 
 **3. Pressure solve (`solvePressure`).** Real water can't be squashed: whatever flows into a
 cell must flow out. For each water cell we add up the flow out minus the flow in (the
 "divergence"). If it isn't zero, we push the extra back out through the cell's open sides,
-shared equally. Fixing one cell upsets its neighbours a little, so we sweep over the grid 40
-times (the Gauss-Seidel method), and each sweep brings every cell closer to zero. Walls never
+shared equally. Fixing one cell upsets its neighbours a little, so we sweep over the grid again and
+again (the Gauss-Seidel method) until the worst cell is below 1e-4 m/s, or 200 sweeps at most. Walls never
 move, so their edges stay at zero. This step is what turns falling dots into a splashing,
 sloshing liquid.
 
@@ -39,5 +39,5 @@ up inside a wall, we put it back at the wall and stop its speed into the wall.
 ## Caveats (simplifications compared with the real 3D sim)
 - There is no particle-spacing or density correction, so particles can bunch into lines and the
   water volume slowly drifts. The real sim adds both.
-- A fixed 40 Gauss-Seidel sweeps are not fully converged. That's fine for looks, but not exact.
-- Fixed time step (1/120 s, 2 steps per drawn frame), with no CFL limit.
+- Gauss-Seidel stops at max |divergence| < 1e-4 m/s or 200 sweeps, so it is close to, not exactly, incompressible.
+- Fixed time step 1/240 s (4 steps per drawn frame), chosen so the ~3.8 m/s dam-break front moves under one cell per step (CFL rule). There is no adaptive step.
