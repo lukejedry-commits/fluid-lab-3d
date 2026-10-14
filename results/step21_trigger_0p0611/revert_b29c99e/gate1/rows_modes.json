@@ -1,0 +1,34 @@
+[
+ {
+  "part": "modes",
+  "id": "P.A max rel Linf over 6 solves (worst A_dirichlet_213 N=16)",
+  "measured": "2.417e-13",
+  "threshold": "<= 1e-7",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "modes",
+  "id": "P.B max rel Linf over 9 solves (worst B_neumann_210 N=16)",
+  "measured": "2.850e-13",
+  "threshold": "<= 1e-7",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "modes",
+  "id": "P.C max rel Linf over 9 solves (worst C_mixed_202 N=32)",
+  "measured": "2.510e-13",
+  "threshold": "<= 1e-7",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "modes",
+  "id": "P.res mode solves (tol 1e-12): max true residual / ||rhs||",
+  "measured": "4.011e-12",
+  "threshold": "<= 1e-8",
+  "pass": true,
+  "note": ""
+ }
+]
