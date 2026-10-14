@@ -133,3 +133,14 @@ U_R = 2.11781302 m/s, frame = 1/60 s. a=16: short W=3, q=0.0337317, limit 1.0337
 - No alpha qualified under 14j. Code frozen at alpha = 0.1.
 - If the Lead ships T4 as a limitation: T4 stays reported as FAIL against 1% (never relabelled PASS) and gains a graded regression ceiling: T4 <= 2.60% at a=16 and <= 2.70% at a=8 (step 15 values 2.46/2.59 plus a 0.1-point margin), so the limitation can't silently grow. The write-up gives the peak frame and both resolutions.
 - C3.separation info for the next step: per step, the fluid/air flip count, plus the pressure-stage dE in BOTH the theta weighting and the face-mass weighting (NM). Diagnosis only; no fix until it's ruled.
+
+### Z amendment 2026-10-14l (surface fix, option 3; step 18 rulings)
+- Options 1 (changing the seed) and lowering the jitter are REJECTED. C3.separation stays at jitter 0.5 with its limits unchanged.
+- Smooth theta: unit rows, graded BEFORE any graded run:
+  (a) Lattice: on the T1 and T1b lattices at every N, smooth theta equals count-based theta to 1e-12 (NM).
+  (b) Exact fraction: a lattice filling fraction f in {0.25, 0.5, 0.75} of the top cell (flat surface) gives theta = f to 1e-12.
+  (c) Continuity: one particle moved across a top-row face changes theta by <= 0.02 (count-based: 0.125). This row must fail on the count-based theta.
+- Graded after the fix: C3.separation (energy and max|u|) at jitter 0.5; Gate 1 65/65, 0 flips; the T3 rows and T4 ceiling as frozen.
+- Energy-bookkeeping closure, graded in every test: the sum of the per-stage dE equals the total dE per step to 1e-12 relative. Info: g2p dE versus particle KE, per step.
+- Info: fraction of particles push-out moves per step in C3.separation. Any change to the push-out trigger must be derived from the seeding statistics and posted BEFORE the run.
+- Optional push-out at t=0 before the first P2G is setup only and is not counted as the fix.
