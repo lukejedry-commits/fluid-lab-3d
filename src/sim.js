@@ -23,7 +23,7 @@ class Sim {
     this.subMul = o.subMul ?? 1; // T2 half-dt info row: multiply the substep count (cap applies before)
     this.sepFrac = o.sepFrac ?? 0.5; this.sepIters = o.sepIters ?? 1;
     // C3 regression switches (defaults = production behaviour; tests turn one fix off to prove its test fails)
-    this.useDensFix = o.densFix ?? true; this.densSign = o.densSign ?? 1; this.densTol = o.densTol ?? 1e-4; this.densCap = o.densCap ?? 0.1; this.densAlpha = o.densAlpha ?? 0.1; this.densDead = o.densDead ?? 0.2; // fix 3 v5
+    this.useDensFix = o.densFix ?? true; this.densSign = o.densSign ?? 1; this.densTol = o.densTol ?? 1e-4; this.densCap = o.densCap ?? 0.1; this.densAlpha = o.densAlpha ?? 0.1; this.densDead = o.densDead ?? 0.2; // fix 3 v6
     this.useGhostFill = o.ghostFill ?? true; this.useWallStrip = o.wallStrip ?? true; this.useSepClip = o.sepClip ?? true;
     this.s = this.h / 2;                    // particle spacing (2x2x2 per cell)
     this.pr = 0.25 * this.s;                // wall clearance radius
@@ -410,7 +410,7 @@ class Sim {
       if (airAdj) continue; stats.nInterior++; const e = nbar[c] / 8 - 1;
       if (c < nx * ny) stats.floorE.push(e);
       if (Math.abs(e) >= this.densDead) { E[c] = e; stats.nAboveDead++; } }
-    // v5 target (Z 2026-10-14g): ebar = T4 interior mean of (nbar/8 - 1) over strict-interior cells (>= 1 particle and
+    // v6 target (Z 2026-10-14i; v5 with raw counts): ebar = T4 interior mean of (n_c/8 - 1) over strict-interior cells (>= 1 particle and
     // every in-box 26-neighbour >= 1 particle, the T4 definition); per air-connected region r with n_r non-air-adjacent
     // fluid cells, target_r = n_r * sign(ebar) * max(|ebar| - 0.005, 0). After the dead-band, e is shifted uniformly over
     // those n_r cells so sum e = target_r. Graded: |sum e - target_r| / n_r <= 1e-12.
@@ -419,7 +419,7 @@ class Sim {
       for (let k = 0; k < nz; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const c = i + nx * (j + ny * k); if (!cnt[c]) continue; let all = true;
         for (let dk = -1; dk <= 1 && all; dk++) for (let dj = -1; dj <= 1 && all; dj++) for (let di = -1; di <= 1; di++) { if (!di && !dj && !dk) continue;
           const ii = i + di, jj = j + dj, kk = k + dk; if (ii < 0 || jj < 0 || kk < 0 || ii >= nx || jj >= ny || kk >= nz) continue; if (!cnt[ii + nx * (jj + ny * kk)]) { all = false; break; } }
-        if (all) { sI += nbar[c] / 8 - 1; nI++; } }
+        if (all) { sI += cnt[c] / 8 - 1; nI++; } } // v6: raw counts (the quantity T4 grades); local source stays on the splat nbar
       const ebar = nI ? sI / nI : 0, tpc = Math.sign(ebar) * Math.max(Math.abs(ebar) - 0.005, 0);
       stats.ebarT4 = ebar; stats.nT4 = nI; stats.targetPerCell = tpc;
       const rs = new Float64Array(air.length), rn = new Float64Array(air.length);
