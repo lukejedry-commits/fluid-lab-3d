@@ -1,0 +1,250 @@
+[
+ {
+  "part": "separation",
+  "id": "C3.separation C3.seed: min distance of any seeded particle to any wall at t=0",
+  "measured": "1.9531e-3 m",
+  "threshold": ">= clearance 1.9531e-3 m",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "C3.separation setup",
+  "measured": "N=32, H=0.5 m, grid 32x32x40, 262144 particles, seed 3232, jitter 0.5 s (uniform in sub-cells), cap 16, 120 frames",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "C3.separation strict interior mean (info per section Z)",
+  "measured": "5.416e-4 (frame 115, m=7.9957, 27003 cells)",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "C3.separation peak cell count (info)",
+  "measured": "20 (frame 69, cell [5,21,31])",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "C3.separation total energy max (E-E0)/|E0| (every step)",
+  "measured": "7.138e-5",
+  "threshold": "<= 1e-6",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "C3.separation cumulative stage energy at end (J)",
+  "measured": "p2g 7.652e-2; ghost 0.000e+0; gravity 2.006e+2; pressure -2.002e+2; g2p -5.041e-1; extension 2.191e-2; advect -6.175e-3; pushout -1.793e-6; densfix 1.136e-2",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": "|E0| = 3.066e+2 J"
+ },
+ {
+  "part": "separation",
+  "id": "C3.separation push-out stage: cumulative / max per step / steps > 0",
+  "measured": "-1.793e-6 J (-5.847e-9 |E0|) / 1.167e-8 J / 19 of 120",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "C3.separation C3.separation anti-inflation (fix 3 on): |sum over steps of stage dPE| over 2 s",
+  "measured": "1.136e-2 J (signed 1.136e-2 J; 3.706e-5 |E0|)",
+  "threshold": "<= 1e-6 |E0| = 3.066e-4 J",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "C3.separation fix3 stage dKE max per step (one-sided)",
+  "measured": "0.000e+0 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "C3.separation fix3 fraction of (non-air-adjacent) fluid cells above dead-band per step: mean / max; steps with any",
+  "measured": "1.863e-5 / 1.260e-4; 47 of 120",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "C3.separation fix3 mean e over corrected cells per step: mean / min / max (steps corrected)",
+  "measured": "-1.588e-1 / -2.425e-1 / 2.035e-1 (47)",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "C3.separation fix3 ebar_T4 max |.| / steps with nonzero target",
+  "measured": "5.039e-4 / 0 of 120",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "C3.separation C3.fix3 target sum |sum e - target_r| / n_r, every step",
+  "measured": "1.583e-17",
+  "threshold": "<= 1e-12",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "C3.separation fix3 PCG iterations (mean / max)",
+  "measured": "8.14 / 23",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "C3.separation fix3 max |dx|/h (correction alone) / cap-hit steps",
+  "measured": "0.0048 / 0 of 120",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "C3.separation max|u| at t=2 s",
+  "measured": "1.198e-1",
+  "threshold": "< 2.215e-3",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "C3.separation C3.seed: push-out dE at step 1 (t=0 step, not excluded)",
+  "measured": "2.672e-12 J (8.715e-15 |E0|)",
+  "threshold": "<= 1e-6 |E0|",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "C3.separation push-out energy spike (largest per-step push-out dE)",
+  "measured": "step 55 (t=0.9000 s): step dE 1.167e-8 J; top particle #254084 dE 5.073e-7 J, x0 [0.253815, 0.002511, 0.488829] m, dx [4.769e-6, 0.000e+0, 1.084e-4] m, v before [-1.152e-2, -2.410e-4, -2.797e-2] -> after [-1.152e-2, -2.410e-4, -2.797e-2] m/s",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "C3.separation cell [2,12,1] count start / max / end",
+  "measured": "8 / 8 / 8",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "C3.separation cell [0,0,0] count start / max / end",
+  "measured": "8 / 8 / 8",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "C3.separation cell [31,0,0] count start / max / end",
+  "measured": "8 / 8 / 8",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "C3.separation cell [0,31,0] count start / max / end",
+  "measured": "8 / 8 / 8",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "C3.separation cell [31,31,0] count start / max / end",
+  "measured": "8 / 8 / 8",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "C3.separation layer mean particles/cell k=0..4 at start / end",
+  "measured": "8.000, 8.000, 8.000, 8.000, 8.000 / 7.997, 8.000, 8.006, 7.994, 7.999",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "C3.separation trace: step of max (E-E0)/|E0| and cumulative stage energies there (J)",
+  "measured": "step 49 t=0.8167 s, rise 7.138e-5 |E0| = 2.188e-2 J; gravity+pressure 1.330e-1; p2g 1.610e-2; ghost 0.000e+0; g2p -1.509e-1; extension 3.210e-3; advect 1.512e-2; pushout -5.704e-7; densfix 5.333e-3",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "C3.separation trace: sum of positive per-step stage dE over 2 s by stage (J)",
+  "measured": "gravity+pressure 4.090e-1; p2g 7.652e-2; advect 2.227e-2; extension 2.191e-2; densfix 1.209e-2; pushout 8.670e-8",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "C3.separation trace: max|u| (m/s) at t = 0, 0.25, 0.5, 1, 1.5, 2 s",
+  "measured": "0.02: 1.182e-9; 0.25: 4.369e-2; 0.50: 9.767e-2; 1.00: 1.412e-1; 1.50: 1.228e-1; 2.00: 1.198e-1",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "C3.separation trace: 5 largest per-step max|u| increases (step: d max|u|, then that step's g2p / extension / gravity+pressure / pushout dE)",
+  "measured": "82: +6.117e-2, -5.031e-3 / 2.619e-4 / 3.944e-3 / -2.949e-8; 27: +6.025e-2, -3.697e-3 / 7.182e-5 / 3.402e-3 / -4.616e-8; 115: +5.903e-2, -5.251e-3 / 3.357e-4 / 3.850e-3 / -6.741e-8; 36: +4.770e-2, -4.661e-3 / 1.122e-4 / 4.182e-3 / -1.884e-8; 93: +4.343e-2, -5.408e-3 / 3.091e-4 / 4.488e-3 / -6.403e-9",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "[separation] energy bookkeeping closure: max over 120 substeps |sum stage dE - dE_total| / |E| (worst at 32x32x40 step 43)",
+  "measured": "1.666e-16",
+  "threshold": "<= 1e-12",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "[separation] push-out moved fraction per step, sim 32x32x40 (120 steps): mean / max",
+  "measured": "5.065e-2 / 2.425e-1",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "separation",
+  "id": "[separation] colvol surface cells on count-theta fallback per frame, sim 32x32x40 (120 frames): mean / max",
+  "measured": "2.156e-1 / 3.477e-1",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ }
+]

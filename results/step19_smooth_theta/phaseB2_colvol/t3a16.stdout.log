@@ -1,0 +1,72 @@
+frame 5 t=0.0833 Z=2.125 elapsed 16 s
+frame 10 t=0.1667 Z=4.188 elapsed 43 s
+frame 15 t=0.2500 Z=6.813 elapsed 69 s
+frame 20 t=0.3333 Z=9.625 elapsed 96 s
+frame 25 t=0.4167 Z=12.438 elapsed 124 s
+frame 30 t=0.5000 Z=15.500 elapsed 151 s
+PASS a16 Ritter short window W=3 frames: peak speed / U_R : 1.0119519 (frame 28) vs <= 1 + q = 1.0337317 (q = 0.0337317)
+PASS a16 Ritter long window W_L=11 frames: peak speed / U_R : 0.9475550 (frame 30) vs <= 1.0
+INFO a16 Ritter single-substep peak (info) : 3.3394 U_R
+PASS a16 T3.E max (E-E0)/|E0| (PE datum z=0) : -1.731e-2 vs <= 1e-6 (step-to-step rises (below E0): 89)
+PASS a16 pressure-stage dE <= 0 every step (m_f measure) : 0 of 268 > 0 vs <= 0 every step
+PASS a16 P.res max true residual : 9.926e-9 vs <= 1e-8
+PASS a16 P.div max |div u| dt : 8.261e-9 vs <= 1e-6
+INFO a16 CFL / cap : max CFL 0.9954; cap 16; frames cap-bound with CFL>1: 0 of 30; substeps 268
+INFO a16 T3.mm shift : 0.3846
+INFO a16 T3.mm Z=1.11 (report only) : 0.656 vs 0.41 (60.09%)
+INFO a16 T3.mm Z=1.22 (report only) : 0.850 vs 0.84 (1.18%)
+PASS a16 T3.mm Z=1.67 (T_sim 1.479, T_mean 1.43) : 3.43% vs <= 8%
+PASS a16 T3.mm Z=1.89 (T_sim 1.684, T_mean 1.63) : 3.29% vs <= 8%
+PASS a16 T3.mm Z=2.11 (T_sim 1.916, T_mean 1.83) : 4.72% vs <= 8%
+PASS a16 T3.mm Z=2.33 (T_sim 2.117, T_mean 1.98) : 6.94% vs <= 8%
+PASS a16 T3.mm Z=2.56 (T_sim 2.280, T_mean 2.2) : 3.63% vs <= 8%
+PASS a16 T3.mm Z=2.78 (T_sim 2.479, T_mean 2.32) : 6.86% vs <= 8%
+PASS a16 T3.mm Z=3 (T_sim 2.623, T_mean 2.51) : 4.52% vs <= 8%
+PASS a16 T3.mm Z=3.22 (T_sim 2.798, T_mean 2.65) : 5.58% vs <= 8%
+PASS a16 T3.mm Z=3.44 (T_sim 2.934, T_mean 2.83) : 3.67% vs <= 8%
+PASS a16 T3.mm Z=3.67 (T_sim 3.114, T_mean 2.97) : 4.87% vs <= 8%
+PASS a16 T3.mm Z=3.89 (T_sim 3.275, T_mean 3.11) : 5.31% vs <= 8%
+PASS a16 T3.mm Z=4.11 (T_sim 3.396, T_mean 3.33) : 1.98% vs <= 8%
+PASS a16 T3.mm Z=5 (T_sim 3.953, T_mean 4.02) : 1.66% vs <= 8%
+PASS a16 T3.mm Z=5.89 (T_sim 4.499, T_mean 4.44) : 1.33% vs <= 8%
+PASS a16 T3.mm Z=7 (T_sim 5.109, T_mean 5.09) : 0.38% vs <= 8%
+PASS a16 T3.mm Z=8 (T_sim 5.665, T_mean 5.69) : 0.43% vs <= 8%
+PASS a16 T3.mm Z=9 (T_sim 6.221, T_mean 6.3) : 1.25% vs <= 8%
+PASS a16 T3.mm Z=10 (T_sim 6.757, T_mean 6.83) : 1.06% vs <= 8%
+PASS a16 T3.mm Z=11 (T_sim 7.291, T_mean 7.44) : 2.01% vs <= 8%
+PASS a16 T3.mm Z=12 (T_sim 7.824, T_mean 8.08) : 3.17% vs <= 8%
+PASS a16 T3.mm Z=13 (T_sim 8.358, T_mean 8.67) : 3.60% vs <= 8%
+PASS a16 T3.mm Z=14 (T_sim 8.863, T_mean 9.31) : 4.80% vs <= 8%
+FAIL a16 T4 interior mean, max |m-m0|/m0 over 31 frames (m0 8.0000) : 2.066e-2 (frame 12, m=8.1653) vs <= 1e-2 every frame
+PASS a16 T4 particle count exact : 65536 vs == 65536
+INFO a16 T4 capped estimate final / min (rel V0) : -8.369e-2 / -1.084e-1
+INFO a16 T4 particles in n>12 cells (max) / fluid cells n>8 (max) : 6.755e-2 / 3.598e-1
+INFO a16 T4 peak count : 24 at frame 9 cell [17,10,0] (front x 3.75a)
+INFO a16 T4 final histogram n:cells(Poisson(6.791)) : 1:381(74) 2:555(250) 3:480(567) 4:605(962) 5:834(1307) 6:1220(1479) 7:1390(1435) 8:1470(1218) 9:1176(919) 10:775(624) 11:449(385) 12:214(218) 13:66(114) 14:25(55) 15:6(25) 16:2(11) 17:2(4)
+PASS C3.fix3 a=16: max |dx|/h of the correction's own displacement (trailing push-out not capped by this row) : 0.1000 (stage incl. push-out 0.1055, info) vs <= 0.1
+PASS C3.fix3 a=16: stage dKE every step, one-sided (correction + trailing push-out) : max dKE 0.000e+0 J (min -9.998e-9 J; 0 steps > 0) vs <= 1e-12 J
+INFO [PE_pack row RETIRED, Z 2026-10-14f; info only] a16: cum stage dPE vs PE_pack(t) + 1e-6|E0| (PE_pack = [PE_uni - PE_act](t) - [..](0)) : max (cum dPE - PE_pack) 3.579e-3 J at step 220 (cum dPE 3.970e-3, PE_pack 3.906e-4) (would have been FAIL vs 1e-6|E0| = 2.093e-7 J)
+PASS C3.fix3 a=16: skipped regions (no air) max per step : 0 (with nonzero e: 0) vs == 0
+PASS C3.fix3 a=16: target sum, max over steps and regions of |sum e - target_r| / n_r : 5.467e-15 vs <= 1e-12 every step
+INFO a16 fix3 ebar_T4 per step (mean / min / max) and steps with nonzero target : 7.998e-3 / -2.108e-3 / 2.214e-2; 191 of 268
+INFO a16 fix3 uniform shift applied to reach the target (max |mean e| over regions, per step: mean / max) : 1.205e-3 / 5.417e-3
+INFO a16 front displacement caused by the correction alone in each Ritter window (W = 3 frames) : max |dx_front,corr| 0.000e+0 m = 0.000 h (window ending frame 3); at the worst Ritter window (frame 28): total 1.072e-1 m, by correction 0.000e+0 m (0.000 h), speed 1.0120 U_R, speed minus correction 1.0120 U_R; run total by correction 0.000e+0 m
+INFO a16 fix3 PCG iterations per step (mean / max; steps solved) : 10.4 / 17; 243 of 268
+INFO a16 fix3 max |dx|/h per step (mean / max) : 0.0297 / 0.1000
+INFO a16 fix3 fraction of moved particles hitting the cap (mean / max over steps) : 3.956e-6 / 3.357e-4
+INFO a16 fix3 fraction of steps where the cap binds : 9 of 268 = 0.034; steps 74,75,76,77,78,79,82,96,97
+INFO a16 fix3 fraction of non-air-adjacent fluid cells above dead-band per step (mean / max) : 3.103e-2 / 7.117e-2
+INFO a16 fix3 mean e over corrected cells per step (mean / min / max; steps corrected) : 9.589e-2 / -4.502e-2 / 3.248e-1; 241 of 268
+INFO a16 fix3 floor-layer (k=0, non-air-adjacent) raw e (before dead-band): mean of per-step mean / min / max; cells |e| >= 0.2 (mean per step of n) : 1.545e-2 / -4.332e-1 / 1.283e+0; 97.2 of 1858.4
+INFO a16 fix3 stage dPE / dKE (sum, max dPE), PE_pack v2 (end, max) : sum dPE 4.025e-3 J, max 9.936e-5 J; sum dKE -7.272e-8 J; PE_pack 4.597e-4 J (max 2.725e-3)
+PASS C3.fix3 a=16: T3.mm worst graded row no worse than fix 1 (6.94%) : 6.94% vs <= 6.94%
+INFO a16 (Physics) k=0/k=1 interface (z=h): net upward particle crossings vs grid w-face volume flux, in particles : run total -30875 vs -31548.3; column region (x<a) -7700 vs -7448.0; mean |per-step difference| 14.77
+INFO a16 (Physics) APIC field at nearest wall, floor: mean u_n (positive = away from wall) / max into-wall / mean count into-wall of n, per run third : [-1.26e-3 / 2.53e-1 / 5921 of 7262] [-5.11e-4 / 5.27e-2 / 13477 of 16877] [-3.63e-4 / 2.05e-2 / 20288 of 26167]
+INFO a16 (Physics) APIC field at nearest wall, back: mean u_n (positive = away from wall) / max into-wall / mean count into-wall of n, per run third : [5.27e-4 / 9.62e-2 / 635 of 2458] [7.14e-4 / 1.83e-2 / 195 of 830] [-1.10e-3 / 1.03e-2 / 310 of 412]
+INFO a16 (Physics) APIC field at nearest wall, side: mean u_n (positive = away from wall) / max into-wall / mean count into-wall of n, per run third : [1.24e-5 / 2.24e-1 / 3744 of 8201] [3.28e-5 / 3.08e-2 / 3395 of 8273] [2.06e-5 / 2.52e-2 / 3858 of 8297]
+INFO a16 (NM) column region (x < a) mean particles/cell, layers k=0..5, at frames 1,6,11,16,21,26,30 : f1: [7.50 7.93 8.00 8.15 8.60 8.43] total 64236; f6: [8.23 8.25 7.60 8.12 8.15 7.82] total 42759; f11: [9.76 9.18 8.46 8.21 8.15 8.09] total 24423; f16: [8.11 8.39 8.29 8.20 8.24 8.27] total 14754; f21: [8.23 7.82 7.91 7.88 7.07 0.00] total 9961; f26: [8.10 8.00 7.67 5.42 0.00 0.00] total 7473; f30: [8.04 7.86 8.00 0.01 0.00 0.00] total 6121
+INFO a16 T3.mm vs fix-1 (Z: T now / T fix1 / delta; error now) : Z=1.11: 0.656 / 0.656 / +0.000; 60.09% | Z=1.22: 0.850 / 0.850 / +0.000; 1.18% | Z=1.44: 1.190 / 1.190 / +0.000; 0.00% | Z=1.67: 1.479 / 1.479 / +0.000; 3.43% | Z=1.89: 1.684 / 1.684 / +0.000; 3.29% | Z=2.11: 1.916 / 1.916 / +0.000; 4.72% | Z=2.33: 2.117 / 2.117 / +0.000; 6.94% | Z=2.56: 2.280 / 2.280 / +0.000; 3.63% | Z=2.78: 2.479 / 2.479 / +0.000; 6.86% | Z=3: 2.623 / 2.623 / +0.000; 4.52% | Z=3.22: 2.798 / 2.798 / +0.000; 5.58% | Z=3.44: 2.934 / 2.972 / -0.039; 3.67% | Z=3.67: 3.114 / 3.114 / +0.000; 4.87% | Z=3.89: 3.275 / 3.275 / +0.000; 5.31% | Z=4.11: 3.396 / 3.396 / +0.000; 1.98% | Z=5: 3.953 / 3.953 / +0.000; -1.66% | Z=5.89: 4.499 / 4.499 / +0.000; 1.33% | Z=7: 5.109 / 5.140 / -0.031; 0.38% | Z=8: 5.665 / 5.712 / -0.046; -0.43% | Z=9: 6.221 / 6.221 / +0.000; -1.25% | Z=10: 6.757 / 6.799 / -0.042; -1.06% | Z=11: 7.291 / 7.333 / -0.042; -2.01% | Z=12: 7.824 / 7.880 / -0.056; -3.17% | Z=13: 8.358 / 8.358 / +0.000; -3.60% | Z=14: 8.863 / 8.891 / -0.028; -4.80%
+INFO a16 column region (x < a) bottom layer k=0 per-cell counts: mean / min / max / histogram n:cells : f1: 7.50 / 4 / 11 / 4:7 5:16 6:32 7:20 8:166 9:4 10:5 11:6; f5: 7.72 / 6 / 14 / 6:82 7:26 8:112 9:3 10:6 11:11 12:11 13:3 14:2; f10: 9.34 / 0 / 19 / 0:14 1:12 2:9 3:15 4:13 5:9 6:17 7:17 8:14 9:14 10:8 11:10 12:13 13:8 14:16 15:21 16:22 17:13 18:10 19:1; f15: 8.34 / 1 / 14 / 1:5 2:6 3:7 4:17 5:9 6:18 7:28 8:34 9:30 10:45 11:25 12:11 13:14 14:7; f20: 8.20 / 2 / 17 / 2:4 3:6 4:11 5:19 6:31 7:28 8:39 9:37 10:36 11:16 12:15 13:9 14:3 16:1 17:1; f25: 8.03 / 1 / 16 / 1:1 2:3 3:7 4:11 5:25 6:29 7:37 8:37 9:24 10:37 11:17 12:14 13:11 14:1 15:1 16:1; f30: 8.04 / 1 / 17 / 1:3 2:4 3:6 4:17 5:19 6:24 7:33 8:41 9:27 10:34 11:17 12:18 13:8 14:3 15:1 17:1
+PASS [t3a16] energy bookkeeping closure: max over 268 substeps |sum stage dE - dE_total| / |E| (worst at 256x16x40 step 65) : 1.402e-16 vs <= 1e-12
+INFO [t3a16] push-out moved fraction per step, sim 256x16x40 (268 steps): mean / max : 2.462e-1 / 2.971e-1
+INFO [t3a16] colvol surface cells on count-theta fallback per frame, sim 256x16x40 (30 frames): mean / max : 4.915e-1 / 8.013e-1
