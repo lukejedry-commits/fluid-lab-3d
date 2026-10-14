@@ -1,0 +1,74 @@
+[
+ {
+  "part": "t3a8",
+  "id": "a8 Ritter windowed (section Z): max over frames k>=W of [x(t)-x(t-W)]/W, W = ceil(20h/(U_R frame)) = 5 frames",
+  "measured": "1.9288 m/s (0.9108 U_R, frame 24)",
+  "threshold": "< U_R = 2.1178 m/s every frame",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "t3a8",
+  "id": "a8 Ritter single-substep peak / frame-to-frame peak",
+  "measured": "3.6430 U_R / 1.1131 U_R",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "t3a8",
+  "id": "a8 step 5 (t=0.0444): theta-weighted pressure-stage dKE (m_f -2.700e-4, solver 1.997e-4, theta excl. walls -3.373e-4)",
+  "measured": "-3.929e-4 J",
+  "threshold": "<= 1e-8 x KE_theta,pre = 2.458e-10 J",
+  "pass": true,
+  "note": "wall: -5.558e-5; fluid-fluid: -5.248e-4; surface-empty: 8.960e-5; surface-partial: 9.794e-5"
+ },
+ {
+  "part": "t3a8",
+  "id": "a8 step 6 (t=0.0500): theta-weighted pressure-stage dKE (m_f -4.124e-4, solver 2.406e-5, theta excl. walls -4.041e-4)",
+  "measured": "-4.621e-4 J",
+  "threshold": "<= 1e-8 x KE_theta,pre = 3.097e-10 J",
+  "pass": true,
+  "note": "wall: -5.793e-5; fluid-fluid: -6.666e-4; surface-empty: 9.381e-5; surface-partial: 1.687e-4"
+ },
+ {
+  "part": "t3a8",
+  "id": "a8 step 7 (t=0.0556): theta-weighted pressure-stage dKE (m_f -4.317e-4, solver 4.273e-5, theta excl. walls -4.696e-4)",
+  "measured": "-5.292e-4 J",
+  "threshold": "<= 1e-8 x KE_theta,pre = 3.632e-10 J",
+  "pass": true,
+  "note": "wall: -5.960e-5; fluid-fluid: -6.217e-4; surface-empty: 1.880e-4; surface-partial: -3.601e-5"
+ },
+ {
+  "part": "t3a8",
+  "id": "a8 step 13 (t=0.0833): theta-weighted pressure-stage dKE (m_f -4.531e-4, solver 4.635e-5, theta excl. walls -5.335e-4)",
+  "measured": "-5.778e-4 J",
+  "threshold": "<= 1e-8 x KE_theta,pre = 7.127e-10 J",
+  "pass": true,
+  "note": "wall: -4.432e-5; fluid-fluid: -6.991e-4; surface-empty: -2.669e-5; surface-partial: 1.923e-4"
+ },
+ {
+  "part": "t3a8",
+  "id": "a8 step 98 (t=0.3639): theta-weighted pressure-stage dKE (m_f 1.762e-5, solver 6.500e-4, theta excl. walls -9.833e-5)",
+  "measured": "-1.890e-4 J",
+  "threshold": "<= 1e-8 x KE_theta,pre = 1.832e-9 J",
+  "pass": true,
+  "note": "wall: -9.072e-5; fluid-fluid: 1.240e-5; surface-partial: -9.216e-5; surface-empty: -1.856e-5"
+ },
+ {
+  "part": "t3a8",
+  "id": "a8 step 157 (t=0.5278): theta-weighted pressure-stage dKE (m_f 1.993e-5, solver -9.521e-4, theta excl. walls -6.718e-5)",
+  "measured": "-1.770e-3 J",
+  "threshold": "<= 1e-8 x KE_theta,pre = 2.122e-9 J",
+  "pass": true,
+  "note": "wall: -1.703e-3; fluid-fluid: 4.172e-5; surface-partial: -1.114e-4; surface-empty: 2.512e-6"
+ },
+ {
+  "part": "t3a8",
+  "id": "a8 theta-weighted measure over all steps: steps above tolerance",
+  "measured": "0 of 159",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ }
+]

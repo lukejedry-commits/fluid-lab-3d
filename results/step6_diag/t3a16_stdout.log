@@ -1,0 +1,51 @@
+frame 5 t=0.0833 Z=2.125 elapsed 9 s
+frame 10 t=0.1667 Z=4.188 elapsed 23 s
+frame 15 t=0.2500 Z=6.813 elapsed 41 s
+frame 20 t=0.3333 Z=9.625 elapsed 59 s
+frame 25 t=0.4167 Z=12.500 elapsed 78 s
+frame 30 t=0.5000 Z=15.375 elapsed 97 s
+PASS a16 Ritter windowed (section Z): max over frames k>=W of [x(t)-x(t-W)]/W, W = ceil(20h/(U_R frame)) = 3 frames : 2.0717 m/s (0.9782 U_R, frame 31) vs < U_R = 2.1178 m/s every frame
+INFO a16 Ritter single-substep peak / frame-to-frame peak : 2.2263 U_R / 1.1131 U_R
+PASS a16 T3.E max (E-E0)/|E0| (PE datum z=0) : -1.731e-2 vs <= 1e-6 (step-to-step rises (below E0): 9)
+PASS a16 pressure-stage dE <= 0 every step (m_f measure) : 0 of 278 > 0 vs <= 0 every step
+PASS a16 P.res max true residual : 9.958e-9 vs <= 1e-8
+PASS a16 P.div max |div u| dt : 8.261e-9 vs <= 1e-6
+INFO a16 CFL / cap : max CFL 0.9982; cap 16; frames cap-bound with CFL>1: 0 of 31; substeps 278
+INFO a16 T3.mm shift : 0.3846
+INFO a16 T3.mm Z=1.11 (report only) : 0.656 vs 0.41 (60.09%)
+INFO a16 T3.mm Z=1.22 (report only) : 0.850 vs 0.84 (1.18%)
+PASS a16 T3.mm Z=1.67 (T_sim 1.479, T_mean 1.43) : 3.43% vs <= 8%
+PASS a16 T3.mm Z=1.89 (T_sim 1.684, T_mean 1.63) : 3.29% vs <= 8%
+PASS a16 T3.mm Z=2.11 (T_sim 1.916, T_mean 1.83) : 4.72% vs <= 8%
+PASS a16 T3.mm Z=2.33 (T_sim 2.117, T_mean 1.98) : 6.94% vs <= 8%
+PASS a16 T3.mm Z=2.56 (T_sim 2.280, T_mean 2.2) : 3.63% vs <= 8%
+PASS a16 T3.mm Z=2.78 (T_sim 2.479, T_mean 2.32) : 6.86% vs <= 8%
+PASS a16 T3.mm Z=3 (T_sim 2.623, T_mean 2.51) : 4.52% vs <= 8%
+PASS a16 T3.mm Z=3.22 (T_sim 2.798, T_mean 2.65) : 5.58% vs <= 8%
+PASS a16 T3.mm Z=3.44 (T_sim 2.972, T_mean 2.83) : 5.03% vs <= 8%
+PASS a16 T3.mm Z=3.67 (T_sim 3.114, T_mean 2.97) : 4.87% vs <= 8%
+PASS a16 T3.mm Z=3.89 (T_sim 3.275, T_mean 3.11) : 5.31% vs <= 8%
+PASS a16 T3.mm Z=4.11 (T_sim 3.396, T_mean 3.33) : 1.98% vs <= 8%
+PASS a16 T3.mm Z=5 (T_sim 3.953, T_mean 4.02) : 1.66% vs <= 8%
+PASS a16 T3.mm Z=5.89 (T_sim 4.499, T_mean 4.44) : 1.33% vs <= 8%
+PASS a16 T3.mm Z=7 (T_sim 5.140, T_mean 5.09) : 0.99% vs <= 8%
+PASS a16 T3.mm Z=8 (T_sim 5.712, T_mean 5.69) : 0.38% vs <= 8%
+PASS a16 T3.mm Z=9 (T_sim 6.221, T_mean 6.3) : 1.25% vs <= 8%
+PASS a16 T3.mm Z=10 (T_sim 6.799, T_mean 6.83) : 0.45% vs <= 8%
+PASS a16 T3.mm Z=11 (T_sim 7.333, T_mean 7.44) : 1.44% vs <= 8%
+PASS a16 T3.mm Z=12 (T_sim 7.880, T_mean 8.08) : 2.47% vs <= 8%
+PASS a16 T3.mm Z=13 (T_sim 8.358, T_mean 8.67) : 3.60% vs <= 8%
+PASS a16 T3.mm Z=14 (T_sim 8.891, T_mean 9.31) : 4.50% vs <= 8%
+FAIL a16 T4 interior mean, max |m-m0|/m0 over 32 frames (m0 8.0000) : 1.427e-1 (frame 31, m=9.1416) vs <= 1e-2 every frame
+PASS a16 T4 particle count exact : 65536 vs == 65536
+INFO a16 T4 capped estimate final / min (rel V0) : -1.647e-1 / -1.647e-1
+INFO a16 T4 particles in n>12 cells (max) / fluid cells n>8 (max) : 1.537e-1 / 3.682e-1
+INFO a16 T4 peak count : 39 at frame 29 cell [5,4,0] (front x 14.81a)
+INFO a16 T4 final histogram n:cells(Poisson(7.113)) : 1:690(53) 2:851(190) 3:528(450) 4:502(801) 5:567(1139) 6:845(1351) 7:989(1373) 8:1135(1221) 9:976(965) 10:779(686) 11:498(444) 12:293(263) 13:171(144) 14:83(73) 15:57(35) 16:28(15) 17:26(6) 18:15(3) 19:12(1) 20:15(0) 21:12(0) 22:14(0) 23:4(0) 24:13(0) 25:8(0) 26:15(0) 27:11(0) 28:18(0) 29:16(0) 30:9(0) 31:13(0) 32:10(0) 33:6(0) 34:3(0) 36:1(0)
+INFO a16 corner cell [2,12,1]: particle count per substep (min / max / final; substep of max) : 0 / 34 (step 252, t=0.4773) / 32; fluid-classified at end: 1
+INFO a16 post-G2P into-wall velocity, particles in floor (z-) wall-adjacent cells : count per step mean 19781.3, max 35404; max |v_n| 4.284e-1 m/s
+INFO a16 post-G2P into-wall velocity, particles in back wall (x-) wall-adjacent cells : count per step mean 39.6, max 167; max |v_n| 1.532e-1 m/s
+INFO a16 post-G2P into-wall velocity, particles in side walls (y-, y+) wall-adjacent cells : count per step mean 3558.1, max 5607; max |v_n| 3.873e-1 m/s
+INFO a16 push-out (wall strip + separation) in 3x3x3 region around [2,12,1]: particles moved per step (mean/max), total displacement per step (mean/max) : 241.1 / 358; 1.097e-3 / 5.666e-3 m
+INFO a16 cell [2,12,1] net outflow: trilinear field (8x8 surface quadrature) vs MAC face flux (m^3/s) : trilinear max 3.535e-7 min -6.092e-6; grid max |.| 8.091e-6; time-integrated outflow trilinear -9.394e-8 m^3 (-2.061 cell volumes) vs grid -9.750e-8 m^3; scale h^2 sqrt(g a) = 9.553e-6
+INFO a16 padding (inside-solid) faces after extension, frame 10 : {"tangentialMirror":61152,"tangentialOther":0,"normalZero":29952,"normalNonzero":0} (src/sim.js:249-252: tangential = copy of the in-box image face (free-slip mirror), normal = 0)
