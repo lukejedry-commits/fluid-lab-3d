@@ -204,3 +204,13 @@ The proof FAILS at both resolutions and both speeds (worst 2.9e-2; best case 3.2
 | v4 code, fix 3 OFF (info_fix3off) | 0.9782 | 0.9108 |
 
 a=16 is still above 1.0 with fix 3 on, so the fix-3-off comparison ran. With fix 3 off the a=16 Ritter value is 0.9782. The correction moves the front by exactly 0 in every window, so the effect is indirect: the changed particle distribution alters the flow. 2.1431 m/s is 10 h per 3 frames, one quantization level above the 9 h of the fix-1 value.
+
+## CORRECTION to the Gate 1 line above (it was written before the flip check was read): Gate 1 = 65 graded, 60 PASS, 5 FAIL; 5 FLIPS vs step 12
+| Row | step 12 (v3) | step 13 (v4) |
+|---|---|---|
+| T1 N=16 max (E-E0)/|E0| | 4.191e-13 PASS | 3.774e-5 FAIL |
+| T1 N=32 max (E-E0)/|E0| | 5.192e-14 PASS | 5.234e-6 FAIL |
+| T1b.E N=8 | 3.925e-11 PASS | 2.379e-2 FAIL |
+| T1b.E N=32 | 2.251e-12 PASS | 2.227e-5 FAIL |
+| T1b.E N=64 | 1.090e-12 PASS | 1.171e-3 FAIL |
+Cause: the densfix stage. Cumulative densfix dE at the end is +0.770 J (T1b N=8), +3.77e-2 J (T1b N=64) and +1.16e-2 J (T1 N=16). Every other stage nets to roundoff. The harness tags the rise as "gravity" because that stage has the largest positive per-step value. In a still pool, the v4 target (the pre-dead-band sum of nbar/8 - 1 over interior cells) is non-zero from the seeding and surface-layer splat, so the uniform shift drives a correction on every step and raises PE. Three other rows ("NEW" in the comparison) are the same checks; their ids embed the measured values.
