@@ -92,3 +92,10 @@ No gate loosened.
 - C3.fix3.sign: 16 particles on a uniform 2x2x4 lattice in the centre cell, with the open-top box from 14c. Graded: every particle has an outward radial dx, and nbar in that cell drops after one step. Must fail with the sign flipped.
 - NEW graded anti-inflation row (C3.separation with fix 3 on): |sum over steps of stage dPE| <= 1e-6|E0| over 2 s (absolute value of the signed sum, not a sum of absolute values), because a still tank must not be corrected. Info: mean e over corrected cells per step (expected ~0; drift positive means inflation).
 - Unchanged: total energy (E-E0)/|E0| <= 1e-6; T4 within 1%; T3.mm no worse than fix 1; Ritter <= 1.0; must fail on f0220c4; cap-bind more than 50% gets flagged.
+
+### Z amendment 2026-10-14e (fix 3 v3; Physics + NM rulings on step 11)
+- md5 convention: every posted ASSERTS md5 is the whole-file md5.
+- nbar = P2G splat of particle positions (the same kernel and weights as the velocity transfer), not cell counts smoothed afterwards. This applies to the source and to C3.fix3.sign (graded: the splat nbar in the centre cell drops with the production sign; the flipped sign must make it rise and fail).
+- Volume-neutral source: after the dead-band, in each air-connected fluid region subtract the region mean of e from every fluid cell not adjacent to air, so sum(e) = 0. Graded: |sum e| per region <= 1e-12 (normalised by the region's cell count) after the subtraction, at every step.
+- Info row: front displacement caused by the correction alone within each Ritter window.
+- Unchanged and not loosened: alpha = 0.1, Ritter <= 1.0, PE_pack bound, total energy 1e-6, T4 1%. If a=8 T4 still fails, an alpha = 0.2 run is INFO ONLY and does not change the frozen alpha.
