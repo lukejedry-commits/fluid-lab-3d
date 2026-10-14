@@ -167,3 +167,11 @@ U_R = 2.11781302 m/s, frame = 1/60 s. a=16: short W=3, q=0.0337317, limit 1.0337
 - Revert check: the full Gate 1 must be bit-identical to 1e6089c (run as part of the graded suite).
 - 14o clarification (NM): the revert commit b29c99e must be bit-identical to 1e6089c on the full Gate 1. For the trigger commit, any run where the OLD 0.25h trigger fired 0 times at every step must be bit-identical (the new trigger is smaller, so it can't fire there). Every other run (including T3, T4, C3.separation and the tilted tank) is graded against its frozen limits. Fire counts per run are logged.
 - PHYSICS_SPEC reference: d107f6e5.
+
+### Z amendment 2026-10-14p (v1 freeze; Lead ruling on step 21)
+- Push-out trigger stays 0.25 h (pushed code 4e3ba9b / b29c99e). 0.0611 h NOT adopted; the 14n/14o trigger rows (step-1 move fraction, wall-clamp limit) are RETIRED with it. Step 21 is kept as a record.
+- Known limitations (always reported as FAIL against their original limits, never relabelled PASS), each with a graded regression ceiling taken from the pushed code plus a ~10% margin:
+  * T4: <= 2.60% (a=16), <= 2.70% (a=8). Step 15 values were 2.46/2.59. Write-up: the error shrinks under refinement (2.59 -> 2.46 on this code; 5.08 -> 3.32 at 0.0611 h, about first order).
+  * C3.separation: energy rise <= 2.2e-6|E0| (2.04e-6 on this code); max|u| at 2 s <= 2.0e-2 m/s (1.79e-2).
+- Required for the v1 handoff (NM): an E(t) plot for both jitter 0.5 tanks on 0.25 h, with the step-21 0.0611 h curve on the same axes.
+- Gate 1 unchanged: 68/68, 0 flips.
