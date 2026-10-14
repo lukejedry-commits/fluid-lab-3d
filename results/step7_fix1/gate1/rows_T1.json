@@ -1,0 +1,266 @@
+[
+ {
+  "part": "T1",
+  "id": "T1 N=8: max|u| at t=10 s",
+  "measured": "5.625e-10",
+  "threshold": "< 2.215e-3",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "T1 N=8: pressure profile, interior cells",
+  "measured": "2.380e-10",
+  "threshold": "<= 1e-2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "T1 N=8: max (E-E0)/|E0|",
+  "measured": "-7.787e-15",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "P.res T1 N=8: max final true residual / ||rhs|| (600 solves)",
+  "measured": "6.408e-9",
+  "threshold": "<= 1e-8",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "P.res T1 N=8: max iters / median(prev 20), steps > 20",
+  "measured": "1.000 (step 21)",
+  "threshold": "<= 2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "P.div T1 N=8: max |div u| * dt",
+  "measured": "4.529e-10",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "NM T1 N=8: pressure-stage dE > 0 (graded in T3)",
+  "measured": "0 of 600 steps; max 0.000e+0 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "NM T1 N=8: CFL used per frame",
+  "measured": "max 0.2088, min 0.2088; frames with 8-cap binding and CFL>1: 0",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "NM T1 N=8: extension-stage |dE| per step (own stage)",
+  "measured": "max 0.000e+0 J, cumulative 0.000e+0 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "T1 N=16: max|u| at t=10 s",
+  "measured": "8.437e-10",
+  "threshold": "< 2.215e-3",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "T1 N=16: pressure profile, interior cells",
+  "measured": "5.267e-10",
+  "threshold": "<= 1e-2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "T1 N=16: max (E-E0)/|E0|",
+  "measured": "4.191e-13",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "P.res T1 N=16: max final true residual / ||rhs|| (600 solves)",
+  "measured": "6.694e-9",
+  "threshold": "<= 1e-8",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "P.res T1 N=16: max iters / median(prev 20), steps > 20",
+  "measured": "1.000 (step 21)",
+  "threshold": "<= 2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "P.div T1 N=16: max |div u| * dt",
+  "measured": "1.526e-9",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "NM T1 N=16: pressure-stage dE > 0 (graded in T3)",
+  "measured": "0 of 600 steps; max 0.000e+0 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "NM T1 N=16: CFL used per frame",
+  "measured": "max 0.2953, min 0.2953; frames with 8-cap binding and CFL>1: 0",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "NM T1 N=16: extension-stage |dE| per step (own stage)",
+  "measured": "max 0.000e+0 J, cumulative 0.000e+0 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "T1 N=32: max|u| at t=10 s",
+  "measured": "1.200e-9",
+  "threshold": "< 2.215e-3",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "T1 N=32: pressure profile, interior cells",
+  "measured": "2.849e-10",
+  "threshold": "<= 1e-2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "T1 N=32: max (E-E0)/|E0|",
+  "measured": "5.192e-14",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "P.res T1 N=32: max final true residual / ||rhs|| (600 solves)",
+  "measured": "8.637e-9",
+  "threshold": "<= 1e-8",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "P.res T1 N=32: max iters / median(prev 20), steps > 20",
+  "measured": "1.000 (step 21)",
+  "threshold": "<= 2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "P.div T1 N=32: max |div u| * dt",
+  "measured": "6.248e-9",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "NM T1 N=32: pressure-stage dE > 0 (graded in T3)",
+  "measured": "0 of 600 steps; max 0.000e+0 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "NM T1 N=32: CFL used per frame",
+  "measured": "max 0.4176, min 0.4176; frames with 8-cap binding and CFL>1: 0",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "NM T1 N=32: extension-stage |dE| per step (own stage)",
+  "measured": "max 0.000e+0 J, cumulative 0.000e+0 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "T1 floor force order (sec. Z): e(h) = 8.403e-13, 6.134e-13, 4.211e-13 vs floor 1e-10 x rho g H L W",
+  "measured": "all <= floor: exact discrete equilibrium",
+  "threshold": "order >= 0.8 if above floor",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "T1 floor force regression floor (sec. Z): max e over N",
+  "measured": "8.403e-13",
+  "threshold": "<= 1e-10",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "T1 floor force e at h/H=1/32",
+  "measured": "4.211e-13",
+  "threshold": "<= 1e-2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "T1 side wall force order (sec. Z): e(h) = 2.454e-12, 1.336e-12, 1.117e-12 vs floor 1e-10 x 1/2 rho g H^2 W",
+  "measured": "all <= floor: exact discrete equilibrium",
+  "threshold": "order >= 0.8 if above floor",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "T1 side wall force regression floor (sec. Z): max e over N",
+  "measured": "2.454e-12",
+  "threshold": "<= 1e-10",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T1",
+  "id": "T1 side wall force e at h/H=1/32",
+  "measured": "1.117e-12",
+  "threshold": "<= 1e-2",
+  "pass": true,
+  "note": ""
+ }
+]

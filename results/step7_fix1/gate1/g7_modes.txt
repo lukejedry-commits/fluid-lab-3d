@@ -1,0 +1,4 @@
+PASS P.A max rel Linf over 6 solves (worst A_dirichlet_213 N=16) : 2.417e-13 vs <= 1e-7
+PASS P.B max rel Linf over 9 solves (worst B_neumann_210 N=16) : 2.850e-13 vs <= 1e-7
+PASS P.C max rel Linf over 9 solves (worst C_mixed_202 N=32) : 2.510e-13 vs <= 1e-7
+PASS P.res mode solves (tol 1e-12): max true residual / ||rhs|| : 4.011e-12 vs <= 1e-8

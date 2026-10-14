@@ -1,0 +1,46 @@
+frame 5 t=0.0833 Z=2.125 elapsed 2 s
+frame 10 t=0.1667 Z=4.125 elapsed 3 s
+frame 15 t=0.2500 Z=6.750 elapsed 4 s
+frame 20 t=0.3333 Z=9.500 elapsed 6 s
+frame 25 t=0.4167 Z=12.250 elapsed 7 s
+frame 30 t=0.5000 Z=14.875 elapsed 8 s
+PASS a8 Ritter windowed (section Z): max over frames k>=W of [x(t)-x(t-W)]/W, W = ceil(20h/(U_R frame)) = 5 frames : 1.9288 m/s (0.9108 U_R, frame 24) vs < U_R = 2.1178 m/s every frame
+INFO a8 Ritter single-substep peak / frame-to-frame peak : 3.6430 U_R / 1.1131 U_R
+PASS a8 T3.E max (E-E0)/|E0| (PE datum z=0) : -1.729e-2 vs <= 1e-6 (step-to-step rises (below E0): 10)
+PASS a8 pressure-stage dE <= 0 every step (m_f measure) : 0 of 159 > 0 vs <= 0 every step
+PASS a8 P.res max true residual : 9.929e-9 vs <= 1e-8
+PASS a8 P.div max |div u| dt : 2.871e-9 vs <= 1e-6
+INFO a8 CFL / cap : max CFL 0.9918; cap 16; frames cap-bound with CFL>1: 0 of 32; substeps 159
+INFO a8 T3.mm shift : 0.4159
+INFO a8 T3.mm Z=1.11 (report only) : 0.688 vs 0.41 (67.72%)
+INFO a8 T3.mm Z=1.22 (report only) : 0.842 vs 0.84 (0.25%)
+PASS a8 T3.mm Z=1.67 (T_sim 1.482, T_mean 1.43) : 3.66% vs <= 8%
+PASS a8 T3.mm Z=1.89 (T_sim 1.738, T_mean 1.63) : 6.60% vs <= 8%
+PASS a8 T3.mm Z=2.11 (T_sim 1.941, T_mean 1.83) : 6.09% vs <= 8%
+PASS a8 T3.mm Z=2.33 (T_sim 2.087, T_mean 1.98) : 5.38% vs <= 8%
+PASS a8 T3.mm Z=2.56 (T_sim 2.306, T_mean 2.2) : 4.81% vs <= 8%
+FAIL a8 T3.mm Z=2.78 (T_sim 2.519, T_mean 2.32) : 8.57% vs <= 8%
+PASS a8 T3.mm Z=3 (T_sim 2.655, T_mean 2.51) : 5.77% vs <= 8%
+FAIL a8 T3.mm Z=3.22 (T_sim 2.868, T_mean 2.65) : 8.22% vs <= 8%
+PASS a8 T3.mm Z=3.44 (T_sim 3.004, T_mean 2.83) : 6.14% vs <= 8%
+PASS a8 T3.mm Z=3.67 (T_sim 3.146, T_mean 2.97) : 5.92% vs <= 8%
+PASS a8 T3.mm Z=3.89 (T_sim 3.326, T_mean 3.11) : 6.95% vs <= 8%
+PASS a8 T3.mm Z=4.11 (T_sim 3.435, T_mean 3.33) : 3.15% vs <= 8%
+PASS a8 T3.mm Z=5 (T_sim 3.998, T_mean 4.02) : 0.54% vs <= 8%
+PASS a8 T3.mm Z=5.89 (T_sim 4.561, T_mean 4.44) : 2.73% vs <= 8%
+PASS a8 T3.mm Z=7 (T_sim 5.254, T_mean 5.09) : 3.22% vs <= 8%
+PASS a8 T3.mm Z=8 (T_sim 5.769, T_mean 5.69) : 1.38% vs <= 8%
+PASS a8 T3.mm Z=9 (T_sim 6.335, T_mean 6.3) : 0.55% vs <= 8%
+PASS a8 T3.mm Z=10 (T_sim 6.901, T_mean 6.83) : 1.04% vs <= 8%
+PASS a8 T3.mm Z=11 (T_sim 7.467, T_mean 7.44) : 0.36% vs <= 8%
+PASS a8 T3.mm Z=12 (T_sim 8.033, T_mean 8.08) : 0.58% vs <= 8%
+PASS a8 T3.mm Z=13 (T_sim 8.548, T_mean 8.67) : 1.41% vs <= 8%
+PASS a8 T3.mm Z=14 (T_sim 9.114, T_mean 9.31) : 2.10% vs <= 8%
+FAIL a8 T4 interior mean, max |m-m0|/m0 over 33 frames (m0 8.0000) : 1.376e-1 (frame 27, m=9.1009) vs <= 1e-2 every frame
+PASS a8 T4 particle count exact : 8192 vs == 8192
+INFO a8 T4 capped estimate final / min (rel V0) : -1.263e-1 / -1.320e-1
+INFO a8 T4 particles in n>12 cells (max) / fluid cells n>8 (max) : 1.420e-1 / 3.309e-1
+INFO a8 T4 peak count : 35 at frame 28 cell [1,6,0] (front x 13.75a)
+INFO a8 T4 final histogram n:cells(Poisson(5.962)) : 1:198(21) 2:173(63) 3:58(125) 4:82(187) 5:113(223) 6:157(221) 7:140(188) 8:121(140) 9:100(93) 10:84(55) 11:66(30) 12:39(15) 13:13(7) 14:10(3) 15:3(1) 16:1(0) 21:1(0) 22:3(0) 23:4(0) 25:3(0) 26:2(0) 27:3(0)
+PASS a8 pressure-stage dKE, own-mass measure (= logged stage), every step : 0 of 159 > 0 vs <= 0 every step
+PASS a8 pressure-stage dKE, theta measure, every step : 0 of 159 > 1e-8 KE_theta; max -1.659e-4 J vs <= 1e-8 x KE_theta,pre every step
