@@ -116,3 +116,6 @@ No gate loosened.
   (a) long window W_L = ceil(100 h/(U_R*frame_dt)) frames, about 10 at a=16 and 20 at a=8; graded peak <= 1.0.
   (b) short window as before (3 frames at a=16, 5 at a=8); graded <= 1 + q, where q = h/(W*frame_dt*U_R) is one cell step computed from the grid (about 0.034 at a=16, 0.068 at a=8). Coding prints the exact q values; they are frozen from the grid, not from results.
   The short window guards against a brief real overshoot, and the long window guards against a sustained one.
+
+### Z amendment 2026-10-14h: exact Ritter windows (Coding 765282d, Physics- and Validation-checked)
+U_R = 2.11781302 m/s, frame = 1/60 s. a=16: short W=3, q=0.0337317, limit 1.0337317; long W_L=11, limit 1.0. a=8: short W=5, q=0.0404781, limit 1.0404781; long W_L=21, limit 1.0. These supersede the approximate figures in 14g.
