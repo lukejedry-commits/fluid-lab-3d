@@ -291,17 +291,37 @@ class Sim {
     for (let p = 0; p < this.count; p++) {
       const xp = this.x[3 * p], yp = this.x[3 * p + 1], zp = this.x[3 * p + 2];
       for (let a = 0; a < 3; a++) {
-        const V = this.vel[a], P = this.P[a], off = [a === 0 ? 0 : 0.5, a === 1 ? 0 : 0.5, a === 2 ? 0 : 0.5];
+        const V = this.vel[a], P = this.P[a], off = [a === 0 ? 0 : 0.5, a === 1 ? 0 : 0.5, a === 2 ? 0 : 0.5], Da = this.D[a][a] - 1;
         for (let b = 0; b < 3; b++) { const f = this.x[3 * p + b] * ih - off[b]; const base = Math.floor(f - 0.5); B[b] = base; Sim.w3(f - base, W, 3 * b); }
         let v = 0, c0 = 0, c1 = 0, c2 = 0;
         for (let kk = 0; kk < 3; kk++) { const k = Math.min(Math.max(B[2] + kk, -1), P[2] - 2); const dz = (B[2] + kk + off[2]) * h - zp;
           for (let jj = 0; jj < 3; jj++) { const j = Math.min(Math.max(B[1] + jj, -1), P[1] - 2); const dy = (B[1] + jj + off[1]) * h - yp; const wjk = W[3 + jj] * W[6 + kk];
             for (let ii = 0; ii < 3; ii++) { const i = Math.min(Math.max(B[0] + ii, -1), P[0] - 2); const dx = (B[0] + ii + off[0]) * h - xp;
-              const w = W[ii] * wjk, u = V[(i + 1) + P[0] * ((j + 1) + P[1] * (k + 1))];
+              // FIX 2: the normal component at solid faces (and beyond them) reads exactly 0
+              const ia = a === 0 ? i : a === 1 ? j : k, solid = ia <= 0 || ia >= Da;
+              const w = W[ii] * wjk, u = solid ? 0 : V[(i + 1) + P[0] * ((j + 1) + P[1] * (k + 1))];
               v += w * u; c0 += w * u * dx; c1 += w * u * dy; c2 += w * u * dz; } } }
         this.v[3 * p + a] = v; this.C[9 * p + 3 * a] = c0 * Dinv; this.C[9 * p + 3 * a + 1] = c1 * Dinv; this.C[9 * p + 3 * a + 2] = c2 * Dinv;
       }
     }
+    this.wallClamp();
+  }
+  /** FIX 2 (ASSERTS sec. Z, C3.fix2): for each particle in a wall-adjacent cell and each adjacent wall
+   *  (outward normal n into the wall, d = |x_wall - x_p|): if the particle's own field at the wall,
+   *  n.(u_n + C_nn (x_wall - x_p)), points into the wall, set C_nn so it is exactly 0 there.
+   *  Only when d < 1e-3 h is u_n changed instead (counted). Runs after the final G2P velocity. */
+  wallClamp() {
+    const h = this.h, n = [this.nx, this.ny, this.nz]; let nC = 0, nU = 0; const rec = this.clampRecord ? [] : null;
+    for (let p = 0; p < this.count; p++) for (let b = 0; b < 3; b++) {
+      const x = this.x[3 * p + b], cell = Math.floor(x / h);
+      for (const [hit, xw, sg] of [[cell <= 0, 0, -1], [cell >= n[b] - 1, this.L[b], 1]]) {
+        if (!hit) continue;
+        const qi = 3 * p + b, ci = 9 * p + 4 * b, dx = xw - x, at = this.v[qi] + this.C[ci] * dx;
+        if (sg * at <= 0) continue;
+        if (rec) rec.push([p, b, this.v[qi], this.C[ci]]);
+        if (Math.abs(dx) >= 1e-3 * h) { this.C[ci] = -this.v[qi] / dx; nC++; } else { this.v[qi] = -this.C[ci] * dx; nU++; }
+      } }
+    this.clampStats = { nC, nU }; if (rec) this.clampChanges = rec;
   }
   // ---------------- RK2 advection in the grid field (trilinear) ----------------
   sample(a, x, y, z) {
