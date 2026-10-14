@@ -1,0 +1,37 @@
+PASS C3.separation C3.seed: min distance of any seeded particle to any wall at t=0 : 1.9531e-3 m vs >= clearance 1.9531e-3 m
+C3.separation frame 20 peak 9 mean 8.0000 122 s
+C3.separation frame 40 peak 9 mean 8.0000 190 s
+C3.separation frame 60 peak 9 mean 8.0000 254 s
+C3.separation frame 80 peak 9 mean 8.0000 300 s
+C3.separation frame 100 peak 9 mean 8.0000 343 s
+C3.separation frame 120 peak 9 mean 8.0000 383 s
+INFO C3.separation setup : N=32, H=0.5 m, grid 32x32x40, 262144 particles, seed 3232, jitter 0.5 s (uniform in sub-cells), cap 16, 120 frames
+INFO C3.separation strict interior mean (info per section Z) : 4.630e-6 (frame 2, m=8.0000, 27000 cells)
+INFO C3.separation peak cell count (info) : 9 (frame 1, cell [13,17,7])
+PASS C3.separation total energy max (E-E0)/|E0| (every step) : 6.232e-7 vs <= 1e-6
+INFO C3.separation cumulative stage energy at end (J) : p2g 0.000e+0; ghost 0.000e+0; gravity 2.005e+2; pressure -2.004e+2; g2p -1.307e-1; extension 0.000e+0; advect -3.280e-11; pushout 1.785e-11; densfix 1.910e-4 (|E0| = 3.066e+2 J)
+INFO C3.separation push-out stage: cumulative / max per step / steps > 0 : 1.785e-11 J (5.822e-14 |E0|) / 7.958e-13 J / 120 of 120
+PASS C3.separation C3.separation anti-inflation (fix 3 on): |sum over steps of stage dPE| over 2 s : 1.910e-4 J (signed 1.910e-4 J; 6.232e-7 |E0|) vs <= 1e-6 |E0| = 3.066e-4 J
+INFO C3.separation fix3 stage dKE max per step (one-sided) : 0.000e+0 J
+INFO C3.separation fix3 fraction of (non-air-adjacent) fluid cells above dead-band per step: mean / max; steps with any : 5.250e-7 / 3.150e-5; 2 of 120
+INFO C3.separation fix3 mean e over corrected cells per step: mean / min / max (steps corrected) : 2.038e-1 / 2.008e-1 / 2.068e-1 (2)
+INFO C3.separation fix3 ebar_T4 max |.| / steps with nonzero target : 0.000e+0 / 0 of 120
+PASS C3.separation C3.fix3 target sum |sum e - target_r| / n_r, every step : 9.389e-19 vs <= 1e-12
+INFO C3.separation fix3 PCG iterations (mean / max) : 0.38 / 23
+INFO C3.separation fix3 max |dx|/h (correction alone) / cap-hit steps : 0.0030 / 0 of 120
+PASS C3.separation max|u| at t=2 s : 1.214e-9 vs < 2.215e-3
+PASS C3.separation C3.seed: push-out dE at step 1 (t=0 step, not excluded) : 7.958e-13 J (2.596e-15 |E0|) vs <= 1e-6 |E0|
+INFO C3.separation push-out energy spike (largest per-step push-out dE) : step 1 (t=0.0000 s): step dE 1.002e-8 J; top particle #49381 dE 4.935e-9 J, x0 [0.445532, 0.002616, 0.107500] m, dx [3.144e-6, 0.000e+0, 1.055e-6] m, v before [5.893e-11, -4.508e-12, -5.234e-11] -> after [5.893e-11, -4.508e-12, -5.234e-11] m/s
+INFO C3.separation cell [2,12,1] count start / max / end : 8 / 8 / 8
+INFO C3.separation cell [0,0,0] count start / max / end : 8 / 8 / 8
+INFO C3.separation cell [31,0,0] count start / max / end : 8 / 8 / 8
+INFO C3.separation cell [0,31,0] count start / max / end : 8 / 8 / 8
+INFO C3.separation cell [31,31,0] count start / max / end : 8 / 8 / 8
+INFO C3.separation layer mean particles/cell k=0..4 at start / end : 8.000, 8.000, 8.000, 8.000, 8.000 / 8.001, 7.999, 8.000, 8.000, 8.000
+INFO C3.separation trace: step of max (E-E0)/|E0| and cumulative stage energies there (J) : step 8 t=0.1333 s, rise 6.232e-7 |E0| = 1.910e-4 J; gravity+pressure 8.716e-3; p2g 0.000e+0; ghost 0.000e+0; g2p -8.716e-3; extension 0.000e+0; advect -9.095e-13; pushout 1.876e-12; densfix 1.910e-4
+INFO C3.separation trace: sum of positive per-step stage dE over 2 s by stage (J) : gravity+pressure 1.307e-1; densfix 1.910e-4; advect 1.581e-10; pushout 1.785e-11
+INFO C3.separation trace: max|u| (m/s) at t = 0, 0.25, 0.5, 1, 1.5, 2 s : 0.02: 1.182e-9; 0.25: 1.194e-9; 0.50: 1.198e-9; 1.00: 1.205e-9; 1.50: 1.210e-9; 2.00: 1.214e-9
+INFO C3.separation trace: 5 largest per-step max|u| increases (step: d max|u|, then that step's g2p / extension / gravity+pressure / pushout dE) : 2: +3.882e-12, -1.089e-3 / 0.000e+0 / 1.089e-3 / 2.274e-13; 3: +2.316e-12, -1.089e-3 / 0.000e+0 / 1.089e-3 / 1.705e-13; 4: +1.443e-12, -1.089e-3 / 0.000e+0 / 1.089e-3 / 1.137e-13; 5: +9.564e-13, -1.089e-3 / 0.000e+0 / 1.089e-3 / 1.705e-13; 6: +6.754e-13, -1.089e-3 / 0.000e+0 / 1.089e-3 / 1.137e-13
+PASS [separation] energy bookkeeping closure: max over 120 substeps |sum stage dE - dE_total| / |E| (worst at 32x32x40 step 3) : 9.271e-17 vs <= 1e-12
+INFO [separation] push-out moved fraction per step, sim 32x32x40 (120 steps): mean / max : 7.705e-3 / 1.904e-2
+INFO [separation] colvol surface cells on count-theta fallback per frame, sim 32x32x40 (120 frames): mean / max : 0.000e+0 / 0.000e+0

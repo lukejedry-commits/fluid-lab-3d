@@ -1,0 +1,7 @@
+PASS C3.fix3.sign v6 [production sign]: one step; centre cell 16 (uniform 2x2x4) in 5x5x5 of 8, open top: outward radial dx / centre splat nbar before -> after the step : 16/16 outward (min dx.r 2.215e-6 m^2); splat nbar 10.481445 -> 10.413603 (cell count 16 -> 16; above dead-band 1; PCG 10; target err 2.220e-18) vs all outward AND splat nbar drops (test verdict PASS)
+INFO C3.fix3.sign v6 [production sign]: splat nbar across the correction stage alone : 10.481445 -> 10.413603 (drops); correction max |dx|/h 0.00426
+PASS C3.fix3.sign v6 [sign FLIPPED (must fail)]: one step; centre cell 16 (uniform 2x2x4) in 5x5x5 of 8, open top: outward radial dx / centre splat nbar before -> after the step : 0/16 outward (min dx.r -5.255e-6 m^2); splat nbar 10.481445 -> 10.549454 (cell count 16 -> 16; above dead-band 1; PCG 10; target err 2.220e-18) vs all outward AND splat nbar drops (test verdict FAIL; row passes when the flipped sign fails)
+INFO C3.fix3.sign v6 [sign FLIPPED (must fail)]: splat nbar across the correction stage alone : 10.481445 -> 10.549454 (rises); correction max |dx|/h 0.00426
+PASS [sign] energy bookkeeping closure: max over 2 substeps |sum stage dE - dE_total| / |E| (worst at 5x5x6 step 1) : 0.000e+0 vs <= 1e-12
+INFO [sign] push-out moved fraction per step, sim 5x5x6 (1 steps): mean / max : 0.000e+0 / 0.000e+0
+INFO [sign] push-out moved fraction per step, sim 5x5x6 (1 steps): mean / max : 0.000e+0 / 0.000e+0
