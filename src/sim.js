@@ -24,7 +24,7 @@ class Sim {
     this.sepFrac = o.sepFrac ?? 0.5; this.sepIters = o.sepIters ?? 1;
     // C3 regression switches (defaults = production behaviour; tests turn one fix off to prove its test fails)
     this.useDensFix = o.densFix ?? true; this.densSign = o.densSign ?? 1; this.densTol = o.densTol ?? 1e-4; this.densCap = o.densCap ?? 0.1; this.densAlpha = o.densAlpha ?? 0.1; this.densDead = o.densDead ?? 0.2; // fix 3 v6
-    this.thetaMode = o.thetaMode ?? 'colvol'; // PHYSICS_SPEC 7.7 (b2d23ec4) column volume, default after Phase B1 passed; 'count' = 7.2 per-cell counts; 'smooth' = Phase A splat (failed, kept for the record)
+    this.thetaMode = o.thetaMode ?? 'count'; // Z 2026-10-14n: default reverted to count; 'colvol' (7.7 column volume) behind this flag; 'count' = 7.2 per-cell counts; 'smooth' = Phase A splat (failed, kept for the record)
     this.useGhostFill = o.ghostFill ?? true; this.useWallStrip = o.wallStrip ?? true; this.useSepClip = o.sepClip ?? true;
     this.s = this.h / 2;                    // particle spacing (2x2x2 per cell)
     this.pr = 0.25 * this.s;                // wall clearance radius
