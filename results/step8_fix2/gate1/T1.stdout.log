@@ -1,0 +1,36 @@
+{"N":8,"maxU":5.836046136649602e-10,"pErr":2.2878312954987356e-10,"floorErr":8.783438129048647e-13,"wallErr":6.658502495548594e-13,"wallErrMidpoint":9.749486527873713e-13,"energy":{"worst":-7.786974298831449e-15,"at":0.016666666666666666,"stage":"-","riseStages":{}},"wallSec":7.419}
+PASS T1 N=8: max|u| at t=10 s : 5.836e-10 vs < 2.215e-3
+PASS T1 N=8: pressure profile, interior cells : 2.288e-10 vs <= 1e-2
+PASS T1 N=8: max (E-E0)/|E0| : -7.787e-15 vs <= 1e-6
+PASS P.res T1 N=8: max final true residual / ||rhs|| (600 solves) : 6.408e-9 vs <= 1e-8
+PASS P.res T1 N=8: max iters / median(prev 20), steps > 20 : 1.000 (step 21) vs <= 2
+PASS P.div T1 N=8: max |div u| * dt : 4.529e-10 vs <= 1e-6
+INFO NM T1 N=8: pressure-stage dE > 0 (graded in T3) : 0 of 600 steps; max 0.000e+0 J
+INFO NM T1 N=8: CFL used per frame : max 0.2088, min 0.2088; frames with 8-cap binding and CFL>1: 0
+INFO NM T1 N=8: extension-stage |dE| per step (own stage) : max 0.000e+0 J, cumulative 0.000e+0 J
+{"N":16,"maxU":8.269887182946039e-10,"pErr":5.266769783463135e-10,"floorErr":1.6400572145120389e-12,"wallErr":2.9254022242347583e-12,"wallErrMidpoint":3.0563101262636444e-12,"energy":{"worst":4.689428185388851e-13,"at":10.000000000000076,"stage":"-","riseStages":{"gravity":337}},"wallSec":53.384}
+PASS T1 N=16: max|u| at t=10 s : 8.270e-10 vs < 2.215e-3
+PASS T1 N=16: pressure profile, interior cells : 5.267e-10 vs <= 1e-2
+PASS T1 N=16: max (E-E0)/|E0| : 4.689e-13 vs <= 1e-6
+PASS P.res T1 N=16: max final true residual / ||rhs|| (600 solves) : 6.694e-9 vs <= 1e-8
+PASS P.res T1 N=16: max iters / median(prev 20), steps > 20 : 1.000 (step 21) vs <= 2
+PASS P.div T1 N=16: max |div u| * dt : 1.526e-9 vs <= 1e-6
+INFO NM T1 N=16: pressure-stage dE > 0 (graded in T3) : 0 of 600 steps; max 0.000e+0 J
+INFO NM T1 N=16: CFL used per frame : max 0.2953, min 0.2953; frames with 8-cap binding and CFL>1: 0
+INFO NM T1 N=16: extension-stage |dE| per step (own stage) : max 0.000e+0 J, cumulative 0.000e+0 J
+{"N":32,"maxU":1.3184881517695504e-9,"pErr":2.8171096202948095e-10,"floorErr":6.845778672672071e-13,"wallErr":1.928759202414271e-12,"wallErrMidpoint":1.948043085999263e-12,"energy":{"worst":5.5626770530554575e-15,"at":0.850000000000001,"stage":"-","riseStages":{"gravity":303}},"wallSec":971.89}
+PASS T1 N=32: max|u| at t=10 s : 1.318e-9 vs < 2.215e-3
+PASS T1 N=32: pressure profile, interior cells : 2.817e-10 vs <= 1e-2
+PASS T1 N=32: max (E-E0)/|E0| : 5.563e-15 vs <= 1e-6
+PASS P.res T1 N=32: max final true residual / ||rhs|| (600 solves) : 8.637e-9 vs <= 1e-8
+PASS P.res T1 N=32: max iters / median(prev 20), steps > 20 : 1.000 (step 21) vs <= 2
+PASS P.div T1 N=32: max |div u| * dt : 6.248e-9 vs <= 1e-6
+INFO NM T1 N=32: pressure-stage dE > 0 (graded in T3) : 0 of 600 steps; max 0.000e+0 J
+INFO NM T1 N=32: CFL used per frame : max 0.4176, min 0.4176; frames with 8-cap binding and CFL>1: 0
+INFO NM T1 N=32: extension-stage |dE| per step (own stage) : max 0.000e+0 J, cumulative 0.000e+0 J
+PASS T1 floor force order (sec. Z): e(h) = 8.783e-13, 1.640e-12, 6.846e-13 vs floor 1e-10 x rho g H L W : all <= floor: exact discrete equilibrium vs order >= 0.8 if above floor
+PASS T1 floor force regression floor (sec. Z): max e over N : 1.640e-12 vs <= 1e-10
+PASS T1 floor force e at h/H=1/32 : 6.846e-13 vs <= 1e-2
+PASS T1 side wall force order (sec. Z): e(h) = 6.659e-13, 2.925e-12, 1.929e-12 vs floor 1e-10 x 1/2 rho g H^2 W : all <= floor: exact discrete equilibrium vs order >= 0.8 if above floor
+PASS T1 side wall force regression floor (sec. Z): max e over N : 2.925e-12 vs <= 1e-10
+PASS T1 side wall force e at h/H=1/32 : 1.929e-12 vs <= 1e-2

@@ -80,3 +80,5 @@ T1 and T2 must pass before any other test runs. The rest follow: T3, T4, T5, C1,
 **Units.** The code runs at ρ = 1. Every force check is quoted against ρgH·LW in those same units.
 
 **T1b (surface off a grid face).** Same as T1, but with H = 10.4h at every resolution. This case exercises θ and the ghost-fluid correction, which is where the 2D excess of about 1% came from. It is graded on the frozen size limit and order gate. T1 itself, with the surface on a face, is graded as the exact equilibrium under Validation's 1e−10 floor.
+
+**Fix 2: wall clamp (2026-10-14).** After grid-to-particle, in every transfer mode, for each particle in a cell next to a solid wall, with n the outward normal into the wall and d = |x_wall − x_p|: if u_n + C_nn·(x_wall − x_p) > 0, set C_nn = u_n/d so that the particle's velocity field is exactly 0 at the wall. Leave u_n unchanged. Only when d < 1e−3·h is u_n itself clamped, to min(0, u_n), and those cases are counted. Grid-to-particle also uses zero normal velocity at solid faces. The particle's own velocity is never clamped across the whole cell, because water in the wall cell really does move toward the wall at about w_face·d/h.
