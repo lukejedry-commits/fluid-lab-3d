@@ -60,10 +60,13 @@ class Sim {
     for (let k = k0; k < k1; k++) for (let j = j0; j < j1; j++) for (let i = i0; i < i1; i++)
       for (let c = 0; c < 8; c++) {
         const ox = (c & 1) + 0.5, oy = ((c >> 1) & 1) + 0.5, oz = ((c >> 2) & 1) + 0.5;
-        this.addParticle((i + ox / 2) * h + J * (2 * this.rand() - 1), (j + oy / 2) * h + J * (2 * this.rand() - 1),
-          (k + oz / 2) * h + J * (2 * this.rand() - 1), vel[0], vel[1], vel[2]);
+        this.addParticle(this.seedClamp((i + ox / 2) * h + J * (2 * this.rand() - 1), 0), this.seedClamp((j + oy / 2) * h + J * (2 * this.rand() - 1), 1),
+          this.seedClamp((k + oz / 2) * h + J * (2 * this.rand() - 1), 2), vel[0], vel[1], vel[2]);
       }
   }
+  /** C3.seed (ASSERTS Z 2026-10-14b): a jittered seed never lies inside the wall clearance pr.
+   *  Same RNG draws as before; only coordinates that would land within pr of a wall are clamped to pr. */
+  seedClamp(x, b) { return Math.min(Math.max(x, this.pr), this.L[b] - this.pr); }
   // ---------------- energy (64-bit) ----------------
   particleEnergy() {
     let ke = 0, pe = 0; const { v, x, count } = this;

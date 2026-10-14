@@ -76,3 +76,11 @@ No gate loosened.
   * Total energy: (E - E0)/|E0| <= 1e-6 at every step (the existing limit, unchanged).
   * T4 (interior mean within 1%) graded at the end of T3. T3.mm stays at its fix 1 worst or better. Ritter windowed <= 1.0 (upper bound only; slowing is guarded by T3.mm).
   * The test must fail on the reverted code (T4 fails there already).
+
+### Z amendment 2026-10-14c (fix 3 method, NM; sign corrected)
+- Method frozen as follows. e_c = max(n_c/8 - 1, 0). Solve lap(phi) = -e (or equivalently lap(phi) = e and dx = +grad(phi)) with phi = 0 in air, d(phi)/dn = 0 at solids, PCG tol 1e-4. dx = -grad(phi), trilinear, capped at 0.1 h. Velocities and C are untouched.
+  SIGN NOTE: with lap(phi) = +e and dx = -grad(phi), div(dx) = -e, which moves particles INTO packed cells. The source must be -e.
+- C3.fix3.sign (unit test, graded, runs before T3): 5x5x5 fluid at 8 per cell, closed on the sides and bottom, with an open top (one air layer above, phi = 0); the centre cell holds 16. After one step every particle's dx has a positive outward radial component from that cell centre, and the count in that cell drops. It must fail if the sign is flipped.
+- Solvability: the correction runs only on fluid regions connected to at least one air cell. Regions with no air are skipped and counted (info row; expected 0 in T3).
+- Push-out after the correction counts toward the fix 3 stage (its dKE/dPE are included in that stage's rows).
+- Info rows per step: PCG iterations, max |dx|/h, and the fraction of moved particles hitting the cap. If the cap binds in more than 50% of steps, the cap is flagged for review (not auto-failed).
