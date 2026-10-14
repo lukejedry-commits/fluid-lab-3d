@@ -107,3 +107,12 @@ No gate loosened.
   (a) synthetic front advancing at a known exact speed v: measured speed within 1e-3 relative for v at 0.5 and 1.0 U_R, at a=8 and a=16;
   (b) it is re-run on saved fix 1, fix 2, v2, v3 and v4 output, with all values reported. The limit stays Ritter <= 1.0, unchanged. If any graded run is still above 1.0, a fix-3-off comparison run is required.
 - T4 1% unchanged.
+
+### Z amendment 2026-10-14g (fix 3 v5; rulings on step 13)
+- Sub-cell front estimator DROPPED. Its proof failed by construction (integer counts resolve only h/8).
+- Target (replaces 14f): ebar = the T4 interior mean of (nbar/8 - 1) over strict-interior cells (all 26 neighbours fluid). target_r = n_r * sign(ebar) * max(|ebar| - 0.005, 0). Target-sum row unchanged (<= 1e-12 per cell).
+- Graded proof that still water is untouched: Gate 1 65/65 with 0 flips vs step 12, AND the fix 3 stage's dPE and dx exactly 0 in every Gate 1 still-pool case; C3.separation |sum dPE| <= 1e-6|E0| (unchanged).
+- Ritter, two graded rows (both required):
+  (a) long window W_L = ceil(100 h/(U_R*frame_dt)) frames, about 10 at a=16 and 20 at a=8; graded peak <= 1.0.
+  (b) short window as before (3 frames at a=16, 5 at a=8); graded <= 1 + q, where q = h/(W*frame_dt*U_R) is one cell step computed from the grid (about 0.034 at a=16, 0.068 at a=8). Coding prints the exact q values; they are frozen from the grid, not from results.
+  The short window guards against a brief real overshoot, and the long window guards against a sustained one.
