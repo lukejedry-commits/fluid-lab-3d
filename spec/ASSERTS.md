@@ -119,3 +119,12 @@ No gate loosened.
 
 ### Z amendment 2026-10-14h: exact Ritter windows (Coding 765282d, Physics- and Validation-checked)
 U_R = 2.11781302 m/s, frame = 1/60 s. a=16: short W=3, q=0.0337317, limit 1.0337317; long W_L=11, limit 1.0. a=8: short W=5, q=0.0404781, limit 1.0404781; long W_L=21, limit 1.0. These supersede the approximate figures in 14g.
+
+### Z amendment 2026-10-14i (fix 3 v6; rulings on step 14)
+- Target ebar = mean over strict-interior cells of (raw particle count/8 - 1), the same quantity T4 grades. The local source stays on the splat nbar. The 0.005 dead-band, target formula and alpha = 0.1 are otherwise unchanged.
+- Still-water proof unchanged: Gate 1 65/65, 0 flips, and in every still-pool case (T1, T1b at all N) the stage moves 0 particles with dPE exactly 0. Info: max |ebar| per still-pool case (expected exactly 0).
+- T3.mm scope: a=16 rows graded <= 8% (unchanged). a=8 rows become INFO only, conditional on a graded convergence row: at Z=2.78 and Z=3.22, err(a=16) < err(a=8), with the ratio reported. If that row fails, the a=8 rows revert to graded FAIL. The Lead may overrule the a=8 scope change.
+
+### Z amendment 2026-10-14j (Lead calls on fix 3 closure)
+- If v6 fails T4: alpha sweep {0.1, 0.2, 0.3}, the full suite at both resolutions, INFO. Selection rule, frozen now: choose the SMALLEST alpha that passes every graded row (including T4, the still pool at all N, both Ritter windows, energy and the target sum) at BOTH a=8 and a=16, as one value. If none passes, no alpha is frozen and the Lead decides on a limitation write-up. Nothing outside the grid, and no per-resolution alpha.
+- C3.separation: before any fix, a per-step energy-by-stage trace over 2 s (graded later; this one is info) identifying which stage carries the +2e-6|E0| rise and the max|u| growth.
