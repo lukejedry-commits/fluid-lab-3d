@@ -21,7 +21,7 @@ class Sim {
     this.frame = o.frame ?? 1 / 60; this.maxSub = o.maxSub ?? 16; this.cfl = o.cfl ?? 1;
     this.tol = o.tol ?? 1e-8; this.jitter = o.jitter ?? 0.1; this.rand = mulberry32(o.seed ?? 12345);
     this.subMul = o.subMul ?? 1; // T2 half-dt info row: multiply the substep count (cap applies before)
-    this.sepFrac = o.sepFrac ?? 0.5; this.sepIters = o.sepIters ?? 1;
+    this.sepTrig = o.sepTrig ?? 0.0611; this.sepFrac = 2 * this.sepTrig; this.sepIters = o.sepIters ?? 1; // Z 2026-10-14n/o: pair-separation trigger d_trig = 0.0611 h (was 0.25 h = sepFrac 0.5 x s); sepFrac kept for reporting only
     // C3 regression switches (defaults = production behaviour; tests turn one fix off to prove its test fails)
     this.useDensFix = o.densFix ?? true; this.densSign = o.densSign ?? 1; this.densTol = o.densTol ?? 1e-4; this.densCap = o.densCap ?? 0.1; this.densAlpha = o.densAlpha ?? 0.1; this.densDead = o.densDead ?? 0.2; // fix 3 v6
     this.thetaMode = o.thetaMode ?? 'count'; // Z 2026-10-14n: default reverted to count; 'colvol' (7.7 column volume) behind this flag; 'count' = 7.2 per-cell counts; 'smooth' = Phase A splat (failed, kept for the record)
@@ -372,7 +372,7 @@ class Sim {
   /** item 2: pair separation; one shared push d (i -= d, j += d), shrunk per axis to what BOTH
    *  particles can move inside the box, so it stays exactly equal and opposite. */
   separate() {
-    const minD = this.sepFrac * this.s, minD2 = minD * minD, X = this.x, n = this.count;
+    const minD = this.sepTrig * this.h, minD2 = minD * minD, X = this.x, n = this.count;
     const hn = this.L.map((l) => Math.max(1, Math.floor(l / minD))), cs = this.L.map((l, b) => l / hn[b]);
     const nC = hn[0] * hn[1] * hn[2], start = new Int32Array(nC + 1), cellOf = new Int32Array(n), ids = new Int32Array(n);
     for (let p = 0; p < n; p++) { const c = [0, 1, 2].map((b) => Math.min(hn[b] - 1, Math.max(0, Math.floor(X[3 * p + b] / cs[b])))); cellOf[p] = c[0] + hn[0] * (c[1] + hn[1] * c[2]); start[cellOf[p]]++; }
