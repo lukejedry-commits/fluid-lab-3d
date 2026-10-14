@@ -106,16 +106,49 @@ if (part === 't3a16' || part === 't3a8' || part === 'fix2check') {
       oa(dt); let up = 0, dn = 0, upC = 0, dnC = 0; for (let p = 0; p < s.count; p++) { const a0 = z0[p] < h, a1 = s.x[3 * p + 2] < h, col = s.x[3 * p] < A * h;
         if (a0 && !a1) { up++; if (col) upC++; } if (!a0 && a1) { dn++; if (col) dnC++; } }
       const k = h * h * dt / (h ** 3 / 8); cross.push({ t: s.t, netUpParticles: up - dn, gridFluxParticles: flux * k, netUpCol: upC - dnC, gridFluxCol: fluxCol * k }); }; };
+  const f3 = [];
+  const instrument3 = (s) => { instrument2(s); const { nx, ny, nz, h } = s;
+    if (s.densityCorrection) { const od = s.densityCorrection.bind(s); s.densityCorrection = () => { const X0 = Float64Array.from(s.x.subarray(0, 3 * s.count)); const st = od();
+      let mv = 0; for (let p = 0; p < s.count; p++) mv = Math.max(mv, Math.hypot(s.x[3 * p] - X0[3 * p], s.x[3 * p + 1] - X0[3 * p + 1], s.x[3 * p + 2] - X0[3 * p + 2])); st.maxMoveStage = mv / h; return st; }; }
+    const prevOn = s.onSubstep; s.onSubstep = (sim, rec) => { prevOn && prevOn(sim, rec);
+      const c = sim.markCells(); let peA = 0, peU = 0; // PE_pack per section Z: PE(actual layer counts) - PE(uniform 8 per cell, same particles per column)
+      for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { let ncol = 0; for (let k = 0; k < nz; k++) { const q = c[i + nx * (j + ny * k)]; ncol += q; peA += q * (k + 0.5); }
+        for (let m = 0; m < ncol; m++) peU += Math.floor(m / 8) + 0.5; }
+      const sc = sim.mp * sim.g * h; f3.push({ step: rec.step, t: rec.t, dKE: rec.densKE, dPE: rec.densPE, PEpack: (peA - peU) * sc, dens: rec.dens }); }; };
   const onFrame = (s, fr) => { const c = s.cellCount || s.markCells(), { nx, ny } = s; const layers = []; let tot = 0; // (b) column region i < A
     for (let k = 0; k < 2 * A + 2; k++) { let q = 0; for (let j = 0; j < ny; j++) for (let i = 0; i < A; i++) q += c[i + nx * (j + ny * k)]; tot += q; layers.push(q / (A * ny)); }
     layerSeries.push({ frame: fr, t: s.t, columnTotal: tot, layers }); };
-  const R = lib.runT3(A, { instrument: instrument2, onFrame }); write(`T3a${A}_log.csv`, lib.csv(R.s.log)); write(`T3a${A}_T4_frames.json`, R.frames);
+  const R = lib.runT3(A, { instrument: (s) => { s._wrapAfter = true; instrument3(s); }, onFrame }); write(`T3a${A}_log.csv`, lib.csv(R.s.log)); write(`T3a${A}_T4_frames.json`, R.frames);
   lib.gradeRitter(R, `a${A}`); lib.gradeT3T4(R, `a${A}`);
   const L = R.s.log;
   if (A === 8 && part === 't3a8') { const pm = L.filter((r) => r.dKEpMass > 0), pt = L.filter((r) => r.dKEpTheta > 1e-8 * r.pd.ke0Theta);
     row('C3.fix1: a8 pressure-stage dKE, face-mass measure (= logged stage), every step', `${pm.length} of ${L.length} > 0` + (pm.length ? ` (steps ${pm.map((r) => r.step).join(',')}; max ${fmt(Math.max(...pm.map((r) => r.dKEpMass)))} J)` : ''), '<= 0 every step', pm.length === 0);
     row('a8 pressure-stage dKE, theta measure, every step', `${pt.length} of ${L.length} > 1e-8 KE_theta` + (pt.length ? ` (steps ${pt.map((r) => r.step).join(',')})` : `; max ${fmt(Math.max(...L.map((r) => r.dKEpTheta)))} J`), '<= 1e-8 x KE_theta,pre every step', pt.length === 0);
     write('a8_pressure_steps.json', L.map((r) => ({ step: r.step, t: r.t, mass: r.dKEpMass, solver: r.dKEpSolver, theta: r.dKEpTheta }))); }
+  { // C3.fix3 rows (ASSERTS Z 2026-10-14b/c)
+    const has = f3.length && f3[0].dens !== undefined && R.s.useDensFix !== undefined;
+    if (!has) row(`C3.fix3 a=${A}: density-correction stage present`, 'no density correction in this code', 'present (fix 3)', false);
+    else { let cum = 0, worst = -Infinity, wAt = null, worstFlip = -Infinity; const ks = f3.map((x) => x.dKE), D = f3.map((x) => x.dens).filter(Boolean);
+      for (const x of f3) { cum += x.dPE; if (cum - x.PEpack > worst) { worst = cum - x.PEpack; wAt = x; } worstFlip = Math.max(worstFlip, cum - (-x.PEpack)); }
+      const mvS = Math.max(...D.map((d) => d.maxMoveStage || 0)), mvC = Math.max(...D.map((d) => d.maxDx || 0));
+      row(`C3.fix3 a=${A}: max per-particle move in the fix-3 stage (correction + its push-out) / h`, `${mvS.toFixed(4)} (correction alone ${mvC.toFixed(4)})`, '<= 0.1', mvS <= 0.1 + 1e-12);
+      row(`C3.fix3 a=${A}: stage dKE every step`, `max |dKE| ${fmt(Math.max(...ks.map(Math.abs)))} J`, '<= 1e-12 J', Math.max(...ks.map(Math.abs)) <= 1e-12);
+      row(`C3.fix3 a=${A}: cumulative stage dPE <= PE_pack every step (PE_pack = PE(actual layers) - PE(uniform 8/cell), literal section Z)`, `max (cum dPE - PE_pack) ${fmt(worst)} J at step ${wAt.step} (cum dPE ${fmt(f3.slice(0, f3.indexOf(wAt) + 1).reduce((s, x) => s + x.dPE, 0))}, PE_pack ${fmt(wAt.PEpack)})`, '<= 0 every step', worst <= 0);
+      info(`a${A} fix3: same bound with PE_pack sign flipped (packing deficit = PE(uniform) - PE(actual))`, `max (cum dPE - deficit) ${fmt(worstFlip)} J`);
+      const sk = Math.max(...D.map((d) => d.skipped)); row(`C3.fix3 a=${A}: skipped regions (no air) max per step`, `${sk} (with excess: ${Math.max(...D.map((d) => d.skippedWithExcess))})`, '== 0', sk === 0);
+      const it = D.map((d) => d.iters), fr = D.filter((d) => d.moved).map((d) => d.capped / d.moved), bind = D.filter((d) => d.capped > 0).length;
+      info(`a${A} fix3 PCG iterations per step (mean / max; steps solved)`, `${(it.reduce((a, b) => a + b, 0) / it.length).toFixed(1)} / ${Math.max(...it)}; ${it.filter((x) => x > 0).length} of ${D.length}`);
+      info(`a${A} fix3 max |dx|/h per step (mean / max)`, `${(D.reduce((a, d) => a + d.maxDx, 0) / D.length).toFixed(4)} / ${Math.max(...D.map((d) => d.maxDx)).toFixed(4)}`);
+      info(`a${A} fix3 fraction of moved particles hitting the cap (mean / max over steps)`, `${(fr.reduce((a, b) => a + b, 0) / (fr.length || 1)).toExponential(3)} / ${fr.length ? Math.max(...fr).toExponential(3) : 0}`);
+      info(`a${A} fix3 fraction of steps where the cap binds`, `${bind} of ${D.length} = ${(bind / D.length).toFixed(3)}` + (bind / D.length > 0.5 ? ' -> FLAG: cap binds in > 50% of steps, review' : ''));
+      info(`a${A} fix3 stage dPE / dKE per step (sum, max dPE), PE_pack (start, end)`, `sum dPE ${fmt(f3.reduce((s, x) => s + x.dPE, 0))} J, max ${fmt(Math.max(...f3.map((x) => x.dPE)))} J; sum dKE ${fmt(ks.reduce((a, b) => a + b, 0))} J; PE_pack ${fmt(f3[0].PEpack)} -> ${fmt(f3.at(-1).PEpack)} J`);
+      write(`a${A}_fix3_steps.json`, f3); }
+    const fix1Worst = { 16: 0.0694, 8: 0.0857 }[A], mmc = JSON.parse(fs.readFileSync(path.join(outDir, `a${A}_mm_compare.json`), 'utf8')).filter((r) => r.Z >= 1.67), wm = Math.max(...mmc.map((r) => Math.abs(r.rel)));
+    row(`C3.fix3 a=${A}: T3.mm worst graded row no worse than fix 1 (${(100 * fix1Worst).toFixed(2)}%)`, (100 * wm).toFixed(2) + '%', `<= ${(100 * fix1Worst).toFixed(2)}%`, wm <= fix1Worst + 5e-5);
+    const p1 = path.join(__dirname, `../results/step7_fix1/a${A}_mm_compare.json`);
+    if (A === 8 && fs.existsSync(p1)) { const q = JSON.parse(fs.readFileSync(p1, 'utf8')), now = JSON.parse(fs.readFileSync(path.join(outDir, 'a8_mm_compare.json'), 'utf8'));
+      info('a8 T3.mm vs fix-1 (Z: T now / T fix1 / delta; error now)', now.map((r, i) => `Z=${r.Z}: ${r.T_sim.toFixed(3)} / ${q[i].T_sim.toFixed(3)} / ${(r.T_sim - q[i].T_sim >= 0 ? '+' : '') + (r.T_sim - q[i].T_sim).toFixed(3)}; ${(100 * r.rel).toFixed(2)}%`).join(' | ')); }
+  }
   {
     const sa = cross.reduce((s, x) => s + Math.abs(x.netUpParticles - x.gridFluxParticles), 0) / cross.length, nU = cross.reduce((s, x) => s + x.netUpParticles, 0), gU = cross.reduce((s, x) => s + x.gridFluxParticles, 0);
     const nUc = cross.reduce((s, x) => s + x.netUpCol, 0), gUc = cross.reduce((s, x) => s + x.gridFluxCol, 0);
@@ -146,4 +179,17 @@ if (part === 'seedT3') { // C3.seed for the T3 setups (jitter 0.1 s)
     let dmin = Infinity; for (let p = 0; p < s.count; p++) for (let b = 0; b < 3; b++) dmin = Math.min(dmin, s.x[3 * p + b], s.L[b] - s.x[3 * p + b]);
     row(`C3.seed T3 a=${A}: min distance of any seeded particle to any wall at t=0`, `${dmin.toExponential(4)} m`, `>= clearance ${s.pr.toExponential(4)} m`, dmin >= s.pr); }
   write('rows_seedT3.json', rows);
+}
+
+if (part === 'sign') { // C3.fix3.sign unit test
+  const run = (sg, uniform) => { const h = 0.05, s = new Sim({ nx: 5, ny: 5, nz: 6, h, seed: 5, densSign: sg }); s.seedBlock(0, 5, 0, 5, 0, 5);
+    for (let q = 0; q < 8; q++) { const u = () => (uniform ? s.rand() : 0.15 + 0.7 * s.rand()); s.addParticle((2 + u()) * h, (2 + u()) * h, (2 + u()) * h); }
+    const cid = 2 + 5 * (2 + 5 * 2), before = s.markCells()[cid], X0 = Float64Array.from(s.x.subarray(0, 3 * s.count));
+    s.advanceFrame = null; const rec = s.substep(Math.min(s.frame, s.cflDt()), 1); const dx = s._lastDx, after = s.markCells()[cid]; let ok = 0, tot = 0, minR = Infinity;
+    for (let p = 0; p < s.count; p++) { if ([0, 1, 2].some((b) => Math.floor(X0[3 * p + b] / h) !== 2)) continue; tot++; let r = 0; for (let b = 0; b < 3; b++) r += dx[3 * p + b] * (X0[3 * p + b] - 2.5 * h); minR = Math.min(minR, r); if (r > 0) ok++; }
+    return { before, after, ok, tot, minR, dens: s.lastDens }; };
+  for (const [sg, lab] of [[1, 'production sign'], [-1, 'sign FLIPPED (must fail)']]) { const r = run(sg, true), pass = r.ok === r.tot && r.after < r.before;
+    row(`C3.fix3.sign [${lab}]: one full step, centre cell of 5x5x5 (16 particles; extra 8 uniform in the cell): particles with outward radial dx / centre count before -> after`, `${r.ok}/${r.tot} outward (min radial dx.r ${fmt(r.minR)} m^2); count ${r.before} -> ${r.after}`, 'all outward AND count drops', sg === 1 ? pass : !pass, `test verdict ${pass ? 'PASS' : 'FAIL'}` + (sg === 1 ? '' : '; row passes when the flipped sign fails'));
+    const r2 = run(sg, false); info(`C3.fix3.sign [${lab}] variant: extra 8 placed in the inner [0.15,0.85] of the cell`, `${r2.ok}/${r2.tot} outward; count ${r2.before} -> ${r2.after}`); }
+  write('rows_sign.json', rows);
 }

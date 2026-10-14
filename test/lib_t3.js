@@ -105,10 +105,12 @@ function runT3(A, opts = {}) {
   instrumentProject(s); if (opts.corner) instrumentCorner(s); if (opts.instrument) opts.instrument(s);
   const N0 = s.count, e0 = s.particleEnergy(), E0 = e0.ke + e0.pe, Tfac = Math.sqrt(2 * g / a), UR = 2 * Math.sqrt(g * 2 * a);
   let prevF = front(s), prevT = 0; const frames = [{ frame: 0, t: 0, xFront: prevF, ...t4(s) }], cornerCounts = [];
+  const preOn = s.onSubstep;
   s.onSubstep = (sim, rec) => { const f = front(sim); rec.xFront = f; rec.Z = f / a; rec.T = rec.t * Tfac; rec.frontSpeed = (f - prevF) / (rec.t - prevT); prevF = f; prevT = rec.t;
     const d = sim._pdiag; rec.dKEpMass = d.dMass; rec.dKEpSolver = d.dSolver; rec.dKEpTheta = d.dTheta; rec.pd = d;
     if (opts.corner) { const c = sim.cellCount[CORNER[0] + nx * (CORNER[1] + ny * CORNER[2])]; rec.cornerCount = sim.markCells()[CORNER[0] + nx * (CORNER[1] + ny * CORNER[2])];
       const k = sim._corner; Object.assign(rec, { fluxTrilin: k.ft, fluxGrid: k.fg, intoWallFloorN: k.floorN, intoWallFloorMax: k.floorMax, intoWallBackN: k.backN, intoWallBackMax: k.backMax, intoWallSideN: k.sideN, intoWallSideMax: k.sideMax, cornerPushN: sim._push.n, cornerPushSum: sim._push.sum, cornerFluid: sim.fluid[CORNER[0] + nx * (CORNER[1] + ny * CORNER[2])] }); } };
+  if (preOn) { const lo = s.onSubstep; s.onSubstep = (sim, rec) => { lo(sim, rec); preOn(sim, rec); }; }
   const tEnd = 14.6 / Tfac + 0.15, t0 = Date.now(); let fr = 0;
   while (s.t < tEnd && prevF / a < 15.5) { s.advanceFrame(); fr++; frames.push({ frame: fr, t: s.t, xFront: prevF, ...t4(s) });
     if (opts.corner && fr === 10) s._pad = paddingCheck(s);
