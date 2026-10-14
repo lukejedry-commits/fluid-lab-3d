@@ -66,7 +66,7 @@ T1 and T2 must pass before any other test runs. The rest follow: T3, T4, T5, C1,
 - Total mass and volume.
 
 ## 7. Implementation choices accepted at Gate 1 (2026-10-13, Physics and NM review)
-1. **Fluid faces.** A face carries fluid if m_f > 0. That one rule decides where gravity applies and which faces enter the pressure solve. Ghost fill touches only faces with m_f = 0. A fluid face below the 5% cutoff keeps its own transferred velocity.
+1. **Fluid faces.** A face carries fluid if m_f > 0. That one rule decides where gravity applies and which faces enter the pressure solve. Ghost fill touches only faces with m_f = 0. A fluid face below the 5% cutoff keeps its own transferred velocity. **Energy weighting (fix 1, 2026-10-14):** right after P2G, every mass-carrying face between a fluid cell and a non-fluid cell has its face mass set to θ·ρh³, using the same clamped θ as the solve. Every other fluid face keeps ρh³. Kinetic energy is measured with these masses, which makes the pressure stage an exact projection in the energy measure.
 2. **Surface offset.** θ is the distance from the last fluid cell centre to the surface, divided by h.
    - In a surface cell with fill fraction f ≥ ½, the cell counts as fluid and θ = f − ½.
    - In a surface cell with f < ½, the cell counts as air, and the fluid cell below gets θ = f + ½.
