@@ -1,0 +1,92 @@
+[
+ {
+  "case": "T1b lattice",
+  "N": 8,
+  "maxDiffVsCount": 0.0537109375,
+  "raw": [
+   0.0712890625,
+   0.16796875
+  ]
+ },
+ {
+  "case": "T1b lattice",
+  "N": 16,
+  "maxDiffVsCount": 0.06640625,
+  "raw": [
+   0.6855468749999991,
+   0.81640625
+  ]
+ },
+ {
+  "case": "T1b lattice",
+  "N": 32,
+  "maxDiffVsCount": 0.0615234375,
+  "raw": [
+   0.8134765625,
+   0.9287109375000018
+  ]
+ },
+ {
+  "case": "T1b lattice",
+  "N": 64,
+  "maxDiffVsCount": 0.1044921875,
+  "raw": [
+   0.1455078125,
+   0.3369140625
+  ]
+ },
+ {
+  "case": "flat f=0.25 lattice placement",
+  "N": 8,
+  "maxDiffVsCount": 0.015625,
+  "raw": [
+   0.734375,
+   0.765625
+  ]
+ },
+ {
+  "case": "flat f=0.25 lattice placement",
+  "N": 32,
+  "maxDiffVsCount": 0.015625,
+  "raw": [
+   0.734375,
+   0.765625
+  ]
+ },
+ {
+  "case": "flat f=0.5 lattice placement",
+  "N": 8,
+  "maxDiffVsCount": 0,
+  "raw": [
+   0,
+   0
+  ]
+ },
+ {
+  "case": "flat f=0.5 lattice placement",
+  "N": 32,
+  "maxDiffVsCount": 0,
+  "raw": [
+   0,
+   0
+  ]
+ },
+ {
+  "case": "flat f=0.75 lattice placement",
+  "N": 8,
+  "maxDiffVsCount": 0.015625,
+  "raw": [
+   0.234375,
+   0.265625
+  ]
+ },
+ {
+  "case": "flat f=0.75 lattice placement",
+  "N": 32,
+  "maxDiffVsCount": 0.015625,
+  "raw": [
+   0.234375,
+   0.265625
+  ]
+ }
+]

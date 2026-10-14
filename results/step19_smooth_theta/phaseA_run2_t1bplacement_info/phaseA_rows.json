@@ -1,0 +1,107 @@
+[
+ {
+  "name": "(a) lattice T1 N=8: max |theta_smooth - theta_count| over 64 surface faces",
+  "value": "0.000e+0 (unclamped 0.000e+0); count theta 0.5",
+  "limit": "<= 1e-12",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "name": "(a) lattice T1 N=16: max |theta_smooth - theta_count| over 256 surface faces",
+  "value": "0.000e+0 (unclamped 0.000e+0); count theta 0.5",
+  "limit": "<= 1e-12",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "name": "(a) lattice T1 N=32: max |theta_smooth - theta_count| over 1024 surface faces",
+  "value": "0.000e+0 (unclamped 0.000e+0); count theta 0.5",
+  "limit": "<= 1e-12",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "name": "(a) lattice T1 N=64: max |theta_smooth - theta_count| over 4096 surface faces",
+  "value": "0.000e+0 (unclamped 0.000e+0); count theta 0.5",
+  "limit": "<= 1e-12",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "name": "(a) lattice T1b N=8 (top cell 5 particles): max |theta_smooth - theta_count| over 64 surface faces",
+  "value": "7.500e-2 (unclamped 8.887e-2); count theta 0.125",
+  "limit": "<= 1e-12",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "name": "(a) lattice T1b N=16 (top cell 2 particles): max |theta_smooth - theta_count| over 256 surface faces",
+  "value": "6.641e-2 (unclamped 6.641e-2); count theta 0.75",
+  "limit": "<= 1e-12",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "name": "(a) lattice T1b N=32 (top cell 3 particles): max |theta_smooth - theta_count| over 1024 surface faces",
+  "value": "6.152e-2 (unclamped 6.152e-2); count theta 0.875",
+  "limit": "<= 1e-12",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "name": "(a) lattice T1b N=64 (top cell 6 particles): max |theta_smooth - theta_count| over 4096 surface faces",
+  "value": "1.199e-1 (unclamped 1.199e-1); count theta 0.25",
+  "limit": "<= 1e-12",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "name": "(b) flat fill f=0.25 [t1b placement] (N=8..64): max |z_s/h - (K+f)|, z_s from unclamped smooth theta (theta raw 0.765625,0.75,0.734375 from cell k_c=K-1)",
+  "value": "1.563e-2; with the [0.05,1] clamp 1.563e-2; clamped theta 0.765625,0.75,0.734375; count-based theta 0.75",
+  "limit": "<= 1e-12",
+  "pass": false,
+  "note": "clamp moves z_s: theta raw < 0.05"
+ },
+ {
+  "name": "(b) flat fill f=0.5 [t1b placement] (N=8..64): max |z_s/h - (K+f)|, z_s from unclamped smooth theta (theta raw -0.03515625 from cell k_c=K)",
+  "value": "3.516e-2; with the [0.05,1] clamp 5.000e-2; clamped theta 0.05; count-based theta 0.05",
+  "limit": "<= 1e-12",
+  "pass": false,
+  "note": "clamp moves z_s: theta raw < 0.05"
+ },
+ {
+  "name": "(b) flat fill f=0.75 [t1b placement] (N=8..64): max |z_s/h - (K+f)|, z_s from unclamped smooth theta (theta raw 0.231414794921875,0.21728515625,0.203155517578125 from cell k_c=K)",
+  "value": "4.684e-2; with the [0.05,1] clamp 4.684e-2; clamped theta 0.231414794921875,0.21728515625,0.203155517578125; count-based theta 0.25",
+  "limit": "<= 1e-12",
+  "pass": false,
+  "note": "clamp moves z_s: theta raw < 0.05"
+ },
+ {
+  "name": "(c) continuity smooth theta, one particle moved 2e-9 h across vertical (top face z=32h): max |d theta| over 1024 surface faces (classification unchanged: true)",
+  "value": "0.000e+0",
+  "limit": "<= 0.02",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "name": "(c) continuity count theta, one particle moved 2e-9 h across vertical (top face z=32h): max |d theta| over 1024 surface faces (classification unchanged: true)",
+  "value": "1.250e-1",
+  "limit": "must FAIL (> 0.02)",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "name": "(c) continuity smooth theta, one particle moved 2e-9 h across lateral (x-face, top row): max |d theta| over 1024 surface faces (classification unchanged: true)",
+  "value": "1.235e-10",
+  "limit": "<= 0.02",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "name": "(c) continuity count theta, one particle moved 2e-9 h across lateral (x-face, top row): max |d theta| over 1024 surface faces (classification unchanged: true)",
+  "value": "1.250e-1",
+  "limit": "must FAIL (> 0.02)",
+  "pass": true,
+  "note": ""
+ }
+]

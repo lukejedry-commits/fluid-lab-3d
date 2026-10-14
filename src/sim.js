@@ -24,6 +24,7 @@ class Sim {
     this.sepFrac = o.sepFrac ?? 0.5; this.sepIters = o.sepIters ?? 1;
     // C3 regression switches (defaults = production behaviour; tests turn one fix off to prove its test fails)
     this.useDensFix = o.densFix ?? true; this.densSign = o.densSign ?? 1; this.densTol = o.densTol ?? 1e-4; this.densCap = o.densCap ?? 0.1; this.densAlpha = o.densAlpha ?? 0.1; this.densDead = o.densDead ?? 0.2; // fix 3 v6
+    this.thetaMode = o.thetaMode ?? 'count'; // PHYSICS_SPEC 7.7 option 3 = 'smooth' (opt-in until Phase A passes); 'count' = 7.2 per-cell counts
     this.useGhostFill = o.ghostFill ?? true; this.useWallStrip = o.wallStrip ?? true; this.useSepClip = o.sepClip ?? true;
     this.s = this.h / 2;                    // particle spacing (2x2x2 per cell)
     this.pr = 0.25 * this.s;                // wall clearance radius
@@ -161,7 +162,7 @@ class Sim {
       const i = Math.min(nx - 1, Math.max(0, Math.floor(this.x[3 * p] * ih))), j = Math.min(ny - 1, Math.max(0, Math.floor(this.x[3 * p + 1] * ih))), k = Math.min(nz - 1, Math.max(0, Math.floor(this.x[3 * p + 2] * ih)));
       cnt[i + nx * (j + ny * k)]++;
     }
-    this.cellCount = cnt; return cnt;
+    this.cellCount = cnt; this._fsm = null; return cnt;
   }
   /** ghost-fluid fraction: distance from fluid cell centre to surface / h = f_c - 1/2,
    *  f_c = min(1, particles/8) the cell fill fraction. Clamped to [THETA_MIN, 1]. */
@@ -182,9 +183,17 @@ class Sim {
   }
   /** theta for the face between fluid cell c and non-fluid cell a:
    *  a holds particles (f_a < 1/2 surface cell) -> theta = f_a + 1/2; else theta = f_c - 1/2. Clamp [0.05,1]. */
-  thetaOf(cnt, c, a) {
-    const t = cnt[a] > 0 ? Math.min(1, cnt[a] / 8) + 0.5 : Math.min(1, cnt[c] / 8) - 0.5;
-    return Math.max(0.05, Math.min(1, t));
+  thetaOf(cnt, c, a) { return Math.max(0.05, Math.min(1, this.thetaRaw(cnt, c, a))); }
+  /** unclamped theta. 'count' (7.2): a holds particles -> f_a + 1/2, else f_c - 1/2.
+   *  'smooth' (7.7 option 3): f~ = nbar/8 from the fix-3 P2G splat (quadratic B-spline, mirror-folded at walls);
+   *  theta = f~_c + f~_a + f~_(a+d) - 1/2 along the face normal d = a - c (the smoothed fluid depth beyond c's centre).
+   *  It equals the count formula wherever the splat equals the counts; it moves continuously with particle positions. */
+  thetaRaw(cnt, c, a) {
+    if (this.thetaMode === 'count') return cnt[a] > 0 ? Math.min(1, cnt[a] / 8) + 0.5 : Math.min(1, cnt[c] / 8) - 0.5;
+    const F = this._fsm || (this._fsm = this.splatCounts()), d = a - c, { nx, ny, nz } = this;
+    const ax = Math.abs(d) === 1 ? 0 : Math.abs(d) === nx ? 1 : 2, co = [a % nx, ((a / nx) | 0) % ny, (a / (nx * ny)) | 0][ax] + Math.sign(d);
+    const b = co >= 0 && co < [nx, ny, nz][ax] ? F[a + d] : 0;
+    return (F[c] + F[a] + b) / 8 - 0.5;
   }
   project(dt) {
     const { nx, ny, nz } = this, cnt = this.markCells(), FL = this.classify(cnt);
