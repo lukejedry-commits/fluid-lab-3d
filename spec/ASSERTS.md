@@ -152,3 +152,10 @@ U_R = 2.11781302 m/s, frame = 1/60 s. a=16: short W=3, q=0.0337317, limit 1.0337
 - Row 3 is split: (3a) a particle crossing a horizontal face changes theta by <= 1e-12; (3b) a particle crossing a lateral face changes theta by <= 0.02. The count-based theta must fail 3b.
 - New unit row (4) overhang: a column with fluid, then an air gap, then a detached fluid sheet. The sheet's theta comes from its own run only (exact to 1e-12), and a surface cell whose neighbours are in a different k uses count theta.
 - Info (T3): fraction of surface cells on fallback per frame.
+
+### Z amendment 2026-10-14n (step 19B rulings)
+- Column-volume theta did not qualify: C3.separation got worse and the a=8 T4 ceiling and tilted rows regressed. Default reverts to thetaMode='count' (colvol stays behind a flag). Graded revert check: all rows bit-identical to 1e6089c.
+- PHYSICS_SPEC reference: bd96c77c (whole file; supersedes cd69ca25). Info (Physics): T4 interior density per frame next to the push-out move fraction.
+- Order (NM): push-out trigger first, then C3.separation rerun with count theta, then (only if still failing) the fallback-cell map at steps 1-2 (info, Physics).
+- Push-out trigger d_trig: the 0.1% quantile of the t=0 nearest-neighbour distances on the frozen seed (jitter 0.5, logged seed). The value and d_trig/h are posted and committed BEFORE any run. Graded consistency: the fraction of particles moved at step 1 of C3.separation is <= 0.1% (a quantile cannot give exactly 0). Also graded: C3.separation energy and max|u| (unchanged limits), Gate 1 0 flips, T3 rows, T4 ceilings, tilted tank, energy bookkeeping 1e-12.
+- Info: push-out move fraction per step in T3 and C3.separation.
