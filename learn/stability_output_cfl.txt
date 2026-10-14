@@ -1,0 +1,8 @@
+PASS  mirror == frame() bit-identical after 480 frames (x,y,vx,vy sha256 8079e5158fdbb354...)
+PASS  all values finite
+PASS  particles inside tank: 3500 of 3500
+PASS  max|u| over every substep = 8.385 m/s (limit 13.86)
+PASS  max |u|*dt_sub/h after every substep = 0.5979 (limit 1; worst at frame 48 substep 2/2)
+PASS  max |u|*dt_sub/h after last substep of each frame = 0.5979 (limit 1)
+PASS  max substeps = 3 (limit 8)
+INFO  frames with hitSweepCap: 0 of 480

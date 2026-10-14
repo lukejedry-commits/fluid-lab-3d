@@ -3,3 +3,6 @@ PASS  free fall landing: landed at 0.4000 s, sqrt(2h/g) = 0.3987 s (limit one st
 PASS  drop rest height: y in [0.0210417, 0.0210417] (limit [0.0210417, 0.0416667])
 PASS  still pool: peak speed over 2 s = 4.10e-5 m/s (limit 2.02e-2)
 PASS  water conserved: 3500 particles, all inside the tank for 400 steps
+PASS  controls: finite and inside: 3500 of 3500 particles
+PASS  controls: speed ceiling: max|u| = 8.385 m/s (limit 13.86)
+PASS  controls: CFL per substep: max |u|*dt_sub/h = 0.598 (limit 1)

@@ -202,8 +202,11 @@ const MAX_SUBSTEPS = 8;
 function frame(w, frameDt = 1 / 240) {
   let fastest = 0;
   for (let p = 0; p < w.x.length; p++) fastest = Math.max(fastest, Math.hypot(w.vx[p], w.vy[p]));
-  if (w.stir.active) { fastest = Math.max(fastest, Math.min(STIR_MAX, Math.hypot(w.stir.vx, w.stir.vy))); w.stirNow = true; }
-  const n = Math.min(MAX_SUBSTEPS, Math.max(1, Math.ceil((fastest * frameDt) / CELL)));
+  // Plan for the speed water could reach THIS frame: today's fastest particle,
+  // plus what gravity can add in one frame, plus a full stir kick if stirring.
+  const kick = Math.abs(w.gravity) * frameDt + (w.stir.active ? STIR_MAX : 0);
+  if (w.stir.active) w.stirNow = true;
+  const n = Math.min(MAX_SUBSTEPS, Math.max(1, Math.ceil(((fastest + kick) * frameDt) / CELL)));
   w.hitSweepCap = false; w.substeps = n;
   for (let i = 0; i < n; i++) step(w, frameDt / n);
 }
