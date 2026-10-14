@@ -23,7 +23,7 @@ class Sim {
     this.subMul = o.subMul ?? 1; // T2 half-dt info row: multiply the substep count (cap applies before)
     this.sepFrac = o.sepFrac ?? 0.5; this.sepIters = o.sepIters ?? 1;
     // C3 regression switches (defaults = production behaviour; tests turn one fix off to prove its test fails)
-    this.useDensFix = o.densFix ?? true; this.densSign = o.densSign ?? 1; this.densTol = o.densTol ?? 1e-4; this.densCap = o.densCap ?? 0.1; // fix 3
+    this.useDensFix = o.densFix ?? true; this.densSign = o.densSign ?? 1; this.densTol = o.densTol ?? 1e-4; this.densCap = o.densCap ?? 0.1; this.densAlpha = o.densAlpha ?? 0.1; this.densDead = o.densDead ?? 0.2; // fix 3 v2
     this.useGhostFill = o.ghostFill ?? true; this.useWallStrip = o.wallStrip ?? true; this.useSepClip = o.sepClip ?? true;
     this.s = this.h / 2;                    // particle spacing (2x2x2 per cell)
     this.pr = 0.25 * this.s;                // wall clearance radius
@@ -367,25 +367,44 @@ class Sim {
     }
     return pushes;
   }
-  // ---------------- FIX 3: density correction (ASSERTS Z 2026-10-14c), positions only ----------------
-  /** e_c = max(n_c/8 - 1, 0) on fluid cells; solve lap(phi) = -e (cell units, dt_c = 1) with phi = 0 at air-cell
-   *  centres and d(phi)/dn = 0 at solid walls, PCG/MIC(0) tol densTol, only on fluid regions (6-connected)
-   *  that touch an air cell (others skipped and counted). dx = -grad(phi) * h on MAC faces, trilinear to the
-   *  particles, |dx| capped at densCap h, then push-out. Velocities and C are not touched. */
+  // ---------------- FIX 3 v2: density correction (ASSERTS Z 2026-10-14d, supersedes 14c), positions only ----------------
+  /** nbar_c = 27-cell count smoothed with the P2G (quadratic B-spline) weights at cell-centre offsets
+   *  (0.75 centre, 0.125 per axis neighbour; sums to 1). Out-of-box (solid) cells mirror the adjacent
+   *  in-box cell (index clamped into the box). */
+  smoothedCounts(cnt) {
+    const { nx, ny, nz } = this, w = [0.125, 0.75, 0.125], out = new Float64Array(this.nCells), cl = (v, n) => (v < 0 ? 0 : v >= n ? n - 1 : v);
+    for (let k = 0; k < nz; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { let s = 0;
+      for (let dk = -1; dk <= 1; dk++) for (let dj = -1; dj <= 1; dj++) for (let di = -1; di <= 1; di++)
+        s += w[di + 1] * w[dj + 1] * w[dk + 1] * cnt[cl(i + di, nx) + nx * (cl(j + dj, ny) + ny * cl(k + dk, nz))];
+      out[i + nx * (j + ny * k)] = s; }
+    return out;
+  }
+  /** e = nbar/8 - 1 on fluid cells (two-sided); e = 0 in fluid cells with an in-box non-fluid (air) 6-neighbour;
+   *  wall/floor cells keep e; dead-band e := 0 where |e| < densDead. Solve lap(phi) = -e (A = -lap, A phi = e)
+   *  with phi = 0 in air, d(phi)/dn = 0 at solids, PCG/MIC(0) tol densTol, only on fluid regions touching air
+   *  (others skipped, counted). dx = -alpha grad(phi) h on MAC faces, trilinear, |dx| capped at densCap h,
+   *  then push-out (same stage). Velocities and C untouched. */
   densityCorrection() {
     const { nx, ny, nz, h } = this, n = [nx, ny, nz], cs = [1, nx, nx * ny], N = this.nCells;
-    const cnt = this.markCells(), FL = this.classify(cnt);
-    const stats = { iters: 0, relRes: 0, regions: 0, skipped: 0, moved: 0, capped: 0, maxDx: 0, eSum: 0 };
+    const cnt = this.markCells(), FL = this.classify(cnt), nbar = this.smoothedCounts(cnt);
+    const stats = { iters: 0, relRes: 0, regions: 0, skipped: 0, moved: 0, capped: 0, maxDx: 0, eSum: 0, nE: 0, nFluid: 0, nAboveDead: 0, nInterior: 0, floorE: [] };
     const reg = new Int32Array(N).fill(-1), air = []; const stack = [];
     const nb = (c, f) => { const i = c % nx, j = ((c / nx) | 0) % ny, k = (c / (nx * ny)) | 0, ijk = [i, j, k];
       for (let a = 0; a < 3; a++) for (const sg of [-1, 1]) { const q = ijk[a] + sg; if (q < 0 || q >= n[a]) continue; f(c + sg * cs[a]); } };
     for (let c = 0; c < N; c++) { if (!FL[c] || reg[c] >= 0) continue; const r = air.length; air.push(false); reg[c] = r; stack.push(c);
       while (stack.length) { const q = stack.pop(); nb(q, (m) => { if (!FL[m]) air[r] = true; else if (reg[m] < 0) { reg[m] = r; stack.push(m); } }); } }
     stats.regions = air.length;
+    const E = new Float64Array(N);
+    for (let c = 0; c < N; c++) { if (!FL[c]) continue; stats.nFluid++; let airAdj = false; nb(c, (m) => { if (!FL[m]) airAdj = true; });
+      if (airAdj) continue; stats.nInterior++; const e = nbar[c] / 8 - 1;
+      if (c < nx * ny) stats.floorE.push(e);
+      if (Math.abs(e) >= this.densDead) { E[c] = e; stats.nAboveDead++; } }
     const uid = new Int32Array(N).fill(-1), cells = []; let anyE = false; const skippedWithE = new Set();
-    for (let c = 0; c < N; c++) if (FL[c]) { if (air[reg[c]]) { uid[c] = cells.length; cells.push(c); if (cnt[c] > 8) anyE = true; } else if (cnt[c] > 8) skippedWithE.add(reg[c]); }
+    for (let c = 0; c < N; c++) if (FL[c]) { if (air[reg[c]]) { uid[c] = cells.length; cells.push(c); if (E[c] !== 0) anyE = true; } else if (E[c] !== 0) skippedWithE.add(reg[c]); }
     stats.skipped = air.filter((x) => !x).length; stats.skippedWithExcess = skippedWithE.size;
-    this.lastDens = stats; this._lastDx = null;
+    stats.fracAboveDead = stats.nInterior ? stats.nAboveDead / stats.nInterior : 0;
+    { const fe = stats.floorE; stats.floorE = fe.length ? { n: fe.length, mean: fe.reduce((x, y) => x + y, 0) / fe.length, min: Math.min(...fe), max: Math.max(...fe), nAbove: fe.filter((x) => Math.abs(x) >= this.densDead).length } : null; }
+    this.lastDens = stats; this._lastDx = null; this._lastNbar = nbar;
     if (!anyE) return stats;
     const m = cells.length, sys = { m, diag: new Float64Array(m), pX: new Int32Array(m).fill(-1), pY: new Int32Array(m).fill(-1), pZ: new Int32Array(m).fill(-1), cX: new Float64Array(m), cY: new Float64Array(m), cZ: new Float64Array(m) };
     const b = new Float64Array(m);
@@ -393,14 +412,15 @@ class Sim {
       for (let a = 0; a < 3; a++) for (const side of [0, 1]) { const nbq = ijk[a] + (side ? 1 : -1); if (nbq < 0 || nbq >= n[a]) continue; // wall: Neumann
         const cn = c + (side ? 1 : -1) * cs[a]; d += 1;
         if (uid[cn] >= 0 && side) { (a === 0 ? sys.pX : a === 1 ? sys.pY : sys.pZ)[q] = uid[cn]; (a === 0 ? sys.cX : a === 1 ? sys.cY : sys.cZ)[q] = -1; } }
-      sys.diag[q] = d; const e = Math.max(cnt[c] / 8 - 1, 0); b[q] = this.densSign * e; stats.eSum += e; } // A = -lap  =>  A phi = e  <=>  lap(phi) = -e
+      sys.diag[q] = d; b[q] = this.densSign * E[c]; if (E[c] !== 0) { stats.eSum += E[c]; stats.nE++; } } // A = -lap  =>  A phi = e  <=>  lap(phi) = -e
+    stats.eMean = stats.nE ? stats.eSum / stats.nE : 0;
     const r = pcgSolve(sys, b, { tol: this.densTol }); stats.iters = r.iters; stats.relRes = r.trueRelRes;
-    const phi = (c) => (uid[c] >= 0 ? r.p[uid[c]] : 0);
+    const phi = (c) => (uid[c] >= 0 ? r.p[uid[c]] : 0), al = this.densAlpha;
     const disp = this.vel.map((v) => new Float64Array(v.length));
     for (let a = 0; a < 3; a++) { const D = this.D[a], V = disp[a];
       for (let k = 0; k < D[2]; k++) for (let j = 0; j < D[1]; j++) for (let i = 0; i < D[0]; i++) { const ii = [i, j, k]; if (ii[a] === 0 || ii[a] === n[a]) continue;
         const hi = i + nx * (j + ny * k), lo = hi - cs[a]; if (uid[hi] < 0 && uid[lo] < 0) continue;
-        V[this.idx(a, i, j, k)] = -(phi(hi) - phi(lo)) * h; }
+        V[this.idx(a, i, j, k)] = -al * (phi(hi) - phi(lo)) * h; }
       for (let bb = 0; bb < 3; bb++) { const r2 = [[-1, D[0]], [-1, D[1]], [-1, D[2]]]; const [o1, o2] = [0, 1, 2].filter((c) => c !== bb);
         for (let s1 = r2[o1][0]; s1 <= r2[o1][1]; s1++) for (let s2 = r2[o2][0]; s2 <= r2[o2][1]; s2++) for (const [pad, img] of [[-1, 0], [D[bb], D[bb] - 1]]) {
           const ia = [0, 0, 0], ib = [0, 0, 0]; ia[o1] = ib[o1] = s1; ia[o2] = ib[o2] = s2; ia[bb] = pad; ib[bb] = img;
