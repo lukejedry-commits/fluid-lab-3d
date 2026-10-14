@@ -144,3 +144,11 @@ U_R = 2.11781302 m/s, frame = 1/60 s. a=16: short W=3, q=0.0337317, limit 1.0337
 - Energy-bookkeeping closure, graded in every test: the sum of the per-stage dE equals the total dE per step to 1e-12 relative. Info: g2p dE versus particle KE, per step.
 - Info: fraction of particles push-out moves per step in C3.separation. Any change to the push-out trigger must be derived from the seeding statistics and posted BEFORE the run.
 - Optional push-out at t=0 before the first P2G is setup only and is not counted as the fix.
+
+### Z amendment 2026-10-14m (smooth theta = column volume; step 19A rulings)
+- PHYSICS_SPEC frozen reference: b2d23ec4 (whole file; supersedes 7f5fd3f2).
+- Definition (Physics + NM): H = h * sum(n_k/8) over the CONTIGUOUS fluid run below each surface cell (stopping at the first air or solid cell). Smooth H with a fixed 3x3 lateral kernel, using only neighbours whose surface cell is in the same row k; walls are mirrored; otherwise fall back to count theta. theta comes from the smoothed H.
+- Row 2 is graded as the implied height: (k + 1/2 + theta) h = (K + f) h to 1e-12.
+- Row 3 is split: (3a) a particle crossing a horizontal face changes theta by <= 1e-12; (3b) a particle crossing a lateral face changes theta by <= 0.02. The count-based theta must fail 3b.
+- New unit row (4) overhang: a column with fluid, then an air gap, then a detached fluid sheet. The sheet's theta comes from its own run only (exact to 1e-12), and a surface cell whose neighbours are in a different k uses count theta.
+- Info (T3): fraction of surface cells on fallback per frame.
