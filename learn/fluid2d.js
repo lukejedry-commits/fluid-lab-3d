@@ -71,12 +71,20 @@ function particlesToGrid(w) {
   }
   for (let k = 0; k < w.u.length; k++) if (w.uWeight[k] > 0) w.u[k] /= w.uWeight[k];
   for (let k = 0; k < w.v.length; k++) if (w.vWeight[k] > 0) w.v[k] /= w.vWeight[k];
+  // Extrapolate: an empty (air) edge next to water copies the average of its
+  // watery neighbours, so particles at the surface read sensible speeds.
+  const extend = (a, wt, nx) => { const src = a.slice();
+    for (let k = 0; k < a.length; k++) { if (wt[k] > 0) continue; let s = 0, n = 0;
+      for (const d of [-1, 1, -nx, nx]) if (wt[k + d] > 0) { s += src[k + d]; n++; }
+      if (n) a[k] = s / n; } };
+  extend(w.u, w.uWeight, GRID_W + 1); extend(w.v, w.vWeight, GRID_W);
   w.uOld = w.u.slice(); w.vOld = w.v.slice();  // remember for FLIP in step 4
 }
 
-// STEP 2 - Gravity. Speed up every vertical edge downwards a little.
+// STEP 2 - Gravity. Speed up every vertical edge that touches water downwards
+// a little (edges in empty air have no water to pull on).
 function applyGravity(w, dt) {
-  for (let k = 0; k < w.v.length; k++) w.v[k] += GRAVITY * dt;
+  for (let k = 0; k < w.v.length; k++) if (w.vWeight[k] > 0) w.v[k] += GRAVITY * dt;
 }
 
 // STEP 3 - Pressure solve: make the water incompressible (unsquashable).
