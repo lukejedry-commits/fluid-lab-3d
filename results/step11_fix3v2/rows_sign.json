@@ -1,0 +1,34 @@
+[
+ {
+  "part": "sign",
+  "id": "C3.fix3.sign v2 [production sign]: one step; centre cell 16 particles (uniform 2x2x4) in 5x5x5 of 8, open top: particles with outward radial dx / centre nbar before -> after",
+  "measured": "16/16 outward (min dx.r 3.204e-6 m^2); nbar 11.375000 -> 11.375000 (raw count 16 -> 16; cells above dead-band 1, PCG 10)",
+  "threshold": "all outward AND centre nbar drops",
+  "pass": false,
+  "note": "test verdict FAIL"
+ },
+ {
+  "part": "sign",
+  "id": "C3.fix3.sign v2 [production sign] diagnostic: particle-position P2G-splatted count at the centre cell (alternative reading of nbar, not the implemented one)",
+  "measured": "10.481445 -> 10.391454 (drops); correction max |dx|/h 0.00510",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "sign",
+  "id": "C3.fix3.sign v2 [sign FLIPPED (must fail)]: one step; centre cell 16 particles (uniform 2x2x4) in 5x5x5 of 8, open top: particles with outward radial dx / centre nbar before -> after",
+  "measured": "0/16 outward (min dx.r -6.452e-6 m^2); nbar 11.375000 -> 11.375000 (raw count 16 -> 16; cells above dead-band 1, PCG 10)",
+  "threshold": "all outward AND centre nbar drops",
+  "pass": true,
+  "note": "test verdict FAIL; row passes when the flipped sign fails"
+ },
+ {
+  "part": "sign",
+  "id": "C3.fix3.sign v2 [sign FLIPPED (must fail)] diagnostic: particle-position P2G-splatted count at the centre cell (alternative reading of nbar, not the implemented one)",
+  "measured": "10.481445 -> 10.567127 (does not drop); correction max |dx|/h 0.00510",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ }
+]
