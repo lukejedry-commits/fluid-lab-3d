@@ -53,12 +53,12 @@ const empty = () => { const w = createWorld(); w.x = []; w.y = []; w.vx = []; w.
   check('water conserved', ok, `${n0} particles, all inside the tank for 400 steps`);
 }
 
-// 6. Controls stability (amendment 4:26 PM): 2g + stir at the 4 m/s cap for 2 s.
-//    Ceiling from physics: sqrt(2)*(5.8 m/s 1g splash peak + 4 m/s stir cap) = 13.86 m/s.
+// 6. Controls stability (amendment 4:26 PM): 1g + stir at the 4 m/s cap for 2 s (gravity fixed).
+//    Ceiling: 5.8 m/s 1g splash peak + 4 m/s stir cap = 9.8 m/s.
 //    CFL: max|u|*dt_sub/h <= 1, measured after the last substep of every frame.
 {
   const M = require(path); if (M.frame) {
-    const w = M.createWorld(), n0 = w.x.length; w.gravity = 2 * 9.8;
+    const w = M.createWorld(), n0 = w.x.length; // gravity fixed at 9.8 (slider removed 4:28 PM)
     let maxU = 0, maxC = 0, ok = true;
     for (let f = 0; f < 480; f++) {
       const a = (f / 480) * 4 * Math.PI;
@@ -71,7 +71,7 @@ const empty = () => { const w = createWorld(); w.x = []; w.y = []; w.vx = []; w.
       }
       maxU = Math.max(maxU, fu); maxC = Math.max(maxC, fu * (1 / 240 / w.substeps) / CELL);
     }
-    const lim = Math.SQRT2 * (5.8 + 4);
+    const lim = (5.8 + 4);
     check('controls: finite and inside', ok && w.x.length === n0, `${w.x.length} of ${n0} particles`);
     check('controls: speed ceiling', maxU <= lim, `max|u| = ${maxU.toFixed(3)} m/s (limit ${lim.toFixed(2)})`);
     check('controls: CFL per substep', maxC <= 1, `max |u|*dt_sub/h = ${maxC.toFixed(3)} (limit 1)`);

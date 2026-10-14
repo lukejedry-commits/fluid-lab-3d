@@ -11,8 +11,8 @@ Headless test in Node: `node learn/test_headless.js` (400 steps, checks particle
 ## Controls
 - **Drag** on the water to stir: the grid speeds near your finger are nudged toward your finger's speed (capped at 4 m/s) before the pressure solve, so the water still can't be squashed.
 - **Tap/click** to drop a round blob of water.
-- **Sliders**: gravity (0 to 2g), pressure sweeps (1 to 200; fewer = squashier water, and a red warning appears when the sweep limit is hit), FLIP ratio (0 = syrupy PIC, 1 = lively FLIP).
-- All controls are plain fields on the world object (`w.gravity`, `w.maxSweeps`, `w.flip`, `w.stir = {x, y, vx, vy, active}`), so test code can set them too. The status line shows substeps per frame.
+- **Sliders**: pressure sweeps (1 to 200; fewer = squashier water, and a red warning appears when the sweep limit is hit), FLIP ratio (0 = syrupy PIC, 1 = lively FLIP).
+- All controls are plain fields on the world object (`w.maxSweeps`, `w.flip`, `w.stir = {x, y, vx, vy, active}`), so test code can set them too. Gravity is fixed at 9.8 m/s² in the page; tests can still set `w.gravity`. The status line shows substeps per frame.
 
 ## The five steps (in `fluid2d.js`, function `step`; `frame` repeats it 1-8 times)
 
