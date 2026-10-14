@@ -84,3 +84,11 @@ No gate loosened.
 - Solvability: the correction runs only on fluid regions connected to at least one air cell. Regions with no air are skipped and counted (info row; expected 0 in T3).
 - Push-out after the correction counts toward the fix 3 stage (its dKE/dPE are included in that stage's rows).
 - Info rows per step: PCG iterations, max |dx|/h, and the fraction of moved particles hitting the cap. If the cap binds in more than 50% of steps, the cap is flagged for review (not auto-failed).
+
+### Z amendment 2026-10-14d (fix 3 v2; Physics + NM rulings on Coding's step 10 items 1-4). Supersedes 14c where they conflict.
+- Source: e = nbar/8 - 1 (two-sided). nbar = 27-cell count smoothed with the P2G kernel weights; solid cells mirror the adjacent fluid cell. e = 0 only in fluid cells adjacent to air. Wall and floor cells keep their e. Dead-band: e := 0 where |e| < 0.2 (NM, about 3 sigma of the smoothed noise). Info: fraction of cells above the dead-band per step (expected ~0 in C3.separation). Under-relaxation alpha = 0.1 (dx = -alpha grad(phi), lap(phi) = -e). Cap 0.1 h on the correction's own displacement (graded); the trailing push-out is not capped by this row.
+- Stage = correction + its trailing push-out for the energy rows. dKE <= 1e-12 J, one-sided. Any positive value above that is reported as a push-out bug, not tolerated.
+- PE_pack(t) = [PE_uniform - PE_actual](t) - [PE_uniform - PE_actual](0). Graded: cum stage dPE <= PE_pack(t) + 1e-6|E0| at every step.
+- C3.fix3.sign: 16 particles on a uniform 2x2x4 lattice in the centre cell, with the open-top box from 14c. Graded: every particle has an outward radial dx, and nbar in that cell drops after one step. Must fail with the sign flipped.
+- NEW graded anti-inflation row (C3.separation with fix 3 on): |sum over steps of stage dPE| <= 1e-6|E0| over 2 s (absolute value of the signed sum, not a sum of absolute values), because a still tank must not be corrected. Info: mean e over corrected cells per step (expected ~0; drift positive means inflation).
+- Unchanged: total energy (E-E0)/|E0| <= 1e-6; T4 within 1%; T3.mm no worse than fix 1; Ritter <= 1.0; must fail on f0220c4; cap-bind more than 50% gets flagged.
