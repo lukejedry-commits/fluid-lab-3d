@@ -12,7 +12,7 @@ const { pcgSolve } = require('./pcg');
 
 function mulberry32(a) { return function () { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 
-const STAGES = ['p2g', 'ghost', 'gravity', 'pressure', 'g2p', 'extension', 'advect', 'pushout'];
+const STAGES = ['p2g', 'ghost', 'gravity', 'pressure', 'g2p', 'extension', 'advect', 'pushout', 'densfix'];
 
 class Sim {
   constructor(o) {
@@ -23,6 +23,7 @@ class Sim {
     this.subMul = o.subMul ?? 1; // T2 half-dt info row: multiply the substep count (cap applies before)
     this.sepFrac = o.sepFrac ?? 0.5; this.sepIters = o.sepIters ?? 1;
     // C3 regression switches (defaults = production behaviour; tests turn one fix off to prove its test fails)
+    this.useDensFix = o.densFix ?? true; this.densSign = o.densSign ?? 1; this.densTol = o.densTol ?? 1e-4; this.densCap = o.densCap ?? 0.1; // fix 3
     this.useGhostFill = o.ghostFill ?? true; this.useWallStrip = o.wallStrip ?? true; this.useSepClip = o.sepClip ?? true;
     this.s = this.h / 2;                    // particle spacing (2x2x2 per cell)
     this.pr = 0.25 * this.s;                // wall clearance radius
@@ -366,6 +367,54 @@ class Sim {
     }
     return pushes;
   }
+  // ---------------- FIX 3: density correction (ASSERTS Z 2026-10-14c), positions only ----------------
+  /** e_c = max(n_c/8 - 1, 0) on fluid cells; solve lap(phi) = -e (cell units, dt_c = 1) with phi = 0 at air-cell
+   *  centres and d(phi)/dn = 0 at solid walls, PCG/MIC(0) tol densTol, only on fluid regions (6-connected)
+   *  that touch an air cell (others skipped and counted). dx = -grad(phi) * h on MAC faces, trilinear to the
+   *  particles, |dx| capped at densCap h, then push-out. Velocities and C are not touched. */
+  densityCorrection() {
+    const { nx, ny, nz, h } = this, n = [nx, ny, nz], cs = [1, nx, nx * ny], N = this.nCells;
+    const cnt = this.markCells(), FL = this.classify(cnt);
+    const stats = { iters: 0, relRes: 0, regions: 0, skipped: 0, moved: 0, capped: 0, maxDx: 0, eSum: 0 };
+    const reg = new Int32Array(N).fill(-1), air = []; const stack = [];
+    const nb = (c, f) => { const i = c % nx, j = ((c / nx) | 0) % ny, k = (c / (nx * ny)) | 0, ijk = [i, j, k];
+      for (let a = 0; a < 3; a++) for (const sg of [-1, 1]) { const q = ijk[a] + sg; if (q < 0 || q >= n[a]) continue; f(c + sg * cs[a]); } };
+    for (let c = 0; c < N; c++) { if (!FL[c] || reg[c] >= 0) continue; const r = air.length; air.push(false); reg[c] = r; stack.push(c);
+      while (stack.length) { const q = stack.pop(); nb(q, (m) => { if (!FL[m]) air[r] = true; else if (reg[m] < 0) { reg[m] = r; stack.push(m); } }); } }
+    stats.regions = air.length;
+    const uid = new Int32Array(N).fill(-1), cells = []; let anyE = false; const skippedWithE = new Set();
+    for (let c = 0; c < N; c++) if (FL[c]) { if (air[reg[c]]) { uid[c] = cells.length; cells.push(c); if (cnt[c] > 8) anyE = true; } else if (cnt[c] > 8) skippedWithE.add(reg[c]); }
+    stats.skipped = air.filter((x) => !x).length; stats.skippedWithExcess = skippedWithE.size;
+    this.lastDens = stats; this._lastDx = null;
+    if (!anyE) return stats;
+    const m = cells.length, sys = { m, diag: new Float64Array(m), pX: new Int32Array(m).fill(-1), pY: new Int32Array(m).fill(-1), pZ: new Int32Array(m).fill(-1), cX: new Float64Array(m), cY: new Float64Array(m), cZ: new Float64Array(m) };
+    const b = new Float64Array(m);
+    for (let q = 0; q < m; q++) { const c = cells[q], i = c % nx, j = ((c / nx) | 0) % ny, k = (c / (nx * ny)) | 0, ijk = [i, j, k]; let d = 0;
+      for (let a = 0; a < 3; a++) for (const side of [0, 1]) { const nbq = ijk[a] + (side ? 1 : -1); if (nbq < 0 || nbq >= n[a]) continue; // wall: Neumann
+        const cn = c + (side ? 1 : -1) * cs[a]; d += 1;
+        if (uid[cn] >= 0 && side) { (a === 0 ? sys.pX : a === 1 ? sys.pY : sys.pZ)[q] = uid[cn]; (a === 0 ? sys.cX : a === 1 ? sys.cY : sys.cZ)[q] = -1; } }
+      sys.diag[q] = d; const e = Math.max(cnt[c] / 8 - 1, 0); b[q] = this.densSign * e; stats.eSum += e; } // A = -lap  =>  A phi = e  <=>  lap(phi) = -e
+    const r = pcgSolve(sys, b, { tol: this.densTol }); stats.iters = r.iters; stats.relRes = r.trueRelRes;
+    const phi = (c) => (uid[c] >= 0 ? r.p[uid[c]] : 0);
+    const disp = this.vel.map((v) => new Float64Array(v.length));
+    for (let a = 0; a < 3; a++) { const D = this.D[a], V = disp[a];
+      for (let k = 0; k < D[2]; k++) for (let j = 0; j < D[1]; j++) for (let i = 0; i < D[0]; i++) { const ii = [i, j, k]; if (ii[a] === 0 || ii[a] === n[a]) continue;
+        const hi = i + nx * (j + ny * k), lo = hi - cs[a]; if (uid[hi] < 0 && uid[lo] < 0) continue;
+        V[this.idx(a, i, j, k)] = -(phi(hi) - phi(lo)) * h; }
+      for (let bb = 0; bb < 3; bb++) { const r2 = [[-1, D[0]], [-1, D[1]], [-1, D[2]]]; const [o1, o2] = [0, 1, 2].filter((c) => c !== bb);
+        for (let s1 = r2[o1][0]; s1 <= r2[o1][1]; s1++) for (let s2 = r2[o2][0]; s2 <= r2[o2][1]; s2++) for (const [pad, img] of [[-1, 0], [D[bb], D[bb] - 1]]) {
+          const ia = [0, 0, 0], ib = [0, 0, 0]; ia[o1] = ib[o1] = s1; ia[o2] = ib[o2] = s2; ia[bb] = pad; ib[bb] = img;
+          const ib1 = ib.map((v, c) => Math.min(Math.max(v, 0), D[c] - 1)); V[this.idx(a, ...ia)] = bb === a ? 0 : V[this.idx(a, ...ib1)]; } } }
+    const keep = this.vel; this.vel = disp; const cap = this.densCap * h, dxs = new Float64Array(3 * this.count);
+    for (let p = 0; p < this.count; p++) { const x = this.x[3 * p], y = this.x[3 * p + 1], z = this.x[3 * p + 2];
+      let d0 = this.sample(0, x, y, z), d1 = this.sample(1, x, y, z), d2 = this.sample(2, x, y, z); const L = Math.hypot(d0, d1, d2);
+      if (L === 0) continue; stats.moved++; if (L > cap) { const f = cap / L; d0 *= f; d1 *= f; d2 *= f; stats.capped++; }
+      stats.maxDx = Math.max(stats.maxDx, Math.min(L, cap) / h); dxs[3 * p] = d0; dxs[3 * p + 1] = d1; dxs[3 * p + 2] = d2;
+      this.x[3 * p] += d0; this.x[3 * p + 1] += d1; this.x[3 * p + 2] += d2; }
+    this.vel = keep; this._lastDx = dxs;
+    stats.nWall = this.wallStrip(); stats.nSep = this.separate();
+    return stats;
+  }
   // ---------------- step ----------------
   maxSpeed() { let m = 0; for (let p = 0; p < this.count; p++) m = Math.max(m, Math.hypot(this.v[3 * p], this.v[3 * p + 1], this.v[3 * p + 2])); return m; }
   cflDt() { return this.cfl * this.h / (this.maxSpeed() + Math.sqrt(this.g * this.h)); }
@@ -392,6 +441,8 @@ class Sim {
     this.g2p(); let e = tot(); st.g2p = keNoExt + pe0 - (g + pe0); st.extension = e - (keNoExt + pe0);
     this.advect(dt); let e2 = tot(); st.advect = e2 - e; e = e2;
     const nWall = this.wallStrip(); const nSep = this.separate(); e2 = tot(); st.pushout = e2 - e;
+    { const b0 = this.particleEnergy(); if (this.useDensFix) this.densityCorrection(); else this.lastDens = null; const b1 = this.particleEnergy();
+      st.densfix = b1.ke + b1.pe - (b0.ke + b0.pe); this._densKE = b1.ke - b0.ke; this._densPE = b1.pe - b0.pe; }
     for (const k of STAGES) this.stageCum[k] += st[k];
     const Pz0 = this._lastPz ?? this.momentum().Pz;
     this.t += dt; this.step++;
@@ -399,7 +450,7 @@ class Sim {
     const rec = { step: this.step, t: this.t, dt, nSub, cflDt: this.cflDt(), E: pe.ke + pe.pe, KE: pe.ke, PE: pe.pe, stage: st, stageCum: { ...this.stageCum },
       pcgIters: pr.iters, pcgRelRes: pr.relRes, pcgTrueRelRes: pr.trueRelRes, rhsNorm: pr.bNorm, maxDivDt: pr.maxDivDt, fluidCells: pr.fluidCells,
       nGhost, nWall, nSep, maxU: this.maxSpeed(), mass: this.count * this.mp, ...this.momentum() };
-    rec.dPzdt = (rec.Pz - Pz0) / dt; this._lastPz = rec.Pz;
+    rec.densKE = this._densKE; rec.densPE = this._densPE; rec.dens = this.lastDens; rec.dPzdt = (rec.Pz - Pz0) / dt; this._lastPz = rec.Pz;
     if (this.onSubstep) this.onSubstep(this, rec);
     this.log.push(rec); return rec;
   }
