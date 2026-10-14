@@ -1,0 +1,9 @@
+PASS T2 COM accel (fit of w_com, 49 substeps; a=9.810000000) : 1.268e-14 vs |a-g|/g <= 1e-3 (min z 0.401 m, no floor contact)
+PASS T2 horizontal momentum max(|Px|,|Py|)/(1e-8 M g t) : 1.888e-9 vs <= 1
+PASS P.res T2: max final true residual / ||rhs|| (49 solves) : 6.381e-9 vs <= 1e-8
+PASS P.res T2: max iters / median(prev 20), steps > 20 : 1.000 (step 21) vs <= 2
+PASS P.div T2: max |div u| * dt : 1.451e-16 vs <= 1e-6
+INFO NM T2: pressure-stage dE > 0 (graded in T3) : 23 of 49 steps; max 3.553e-14 J
+INFO NM T2: CFL used per frame : max 0.9842, min 0.3302; frames with 8-cap binding and CFL>1: 0
+INFO NM T2: extension-stage |dE| per step (own stage) : max 8.374e+0 J, cumulative 1.839e+2 J
+INFO T2 half-dt: (E-E0)/|E0| at t=0.4 s, dt vs dt/2 (49 vs 98 substeps; E0 equal: true) : -1.4848e-2 vs -7.4234e-3; ratio 0.4999

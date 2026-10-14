@@ -1,0 +1,194 @@
+[
+ {
+  "part": "tilted",
+  "id": "C3.tilted_tank C3.seed: min distance of any seeded particle to any wall at t=0",
+  "measured": "1.9531e-3 m",
+  "threshold": ">= clearance 1.9531e-3 m",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "tilted",
+  "id": "C3.tilted_tank setup",
+  "measured": "N=32, H=0.5 m, grid 32x32x40, 262144 particles, seed 3232, jitter 0.5 s (uniform in sub-cells), cap 16, 120 frames, surface z = H + 0.05 (x - L/2)",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "tilted",
+  "id": "C3.tilted_tank strict interior mean within 1% of 8, every frame",
+  "measured": "5.185e-4 (frame 106, m=7.9959, 27001 cells)",
+  "threshold": "<= 1e-2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "tilted",
+  "id": "C3.tilted_tank peak cell count, every frame",
+  "measured": "18 (frame 52, cell [9,7,30])",
+  "threshold": "<= 16",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "part": "tilted",
+  "id": "C3.tilted_tank total energy max (E-E0)/|E0| (every step)",
+  "measured": "9.043e-5",
+  "threshold": "<= 1e-6",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "part": "tilted",
+  "id": "C3.tilted_tank energy summed over all stages except push-out, max over frames / |E0|",
+  "measured": "9.037e-5",
+  "threshold": "<= 1e-6",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "part": "tilted",
+  "id": "C3.tilted_tank cumulative stage energy at end (J)",
+  "measured": "p2g 5.711e-2; ghost 0.000e+0; gravity 2.005e+2; pressure -2.001e+2; g2p -5.590e-1; extension 1.725e-1; advect -5.958e-2; pushout 1.981e-5; densfix 8.037e-2",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": "|E0| = 3.066e+2 J"
+ },
+ {
+  "part": "tilted",
+  "id": "C3.tilted_tank push-out stage: cumulative / max per step / steps > 0",
+  "measured": "1.981e-5 J (6.460e-8 |E0|) / 1.758e-6 J / 25 of 120",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "tilted",
+  "id": "C3.tilted_tank fix3 stage: signed sum of dPE over run",
+  "measured": "8.037e-2 J (2.621e-4 |E0|)",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "tilted",
+  "id": "C3.tilted_tank fix3 stage dKE max per step (one-sided)",
+  "measured": "0.000e+0 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "tilted",
+  "id": "C3.tilted_tank fix3 fraction of (non-air-adjacent) fluid cells above dead-band per step: mean / max; steps with any",
+  "measured": "2.359e-6 / 6.291e-5; 8 of 120",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "tilted",
+  "id": "C3.tilted_tank fix3 mean e over corrected cells per step: mean / min / max (steps corrected)",
+  "measured": "-4.929e-2 / -3.034e-1 / 2.028e-1 (8)",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "tilted",
+  "id": "C3.tilted_tank C3.fix3 target sum |sum e - target_r| / n_r, every step",
+  "measured": "1.937e-16",
+  "threshold": "<= 1e-12",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "tilted",
+  "id": "C3.tilted_tank fix3 PCG iterations (mean / max)",
+  "measured": "24.05 / 26",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "tilted",
+  "id": "C3.tilted_tank fix3 max |dx|/h (correction alone) / cap-hit steps",
+  "measured": "0.0046 / 0 of 120",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "tilted",
+  "id": "C3.tilted_tank max|u| at t=2 s / max over run",
+  "measured": "9.210e-2 / 1.782e-1",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "tilted",
+  "id": "C3.tilted_tank C3.seed: push-out dE at step 1 (t=0 step, not excluded)",
+  "measured": "-3.671e-7 J (-1.197e-9 |E0|)",
+  "threshold": "<= 1e-6 |E0|",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "tilted",
+  "id": "C3.tilted_tank push-out energy spike (largest per-step push-out dE)",
+  "measured": "step 12 (t=0.1833 s): step dE 1.758e-6 J; top particle #258509 dE 5.248e-7 J, x0 [0.456630, 0.330313, 0.490493] m, dx [3.723e-5, 4.212e-5, 1.122e-4] m, v before [-1.834e-2, -4.820e-3, -1.259e-1] -> after [-1.834e-2, -4.820e-3, -1.259e-1] m/s",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "tilted",
+  "id": "C3.tilted_tank cell [2,12,1] count start / max / end",
+  "measured": "8 / 9 / 9",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "tilted",
+  "id": "C3.tilted_tank cell [0,0,0] count start / max / end",
+  "measured": "8 / 8 / 8",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "tilted",
+  "id": "C3.tilted_tank cell [31,0,0] count start / max / end",
+  "measured": "8 / 8 / 8",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "tilted",
+  "id": "C3.tilted_tank cell [0,31,0] count start / max / end",
+  "measured": "8 / 8 / 8",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "tilted",
+  "id": "C3.tilted_tank cell [31,31,0] count start / max / end",
+  "measured": "8 / 8 / 8",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "tilted",
+  "id": "C3.tilted_tank layer mean particles/cell k=0..4 at start / end",
+  "measured": "8.000, 8.000, 8.000, 8.000, 8.000 / 7.989, 7.992, 8.021, 7.998, 7.983",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ }
+]
