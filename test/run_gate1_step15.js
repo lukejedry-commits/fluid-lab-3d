@@ -8,12 +8,13 @@ const { Sim, STAGES } = require('../src/sim');
 const PF = require('./pressure_families');
 const { makeT1b } = require('./t1b_setup');
 const part = process.argv[process.argv.indexOf('--part') + 1];
-const outDir = path.join(__dirname, '../results/step15_fix3v6/gate1');
+const outDir = path.join(__dirname, '../results', process.env.GATE_DIR || 'step15_fix3v6/gate1'); // GATE_DIR: alpha-sweep INFO runs only
 // Step 14 still-water proof (Z 2026-10-14g), instrumentation only, adds no graded row here: every call of the fix-3
 // stage records particles moved, max |dx| (correction + push-out) and the stage dPE; written at exit as densfix_proof_<part>.json.
 const DP = { part: null, calls: 0, solves: 0, moved: 0, maxMove: 0, maxAbsDPE: 0, nonzeroDPE: 0, nAboveDeadMax: 0, maxAbsTargetPerCell: 0, bySetup: {} };
 { const od = Sim.prototype.densityCorrection;
-  Sim.prototype.densityCorrection = function () { const X0 = Float64Array.from(this.x.subarray(0, 3 * this.count)), pe0 = this.particleEnergy().pe; const st = od.call(this);
+  const AL = process.env.DENS_ALPHA ? +process.env.DENS_ALPHA : null; // INFO-only alpha sweep (Z 2026-10-14j)
+  Sim.prototype.densityCorrection = function () { if (AL !== null) this.densAlpha = AL; const X0 = Float64Array.from(this.x.subarray(0, 3 * this.count)), pe0 = this.particleEnergy().pe; const st = od.call(this);
     let mv = 0, n = 0; for (let q = 0; q < X0.length; q += 3) { const d = Math.hypot(this.x[q] - X0[q], this.x[q + 1] - X0[q + 1], this.x[q + 2] - X0[q + 2]); if (d !== 0) n++; mv = Math.max(mv, d); }
     const dpe = this.particleEnergy().pe - pe0, key = `${this.nx}x${this.ny}x${this.nz}`; DP.calls++; if (st.iters) DP.solves++; DP.moved += n; DP.maxMove = Math.max(DP.maxMove, mv);
     DP.maxAbsDPE = Math.max(DP.maxAbsDPE, Math.abs(dpe)); if (dpe !== 0) DP.nonzeroDPE++; DP.nAboveDeadMax = Math.max(DP.nAboveDeadMax, st.nAboveDead || 0); DP.maxAbsTargetPerCell = Math.max(DP.maxAbsTargetPerCell, Math.abs(st.targetPerCell || 0));
