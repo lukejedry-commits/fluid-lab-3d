@@ -22,6 +22,8 @@ class Sim {
     this.tol = o.tol ?? 1e-8; this.jitter = o.jitter ?? 0.1; this.rand = mulberry32(o.seed ?? 12345);
     this.subMul = o.subMul ?? 1; // T2 half-dt info row: multiply the substep count (cap applies before)
     this.sepFrac = o.sepFrac ?? 0.5; this.sepIters = o.sepIters ?? 1;
+    // C3 regression switches (defaults = production behaviour; tests turn one fix off to prove its test fails)
+    this.useGhostFill = o.ghostFill ?? true; this.useWallStrip = o.wallStrip ?? true; this.useSepClip = o.sepClip ?? true;
     this.s = this.h / 2;                    // particle spacing (2x2x2 per cell)
     this.pr = 0.25 * this.s;                // wall clearance radius
     this.mp = this.rho * this.h ** 3 / 8;   // particle mass
@@ -114,7 +116,7 @@ class Sim {
   }
   // ---------------- ghost fill ----------------
   ghostFill() {
-    let nG = 0;
+    let nG = 0; if (!this.useGhostFill) return 0;
     for (let a = 0; a < 3; a++) {
       const V = this.vel[a], M = this.mass[a], D = this.D[a], P = this.P[a], src = Float64Array.from(V);
       const st = [1, P[0], P[0] * P[1]];
@@ -308,7 +310,7 @@ class Sim {
   // ---------------- push-out ----------------
   /** item 1: clamp to the box and strip the into-wall normal velocity (only the into-wall part). */
   wallStrip() {
-    let n = 0;
+    let n = 0; if (!this.useWallStrip) return 0;
     for (let p = 0; p < this.count; p++) for (let b = 0; b < 3; b++) {
       const lo = this.pr, hi = this.L[b] - this.pr, q = 3 * p + b;
       if (this.x[q] < lo) { this.x[q] = lo; if (this.v[q] < 0) this.v[q] = 0; n++; }
@@ -335,7 +337,8 @@ class Sim {
           if (d2 >= minD2) continue;
           if (d2 < 1e-24) { d[0] = 0.5 * minD; d[1] = d[2] = 0; } else { const dd = Math.sqrt(d2), k = 0.5 * (minD - dd) / dd; for (let b = 0; b < 3; b++) d[b] *= k; }
           for (let b = 0; b < 3; b++) { const xi = X[3 * i + b], xj = X[3 * j + b], hi = his[b];
-            if (d[b] > 0) { const li = xi - Math.min(xi, lo), lj = Math.max(xj, hi) - xj; d[b] = Math.min(d[b], li, lj); }
+            if (!this.useSepClip) { /* C3: clip removed */ }
+            else if (d[b] > 0) { const li = xi - Math.min(xi, lo), lj = Math.max(xj, hi) - xj; d[b] = Math.min(d[b], li, lj); }
             else if (d[b] < 0) { const li = Math.max(xi, hi) - xi, lj = xj - Math.min(xj, lo); d[b] = -Math.min(-d[b], li, lj); }
             X[3 * i + b] -= d[b]; X[3 * j + b] += d[b]; }
           pushes++; }

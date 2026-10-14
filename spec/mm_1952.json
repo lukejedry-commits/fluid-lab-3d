@@ -1,0 +1,335 @@
+{
+ "source": "Martin, J.C. & Moyce, W.J. (1952) Phil. Trans. R. Soc. A 244(882):312-324, doi:10.1098/rsta.1952.0006, Table 2 (p.317), rectangular section, plane symmetry, n^2=2, a=2.25 in, thickness 2.25 in",
+ "pdf_sha256": "083324d105d3654d4c1ad5326d6c3ae2de713cd2a1bb4b3f7aeb070a9355f300",
+ "transcription": "by hand from the page image by Validation Engineer Expert 2026-10-14; printed mean checked against mean of records",
+ "definitions": "Z = x/a (front position over initial base width a), T = n t sqrt(g/a) = t sqrt(2g/a). Paper normalizes T so T = 1.19 at Z = 1.44 (release-time offset). Simulation must apply the same time shift before grading.",
+ "rows": [
+  {
+   "Z": 1.11,
+   "T_mean": 0.41,
+   "records": [
+    0.3,
+    0.44,
+    0.48
+   ],
+   "computed_mean": 0.407,
+   "max_rel_dev": 0.2683
+  },
+  {
+   "Z": 1.22,
+   "T_mean": 0.84,
+   "records": [
+    0.75,
+    0.78,
+    0.91,
+    0.83,
+    0.88,
+    0.88
+   ],
+   "computed_mean": 0.838,
+   "max_rel_dev": 0.1071
+  },
+  {
+   "Z": 1.44,
+   "T_mean": 1.19,
+   "records": [
+    1.19,
+    1.19,
+    1.19,
+    1.19,
+    1.19,
+    1.19,
+    1.19,
+    1.19,
+    1.19
+   ],
+   "computed_mean": 1.19,
+   "max_rel_dev": 0.0
+  },
+  {
+   "Z": 1.67,
+   "T_mean": 1.43,
+   "records": [
+    1.4,
+    1.44,
+    1.44,
+    1.39,
+    1.43,
+    1.43
+   ],
+   "computed_mean": 1.422,
+   "max_rel_dev": 0.028
+  },
+  {
+   "Z": 1.89,
+   "T_mean": 1.63,
+   "records": [
+    1.57,
+    1.61,
+    1.63,
+    1.65,
+    1.67,
+    1.64
+   ],
+   "computed_mean": 1.628,
+   "max_rel_dev": 0.0368
+  },
+  {
+   "Z": 2.11,
+   "T_mean": 1.83,
+   "records": [
+    1.75,
+    1.78,
+    1.85,
+    1.84,
+    1.88,
+    1.82,
+    1.87,
+    1.87,
+    1.77
+   ],
+   "computed_mean": 1.826,
+   "max_rel_dev": 0.0437
+  },
+  {
+   "Z": 2.33,
+   "T_mean": 1.98,
+   "records": [
+    1.9,
+    1.92,
+    1.99,
+    2.02,
+    2.02,
+    2.01
+   ],
+   "computed_mean": 1.977,
+   "max_rel_dev": 0.0404
+  },
+  {
+   "Z": 2.56,
+   "T_mean": 2.2,
+   "records": [
+    2.04,
+    2.06,
+    2.21,
+    2.22,
+    2.25,
+    2.19,
+    2.29,
+    2.23,
+    2.14
+   ],
+   "computed_mean": 2.181,
+   "max_rel_dev": 0.0727
+  },
+  {
+   "Z": 2.78,
+   "T_mean": 2.32,
+   "records": [
+    2.21,
+    2.23,
+    2.35,
+    2.38,
+    2.39,
+    2.38
+   ],
+   "computed_mean": 2.323,
+   "max_rel_dev": 0.0474
+  },
+  {
+   "Z": 3.0,
+   "T_mean": 2.51,
+   "records": [
+    2.38,
+    2.4,
+    2.47,
+    2.55,
+    2.57,
+    2.6,
+    2.63,
+    2.66,
+    2.5
+   ],
+   "computed_mean": 2.529,
+   "max_rel_dev": 0.0598
+  },
+  {
+   "Z": 3.22,
+   "T_mean": 2.65,
+   "records": [
+    2.55,
+    2.53,
+    2.62,
+    2.73,
+    2.74,
+    2.72
+   ],
+   "computed_mean": 2.648,
+   "max_rel_dev": 0.0453
+  },
+  {
+   "Z": 3.44,
+   "T_mean": 2.83,
+   "records": [
+    2.7,
+    2.69,
+    2.8,
+    2.91,
+    2.93,
+    2.91
+   ],
+   "computed_mean": 2.823,
+   "max_rel_dev": 0.0495
+  },
+  {
+   "Z": 3.67,
+   "T_mean": 2.97,
+   "records": [
+    2.9,
+    2.86,
+    2.93,
+    3.05,
+    3.08,
+    3.04
+   ],
+   "computed_mean": 2.977,
+   "max_rel_dev": 0.037
+  },
+  {
+   "Z": 3.89,
+   "T_mean": 3.11,
+   "records": [
+    2.94,
+    3.07,
+    3.25,
+    3.2
+   ],
+   "computed_mean": 3.115,
+   "max_rel_dev": 0.0547
+  },
+  {
+   "Z": 4.11,
+   "T_mean": 3.33,
+   "records": [
+    3.13,
+    3.21,
+    3.38,
+    3.37,
+    3.46,
+    3.41,
+    3.35
+   ],
+   "computed_mean": 3.33,
+   "max_rel_dev": 0.0601
+  },
+  {
+   "Z": 5.0,
+   "T_mean": 4.02,
+   "records": [
+    4.09,
+    4.06,
+    3.9
+   ],
+   "computed_mean": 4.017,
+   "max_rel_dev": 0.0299
+  },
+  {
+   "Z": 5.89,
+   "T_mean": 4.44,
+   "records": [
+    4.5,
+    4.45,
+    4.37
+   ],
+   "computed_mean": 4.44,
+   "max_rel_dev": 0.0158
+  },
+  {
+   "Z": 7.0,
+   "T_mean": 5.09,
+   "records": [
+    5.16,
+    5.11,
+    5.01
+   ],
+   "computed_mean": 5.093,
+   "max_rel_dev": 0.0157
+  },
+  {
+   "Z": 8.0,
+   "T_mean": 5.69,
+   "records": [
+    5.76,
+    5.7,
+    5.6
+   ],
+   "computed_mean": 5.687,
+   "max_rel_dev": 0.0158
+  },
+  {
+   "Z": 9.0,
+   "T_mean": 6.3,
+   "records": [
+    6.31,
+    6.25,
+    6.34
+   ],
+   "computed_mean": 6.3,
+   "max_rel_dev": 0.0079
+  },
+  {
+   "Z": 10.0,
+   "T_mean": 6.83,
+   "records": [
+    6.9,
+    6.82,
+    6.77
+   ],
+   "computed_mean": 6.83,
+   "max_rel_dev": 0.0102
+  },
+  {
+   "Z": 11.0,
+   "T_mean": 7.44,
+   "records": [
+    7.51,
+    7.47,
+    7.34
+   ],
+   "computed_mean": 7.44,
+   "max_rel_dev": 0.0134
+  },
+  {
+   "Z": 12.0,
+   "T_mean": 8.08,
+   "records": [
+    8.12,
+    8.08,
+    8.02
+   ],
+   "computed_mean": 8.073,
+   "max_rel_dev": 0.0074
+  },
+  {
+   "Z": 13.0,
+   "T_mean": 8.67,
+   "records": [
+    8.73,
+    8.67,
+    8.6
+   ],
+   "computed_mean": 8.667,
+   "max_rel_dev": 0.0081
+  },
+  {
+   "Z": 14.0,
+   "T_mean": 9.31,
+   "records": [
+    9.36,
+    9.26
+   ],
+   "computed_mean": 9.31,
+   "max_rel_dev": 0.0054
+  }
+ ]
+}
