@@ -1,0 +1,2 @@
+PASS C3.seed T3 a=16: min distance of any seeded particle to any wall at t=0 : 7.1441e-4 m vs >= clearance 4.4648e-4 m
+PASS C3.seed T3 a=8: min distance of any seeded particle to any wall at t=0 : 1.4290e-3 m vs >= clearance 8.9297e-4 m

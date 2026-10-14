@@ -1,0 +1,41 @@
+{
+ "part": "T1b",
+ "calls": 2400,
+ "solves": 0,
+ "moved": 0,
+ "maxMove": 0,
+ "maxAbsDPE": 0,
+ "nonzeroDPE": 0,
+ "nAboveDeadMax": 0,
+ "maxAbsTargetPerCell": 0,
+ "bySetup": {
+  "8x8x6": {
+   "calls": 600,
+   "moved": 0,
+   "maxMove": 0,
+   "maxAbsDPE": 0,
+   "maxAbsEbarT4": 0
+  },
+  "16x16x10": {
+   "calls": 600,
+   "moved": 0,
+   "maxMove": 0,
+   "maxAbsDPE": 0,
+   "maxAbsEbarT4": 0
+  },
+  "32x32x18": {
+   "calls": 600,
+   "moved": 0,
+   "maxMove": 0,
+   "maxAbsDPE": 0,
+   "maxAbsEbarT4": 0
+  },
+  "64x64x34": {
+   "calls": 600,
+   "moved": 0,
+   "maxMove": 0,
+   "maxAbsDPE": 0,
+   "maxAbsEbarT4": 0
+  }
+ }
+}

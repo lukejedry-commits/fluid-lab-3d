@@ -1,0 +1,34 @@
+[
+ {
+  "part": "sign",
+  "id": "C3.fix3.sign v6 [production sign]: one step; centre cell 16 (uniform 2x2x4) in 5x5x5 of 8, open top: outward radial dx / centre splat nbar before -> after the step",
+  "measured": "16/16 outward (min dx.r 4.430e-6 m^2); splat nbar 10.481445 -> 10.345927 (cell count 16 -> 16; above dead-band 1; PCG 10; target err 8.882e-18)",
+  "threshold": "all outward AND splat nbar drops",
+  "pass": true,
+  "note": "test verdict PASS"
+ },
+ {
+  "part": "sign",
+  "id": "C3.fix3.sign v6 [production sign]: splat nbar across the correction stage alone",
+  "measured": "10.481445 -> 10.345927 (drops); correction max |dx|/h 0.00851",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "sign",
+  "id": "C3.fix3.sign v6 [sign FLIPPED (must fail)]: one step; centre cell 16 (uniform 2x2x4) in 5x5x5 of 8, open top: outward radial dx / centre splat nbar before -> after the step",
+  "measured": "0/16 outward (min dx.r -1.051e-5 m^2); splat nbar 10.481445 -> 10.610692 (cell count 16 -> 16; above dead-band 1; PCG 10; target err 8.882e-18)",
+  "threshold": "all outward AND splat nbar drops",
+  "pass": true,
+  "note": "test verdict FAIL; row passes when the flipped sign fails"
+ },
+ {
+  "part": "sign",
+  "id": "C3.fix3.sign v6 [sign FLIPPED (must fail)]: splat nbar across the correction stage alone",
+  "measured": "10.481445 -> 10.610692 (rises); correction max |dx|/h 0.00851",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ }
+]

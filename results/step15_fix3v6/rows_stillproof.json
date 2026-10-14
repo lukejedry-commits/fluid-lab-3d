@@ -1,0 +1,98 @@
+[
+ {
+  "part": "stillproof",
+  "id": "still-water T1 grid 8x8x10: max |ebar_T4| (expected exactly 0) / particles moved / max |dPE|",
+  "measured": "0 / 0 / 0 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "stillproof",
+  "id": "still-water T1 grid 16x16x20: max |ebar_T4| (expected exactly 0) / particles moved / max |dPE|",
+  "measured": "0 / 0 / 0 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "stillproof",
+  "id": "still-water T1 grid 32x32x40: max |ebar_T4| (expected exactly 0) / particles moved / max |dPE|",
+  "measured": "0 / 0 / 0 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "stillproof",
+  "id": "still-water proof Gate 1 T1: fix-3 stage dx and dPE exactly 0 every step",
+  "measured": "1800 stage calls, 0 solves; particles moved 0, max |dx| 0, max |dPE| 0 J (0 nonzero); max cells above dead-band 0; max |target/cell| 0; per grid 8x8x10: max|ebar_T4| 0.000e+0, 16x16x20: max|ebar_T4| 0.000e+0, 32x32x40: max|ebar_T4| 0.000e+0",
+  "threshold": "moved 0, |dx| 0, |dPE| 0",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "stillproof",
+  "id": "still-water T1b grid 8x8x6: max |ebar_T4| (expected exactly 0) / particles moved / max |dPE|",
+  "measured": "0 / 0 / 0 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "stillproof",
+  "id": "still-water T1b grid 16x16x10: max |ebar_T4| (expected exactly 0) / particles moved / max |dPE|",
+  "measured": "0 / 0 / 0 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "stillproof",
+  "id": "still-water T1b grid 32x32x18: max |ebar_T4| (expected exactly 0) / particles moved / max |dPE|",
+  "measured": "0 / 0 / 0 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "stillproof",
+  "id": "still-water T1b grid 64x64x34: max |ebar_T4| (expected exactly 0) / particles moved / max |dPE|",
+  "measured": "0 / 0 / 0 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "stillproof",
+  "id": "still-water proof Gate 1 T1b: fix-3 stage dx and dPE exactly 0 every step",
+  "measured": "2400 stage calls, 0 solves; particles moved 0, max |dx| 0, max |dPE| 0 J (0 nonzero); max cells above dead-band 0; max |target/cell| 0; per grid 8x8x6: max|ebar_T4| 0.000e+0, 16x16x10: max|ebar_T4| 0.000e+0, 32x32x18: max|ebar_T4| 0.000e+0, 64x64x34: max|ebar_T4| 0.000e+0",
+  "threshold": "moved 0, |dx| 0, |dPE| 0",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "stillproof",
+  "id": "fix-3 stage in Gate 1 T2 (not a still pool)",
+  "measured": "147 stage calls, 0 solves; particles moved 0, max |dx| 0, max |dPE| 0 J (0 nonzero); max cells above dead-band 0; max |target/cell| 0; per grid 24x24x64: max|ebar_T4| 4.747e-3",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "stillproof",
+  "id": "fix-3 stage in Gate 1 modes (not a still pool)",
+  "measured": "0 stage calls, 0 solves; particles moved 0, max |dx| 0, max |dPE| 0 J (0 nonzero); max cells above dead-band 0; max |target/cell| 0; per grid ",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "stillproof",
+  "id": "fix-3 stage in Gate 1 D (not a still pool)",
+  "measured": "0 stage calls, 0 solves; particles moved 0, max |dx| 0, max |dPE| 0 J (0 nonzero); max cells above dead-band 0; max |target/cell| 0; per grid ",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ }
+]

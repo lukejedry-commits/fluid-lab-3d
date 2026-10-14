@@ -1,0 +1,31 @@
+PASS C3.tilted_tank C3.seed: min distance of any seeded particle to any wall at t=0 : 1.9531e-3 m vs >= clearance 1.9531e-3 m
+C3.tilted_tank frame 20 peak 14 mean 8.0002 33 s
+C3.tilted_tank frame 40 peak 15 mean 8.0027 57 s
+C3.tilted_tank frame 60 peak 14 mean 7.9998 81 s
+C3.tilted_tank frame 80 peak 14 mean 7.9987 103 s
+C3.tilted_tank frame 100 peak 14 mean 8.0022 121 s
+C3.tilted_tank frame 120 peak 14 mean 8.0036 144 s
+INFO C3.tilted_tank setup : N=32, H=0.5 m, grid 32x32x40, 262144 particles, seed 3232, jitter 0.5 s (uniform in sub-cells), cap 16, 120 frames, surface z = H + 0.05 (x - L/2)
+PASS C3.tilted_tank strict interior mean within 1% of 8, every frame : 5.980e-4 (frame 93, m=8.0048, 27172 cells) vs <= 1e-2
+PASS C3.tilted_tank peak cell count, every frame : 16 (frame 27, cell [4,9,31]) vs <= 16
+PASS C3.tilted_tank total energy max (E-E0)/|E0| (every step) : 0.000e+0 vs <= 1e-6
+PASS C3.tilted_tank energy summed over all stages except push-out, max over frames / |E0| : 0.000e+0 vs <= 1e-6
+INFO C3.tilted_tank cumulative stage energy at end (J) : p2g 5.723e-2; ghost 0.000e+0; gravity 2.005e+2; pressure -2.001e+2; g2p -5.557e-1; extension 1.698e-1; advect -6.039e-2; pushout 2.044e-5; densfix 1.492e-3 (|E0| = 3.066e+2 J)
+INFO C3.tilted_tank push-out stage: cumulative / max per step / steps > 0 : 2.044e-5 J (6.665e-8 |E0|) / 1.813e-6 J / 31 of 120
+INFO C3.tilted_tank fix3 stage: signed sum of dPE over run : 1.492e-3 J (4.867e-6 |E0|)
+INFO C3.tilted_tank fix3 stage dKE max per step (one-sided) : 0.000e+0 J
+INFO C3.tilted_tank fix3 fraction of (non-air-adjacent) fluid cells above dead-band per step: mean / max; steps with any : 1.309e-6 / 3.149e-5; 5 of 120
+INFO C3.tilted_tank fix3 mean e over corrected cells per step: mean / min / max (steps corrected) : -5.471e-2 / -2.775e-1 / 2.047e-1 (5)
+INFO C3.tilted_tank fix3 ebar_T4 max |.| / steps with nonzero target : 5.360e-4 / 0 of 120
+PASS C3.tilted_tank C3.fix3 target sum |sum e - target_r| / n_r, every step : 3.669e-18 vs <= 1e-12
+INFO C3.tilted_tank fix3 PCG iterations (mean / max) : 0.91 / 23
+INFO C3.tilted_tank fix3 max |dx|/h (correction alone) / cap-hit steps : 0.0118 / 0 of 120
+INFO C3.tilted_tank max|u| at t=2 s / max over run : 1.112e-1 / 2.007e-1
+PASS C3.tilted_tank C3.seed: push-out dE at step 1 (t=0 step, not excluded) : -3.671e-7 J (-1.197e-9 |E0|) vs <= 1e-6 |E0|
+INFO C3.tilted_tank push-out energy spike (largest per-step push-out dE) : step 12 (t=0.1833 s): step dE 1.813e-6 J; top particle #258509 dE 5.330e-7 J, x0 [0.456575, 0.330469, 0.490559] m, dx [4.247e-5, 4.204e-5, 1.139e-4] m, v before [-1.844e-2, -4.204e-3, -1.274e-1] -> after [-1.844e-2, -4.204e-3, -1.274e-1] m/s
+INFO C3.tilted_tank cell [2,12,1] count start / max / end : 8 / 9 / 9
+INFO C3.tilted_tank cell [0,0,0] count start / max / end : 8 / 8 / 8
+INFO C3.tilted_tank cell [31,0,0] count start / max / end : 8 / 8 / 8
+INFO C3.tilted_tank cell [0,31,0] count start / max / end : 8 / 8 / 8
+INFO C3.tilted_tank cell [31,31,0] count start / max / end : 8 / 8 / 8
+INFO C3.tilted_tank layer mean particles/cell k=0..4 at start / end : 8.000, 8.000, 8.000, 8.000, 8.000 / 7.992, 7.992, 8.026, 8.003, 7.978
