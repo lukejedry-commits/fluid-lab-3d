@@ -1,0 +1,29 @@
+PASS C3.separation C3.seed: min distance of any seeded particle to any wall at t=0 : 1.9531e-3 m vs >= clearance 1.9531e-3 m
+C3.separation frame 20 peak 11 mean 7.9987 18 s
+C3.separation frame 40 peak 12 mean 7.9981 32 s
+C3.separation frame 60 peak 12 mean 7.9977 46 s
+C3.separation frame 80 peak 12 mean 7.9981 60 s
+C3.separation frame 100 peak 11 mean 7.9983 74 s
+C3.separation frame 120 peak 12 mean 7.9978 88 s
+INFO C3.separation setup : N=32, H=0.5 m, grid 32x32x40, 262144 particles, seed 3232, jitter 0.5 s (uniform in sub-cells), cap 16, 120 frames
+INFO C3.separation strict interior mean (info per section Z) : 2.917e-4 (frame 59, m=7.9977, 27000 cells)
+INFO C3.separation peak cell count (info) : 13 (frame 27, cell [31,16,31])
+FAIL C3.separation total energy max (E-E0)/|E0| (every step) : 2.044e-6 vs <= 1e-6
+INFO C3.separation cumulative stage energy at end (J) : p2g 1.375e-3; ghost 0.000e+0; gravity 2.005e+2; pressure -2.004e+2; g2p -1.409e-1; extension 2.431e-4; advect 4.681e-4; pushout 1.590e-7; densfix 9.498e-5 (|E0| = 3.066e+2 J)
+INFO C3.separation push-out stage: cumulative / max per step / steps > 0 : 1.590e-7 J (5.187e-10 |E0|) / 5.505e-9 J / 102 of 120
+PASS C3.separation C3.separation anti-inflation (fix 3 on): |sum over steps of stage dPE| over 2 s : 9.498e-5 J (signed 9.498e-5 J; 3.098e-7 |E0|) vs <= 1e-6 |E0| = 3.066e-4 J
+INFO C3.separation fix3 stage dKE max per step (one-sided) : 0.000e+0 J
+INFO C3.separation fix3 fraction of (non-air-adjacent) fluid cells above dead-band per step: mean / max; steps with any : 2.625e-7 / 3.150e-5; 1 of 120
+INFO C3.separation fix3 mean e over corrected cells per step: mean / min / max (steps corrected) : 2.027e-1 / 2.027e-1 / 2.027e-1 (1)
+PASS C3.separation C3.fix3 volume-neutral source |sum e| / region cell count, every step : 7.222e-19 vs <= 1e-12
+INFO C3.separation fix3 PCG iterations (mean / max) : 0.19 / 23
+INFO C3.separation fix3 max |dx|/h (correction alone) / cap-hit steps : 0.0029 / 0 of 120
+FAIL C3.separation max|u| at t=2 s : 1.793e-2 vs < 2.215e-3
+PASS C3.separation C3.seed: push-out dE at step 1 (t=0 step, not excluded) : 2.672e-12 J (8.715e-15 |E0|) vs <= 1e-6 |E0|
+INFO C3.separation push-out energy spike (largest per-step push-out dE) : step 1 (t=0.0000 s): step dE 9.820e-9 J; top particle #155639 dE 2.335e-6 J, x0 [0.483924, 0.496810, 0.295144] m, dx [-1.360e-4, 0.000e+0, 4.992e-4] m, v before [-5.950e-11, -2.475e-12, 1.266e-10] -> after [-5.950e-11, -2.475e-12, 1.266e-10] m/s
+INFO C3.separation cell [2,12,1] count start / max / end : 8 / 8 / 8
+INFO C3.separation cell [0,0,0] count start / max / end : 8 / 8 / 8
+INFO C3.separation cell [31,0,0] count start / max / end : 8 / 8 / 8
+INFO C3.separation cell [0,31,0] count start / max / end : 8 / 8 / 8
+INFO C3.separation cell [31,31,0] count start / max / end : 8 / 8 / 8
+INFO C3.separation layer mean particles/cell k=0..4 at start / end : 8.000, 8.000, 8.000, 8.000, 8.000 / 7.997, 8.000, 8.008, 7.994, 8.000

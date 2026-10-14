@@ -1,0 +1,74 @@
+[
+ {
+  "part": "T2",
+  "id": "T2 COM accel (fit of w_com, 49 substeps; a=9.810000000)",
+  "measured": "1.268e-14",
+  "threshold": "|a-g|/g <= 1e-3",
+  "pass": true,
+  "note": "min z 0.401 m, no floor contact"
+ },
+ {
+  "part": "T2",
+  "id": "T2 horizontal momentum max(|Px|,|Py|)/(1e-8 M g t)",
+  "measured": "2.516e-9",
+  "threshold": "<= 1",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T2",
+  "id": "P.res T2: max final true residual / ||rhs|| (49 solves)",
+  "measured": "6.647e-9",
+  "threshold": "<= 1e-8",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T2",
+  "id": "P.res T2: max iters / median(prev 20), steps > 20",
+  "measured": "1.000 (step 21)",
+  "threshold": "<= 2",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T2",
+  "id": "P.div T2: max |div u| * dt",
+  "measured": "1.468e-16",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "T2",
+  "id": "NM T2: pressure-stage dE > 0 (graded in T3)",
+  "measured": "21 of 49 steps; max 4.263e-14 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T2",
+  "id": "NM T2: CFL used per frame",
+  "measured": "max 0.9842, min 0.3302; frames with 8-cap binding and CFL>1: 0",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T2",
+  "id": "NM T2: extension-stage |dE| per step (own stage)",
+  "measured": "max 8.363e+0 J, cumulative 1.851e+2 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "T2",
+  "id": "T2 half-dt: (E-E0)/|E0| at t=0.4 s, dt vs dt/2 (49 vs 98 substeps; E0 equal: true)",
+  "measured": "-1.4848e-2 vs -7.4239e-3; ratio 0.5000",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ }
+]
