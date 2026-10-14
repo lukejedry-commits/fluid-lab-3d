@@ -114,6 +114,21 @@ class Sim {
       }
     }
   }
+  /** FIX 1 (PHYSICS_SPEC 7.1, theta face mass): on every interior face between a fluid cell and a
+   *  non-fluid cell that carries mass, set m_f = theta * rho h^3, with the same clamped theta the
+   *  ghost-fluid solve uses (thetaOf). Classification is the one project() recomputes from the same
+   *  particle positions, so both agree. m_f > 0 is kept (theta >= 0.05), so carriesFluid/faceFraction
+   *  are unchanged; the theta mass is what the energy measure and the ghost-fill weights see. */
+  surfaceThetaMasses() {
+    const { nx, ny, nz } = this, n = [nx, ny, nz], cs = [1, nx, nx * ny], cnt = this.markCells(), FL = this.classify(cnt); let nS = 0;
+    for (let a = 0; a < 3; a++) { const D = this.D[a], M = this.mass[a];
+      for (let k = 0; k < D[2]; k++) for (let j = 0; j < D[1]; j++) for (let i = 0; i < D[0]; i++) {
+        const ii = [i, j, k]; if (ii[a] === 0 || ii[a] === n[a]) continue;
+        const f = this.idx(a, i, j, k); if (!FM.carriesFluid(M[f])) continue;
+        const hi = i + nx * (j + ny * k), lo = hi - cs[a], fh = FL[hi] === 1, fl = FL[lo] === 1; if (fh === fl) continue;
+        M[f] = this.thetaOf(cnt, fh ? hi : lo, fh ? lo : hi) * this.mRef; nS++; } }
+    return nS;
+  }
   // ---------------- ghost fill ----------------
   ghostFill() {
     let nG = 0; if (!this.useGhostFill) return 0;
@@ -360,7 +375,7 @@ class Sim {
   substep(dt, nSub) {
     const st = {}; const tot = () => { const e = this.particleEnergy(); return e.ke + e.pe; };
     const E0 = tot(), pe0 = this.particleEnergy().pe;
-    this.p2g(); let g = this.gridKE(); st.p2g = g + pe0 - E0;
+    this.p2g(); this.surfaceThetaMasses(); let g = this.gridKE(); st.p2g = g + pe0 - E0;
     const nGhost = this.ghostFill(); let g2 = this.gridKE(); st.ghost = g2 - g; g = g2;
     this.applyGravity(dt); g2 = this.gridKE(); st.gravity = g2 - g; g = g2;
     const pr = this.project(dt); g2 = this.gridKE(); st.pressure = g2 - g; g = g2;
