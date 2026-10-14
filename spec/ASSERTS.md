@@ -175,3 +175,4 @@ U_R = 2.11781302 m/s, frame = 1/60 s. a=16: short W=3, q=0.0337317, limit 1.0337
   * C3.separation: energy rise <= 2.2e-6|E0| (2.04e-6 on this code); max|u| at 2 s <= 2.0e-2 m/s (1.79e-2).
 - Required for the v1 handoff (NM): an E(t) plot for both jitter 0.5 tanks on 0.25 h, with the step-21 0.0611 h curve on the same axes.
 - Gate 1 unchanged: 68/68, 0 flips.
+- 14p addendum: the C3.separation ceilings apply over the WHOLE run. The energy rise is max over t (2.044e-6, peak at t=1.55 s) and stays <= 2.2e-6|E0|. max|u| has two rows: <= 2.0e-2 m/s at t=2 s, and the whole-run peak <= 7.0e-2 m/s (pushed code 6.4e-2). PHYSICS_SPEC reference: cb03ed32.
