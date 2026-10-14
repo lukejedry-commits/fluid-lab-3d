@@ -99,3 +99,11 @@ No gate loosened.
 - Volume-neutral source: after the dead-band, in each air-connected fluid region subtract the region mean of e from every fluid cell not adjacent to air, so sum(e) = 0. Graded: |sum e| per region <= 1e-12 (normalised by the region's cell count) after the subtraction, at every step.
 - Info row: front displacement caused by the correction alone within each Ritter window.
 - Unchanged and not loosened: alpha = 0.1, Ritter <= 1.0, PE_pack bound, total energy 1e-6, T4 1%. If a=8 T4 still fails, an alpha = 0.2 run is INFO ONLY and does not change the frozen alpha.
+
+### Z amendment 2026-10-14f (fix 3 v4; rulings on step 12)
+- PE_pack row RETIRED. Reason: it is an invalid test, since it fails at steps with zero correction applied (step 12, steps 1-2). The correction stays bounded by total energy <= E0 + 1e-6, the one-sided dKE, the still-tank |sum dPE|, and the sum target below.
+- Neutrality row REPLACED by a target sum. target_r = sum over interior cells of region r of (nbar/8 - 1), computed BEFORE the dead-band. After the dead-band, e is shifted uniformly over non-air-adjacent cells so that sum e = target_r. Graded: |sum e - target_r| / n_r <= 1e-12 at every step. alpha = 0.1.
+- Ritter front: sub-cell position = last fully counted cell + bottom-layer fill fraction of the next cell (linear), median over y. The window is unchanged. Before it grades anything, the estimator must pass:
+  (a) synthetic front advancing at a known exact speed v: measured speed within 1e-3 relative for v at 0.5 and 1.0 U_R, at a=8 and a=16;
+  (b) it is re-run on saved fix 1, fix 2, v2, v3 and v4 output, with all values reported. The limit stays Ritter <= 1.0, unchanged. If any graded run is still above 1.0, a fix-3-off comparison run is required.
+- T4 1% unchanged.
