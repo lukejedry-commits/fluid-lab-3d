@@ -75,3 +75,38 @@ The Simulation Expert Lead closed Gate 1 on the amend run: **65/65 PASS, 0 flips
 ![T2 energy by stage, half dt](img/T2_halfdt_energy_stages.png)
 ![T2 energy by stage](img/T2_energy_stages.png)
 ![T1b N=64 energy by stage](img/T1b_N64_energy_stages.png)
+
+## Steps 16-22: C3.separation diagnosis and the v1 freeze (2026-10-14)
+
+- **Step 16, separation energy trace.**
+  - What: we checked whether the +1.2e-3 J per-step pressure jumps came from cells flipping between fluid and air.
+  - Result: no flips, and pressure dE was negative on every step in both weightings. The +1.2e-3 J is the ordinary gravity+pressure net, and G2P removes it again.
+- **Step 17, jitter control.**
+  - What: we reran C3.separation on an exact lattice (jitter 0) to see whether jitter matters.
+  - Result: the lattice passes, at about 1e-13 |E0| and 1e-9 m/s. With jitter 0.5, the surface θ starts uniform at t=0 and spreads (std 0.03) after step 1.
+- **Step 18, step 1-2 trace.**
+  - What: we traced which stage first produces the max|u| jump.
+  - Result: it comes from the step-2 pressure solve on top-row surface faces, at 8.13e-2 m/s.
+  - Zeroing C changes nothing. Air-face extension is 8x smaller. The trigger is step-1 push-out pair separation (1327 particles cross cell lines, 54 of them at the surface), which changes the count-based θ.
+- **Step 19, smooth θ trials.**
+  - Splat θ (Phase A) failed the T1b lattice and flat-fill unit rows (bias up to 1.2e-1), so the room froze a column-volume θ.
+  - Column-volume θ passed every unit row, and Gate 1 stayed 68/68 with 0 flips. The graded suite got worse:
+    - C3.separation energy 7.1e-5 and max|u| 1.2e-1;
+    - the tilted tank regressed;
+    - T4 a=8 rose to 3.12%;
+    - 22-49% of surface cells fell back to count θ.
+  - Ruling: not adopted. thetaMode defaults to 'count', and colvol stays behind the flag.
+- **Step 20, revert and seed statistics.**
+  - The revert is bit-identical to 1e6089c.
+  - At t=0 on the frozen separation seed, 22.4% of particles sit closer to a neighbour than the 0.25 h trigger. The 0.1% quantile of that spacing is 0.0611 h.
+- **Step 21, trigger 0.0611 h trial.**
+  - The full Gate 1 at b29c99e is bit-identical to 1e6089c.
+  - With the 0.0611 h trigger, C3.separation passes (6.2e-7 |E0|, 1.2e-9 m/s), but T4 rises to 3.32% (a=16) and 5.08% (a=8).
+  - The trade-off: the trigger does real anti-clumping work in the dam break.
+  - Ruling: not adopted.
+  - Snapshots of the v1 dam break: [docs/snapshots/step21_T3_a16/](snapshots/step21_T3_a16/README.md).
+- **Step 22, v1 freeze.**
+  - The trigger is back at 0.25 h (sepTrig kept as a parameter). The full Gate 1 is bit-identical to 1e6089c.
+  - T4 and C3.separation are v1 known limitations with graded regression ceilings (PHYSICS_SPEC 7.8): T4 2.60% / 2.70%; C3.separation 2.2e-6 |E0| and 2.0e-2 m/s at 2 s. v1 measures 2.46% / 2.59% and 2.04e-6 / 1.79e-2.
+
+![E(t) and max|u|, trigger 0.25 h vs 0.0611 h](img/step22_Et_trigger_compare.png)
