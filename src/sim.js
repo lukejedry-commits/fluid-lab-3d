@@ -23,7 +23,7 @@ class Sim {
     this.subMul = o.subMul ?? 1; // T2 half-dt info row: multiply the substep count (cap applies before)
     this.sepFrac = o.sepFrac ?? 0.5; this.sepIters = o.sepIters ?? 1;
     // C3 regression switches (defaults = production behaviour; tests turn one fix off to prove its test fails)
-    this.useDensFix = o.densFix ?? true; this.densSign = o.densSign ?? 1; this.densTol = o.densTol ?? 1e-4; this.densCap = o.densCap ?? 0.1; this.densAlpha = o.densAlpha ?? 0.1; this.densDead = o.densDead ?? 0.2; // fix 3 v3
+    this.useDensFix = o.densFix ?? true; this.densSign = o.densSign ?? 1; this.densTol = o.densTol ?? 1e-4; this.densCap = o.densCap ?? 0.1; this.densAlpha = o.densAlpha ?? 0.1; this.densDead = o.densDead ?? 0.2; // fix 3 v4
     this.useGhostFill = o.ghostFill ?? true; this.useWallStrip = o.wallStrip ?? true; this.useSepClip = o.sepClip ?? true;
     this.s = this.h / 2;                    // particle spacing (2x2x2 per cell)
     this.pr = 0.25 * this.s;                // wall clearance radius
@@ -410,17 +410,18 @@ class Sim {
       if (airAdj) continue; stats.nInterior++; const e = nbar[c] / 8 - 1;
       if (c < nx * ny) stats.floorE.push(e);
       if (Math.abs(e) >= this.densDead) { E[c] = e; stats.nAboveDead++; } }
-    // v3 volume-neutral source (Z 2026-10-14e): after dead-band, per air-connected region subtract the mean of e
-    // over every fluid cell not adjacent to air from those same cells, so sum(e) = 0. Graded: |sum e| / n_region <= 1e-12.
+    // v4 target sum (Z 2026-10-14f): per air-connected region, target_r = sum over interior (non-air-adjacent) cells of
+    // (nbar/8 - 1) BEFORE the dead-band; after the dead-band, shift e uniformly over those cells so sum e = target_r.
+    // Graded: |sum e - target_r| / n_r <= 1e-12 (n_r = fluid cells in the region).
     const interior = new Uint8Array(N); for (let c = 0; c < N; c++) if (FL[c]) { let aa = false; nb(c, (m) => { if (!FL[m]) aa = true; }); interior[c] = aa ? 0 : 1; }
-    { const rs = new Float64Array(air.length), rn = new Float64Array(air.length), rN = new Float64Array(air.length);
-      for (let c = 0; c < N; c++) if (FL[c]) { rN[reg[c]]++; if (interior[c]) { rs[reg[c]] += E[c]; rn[reg[c]]++; } }
+    { const rs = new Float64Array(air.length), rt = new Float64Array(air.length), rn = new Float64Array(air.length), rN = new Float64Array(air.length);
+      for (let c = 0; c < N; c++) if (FL[c]) { rN[reg[c]]++; if (interior[c]) { rs[reg[c]] += E[c]; rt[reg[c]] += nbar[c] / 8 - 1; rn[reg[c]]++; } }
       stats.ePreSum = 0; for (let c = 0; c < N; c++) if (E[c] !== 0) { stats.ePreSum += E[c]; stats.nE++; }
-      stats.ePreMean = stats.nE ? stats.ePreSum / stats.nE : 0; stats.regionShiftMax = 0;
-      for (let r = 0; r < air.length; r++) if (air[r] && rn[r] && rs[r] !== 0) stats.regionShiftMax = Math.max(stats.regionShiftMax, Math.abs(rs[r] / rn[r]));
-      for (let c = 0; c < N; c++) if (interior[c] && air[reg[c]] && rn[reg[c]]) E[c] -= rs[reg[c]] / rn[reg[c]];
+      stats.ePreMean = stats.nE ? stats.ePreSum / stats.nE : 0; stats.regionShiftMax = 0; stats.targetSum = 0; stats.targetMeanMax = 0;
+      for (let r = 0; r < air.length; r++) if (air[r] && rn[r]) { const sh = (rt[r] - rs[r]) / rn[r]; stats.regionShiftMax = Math.max(stats.regionShiftMax, Math.abs(sh)); stats.targetSum += rt[r]; stats.targetMeanMax = Math.max(stats.targetMeanMax, Math.abs(rt[r] / rn[r])); }
+      for (let c = 0; c < N; c++) if (interior[c] && air[reg[c]] && rn[reg[c]]) E[c] += (rt[reg[c]] - rs[reg[c]]) / rn[reg[c]];
       const s2 = new Float64Array(air.length); for (let c = 0; c < N; c++) if (interior[c]) s2[reg[c]] += E[c];
-      stats.neutralMax = 0; for (let r = 0; r < air.length; r++) if (air[r] && rN[r]) stats.neutralMax = Math.max(stats.neutralMax, Math.abs(s2[r]) / rN[r]); }
+      stats.targetErrMax = 0; for (let r = 0; r < air.length; r++) if (air[r] && rN[r]) stats.targetErrMax = Math.max(stats.targetErrMax, Math.abs(s2[r] - rt[r]) / rN[r]); }
     const uid = new Int32Array(N).fill(-1), cells = []; let anyE = false; const skippedWithE = new Set();
     for (let c = 0; c < N; c++) if (FL[c]) { if (air[reg[c]]) { uid[c] = cells.length; cells.push(c); if (E[c] !== 0) anyE = true; } else if (E[c] !== 0) skippedWithE.add(reg[c]); }
     stats.skipped = air.filter((x) => !x).length; stats.skippedWithExcess = skippedWithE.size;
