@@ -1,0 +1,450 @@
+[
+ {
+  "part": "a8",
+  "id": "a=8 Ritter: max front speed (section-Z front) over 159 substep samples (t=0.3611 s)",
+  "measured": "7.7153 m/s (3.6430 of limit)",
+  "threshold": "< 2.1178 m/s",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T3.E: max (E-E0)/|E0| (PE datum z=0)",
+  "measured": "-1.729e-2",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": "steps where E rose step-to-step: 10"
+ },
+ {
+  "part": "a8",
+  "id": "a=8 pressure-stage dE <= 0 every step",
+  "measured": "2 of 159 steps > 0; max 1.993e-5 J",
+  "threshold": "<= 0 every step",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 P.res max true residual",
+  "measured": "9.929e-9",
+  "threshold": "<= 1e-8",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 P.div max |div u| dt",
+  "measured": "2.871e-9",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 CFL used per frame",
+  "measured": "max 0.9918, min 0.6176; frames with cap (8) binding and CFL>1: 0 of 32; substeps 159",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 energy loss vs sum 1/2 M g^2 dt^2 (section Z: info only, not leak evidence)",
+  "measured": "2.242e-2 J vs 3.751e-2 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T3.mm shift (T = t sqrt(2g/a) + shift; T=1.19 at Z=1.44)",
+  "measured": "0.4159",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T3.mm Z=1.11 (report only)",
+  "measured": "0.688 vs 0.41 (67.72%)",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T3.mm Z=1.22 (report only)",
+  "measured": "0.842 vs 0.84 (0.25%)",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T3.mm Z=1.67 (T_sim 1.482, T_mean 1.43)",
+  "measured": "3.66%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T3.mm Z=1.89 (T_sim 1.738, T_mean 1.63)",
+  "measured": "6.60%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T3.mm Z=2.11 (T_sim 1.941, T_mean 1.83)",
+  "measured": "6.09%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T3.mm Z=2.33 (T_sim 2.087, T_mean 1.98)",
+  "measured": "5.38%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T3.mm Z=2.56 (T_sim 2.306, T_mean 2.2)",
+  "measured": "4.81%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T3.mm Z=2.78 (T_sim 2.519, T_mean 2.32)",
+  "measured": "8.57%",
+  "threshold": "<= 8%",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T3.mm Z=3 (T_sim 2.655, T_mean 2.51)",
+  "measured": "5.77%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T3.mm Z=3.22 (T_sim 2.868, T_mean 2.65)",
+  "measured": "8.22%",
+  "threshold": "<= 8%",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T3.mm Z=3.44 (T_sim 3.004, T_mean 2.83)",
+  "measured": "6.14%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T3.mm Z=3.67 (T_sim 3.146, T_mean 2.97)",
+  "measured": "5.92%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T3.mm Z=3.89 (T_sim 3.326, T_mean 3.11)",
+  "measured": "6.95%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T3.mm Z=4.11 (T_sim 3.435, T_mean 3.33)",
+  "measured": "3.15%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T3.mm Z=5 (T_sim 3.998, T_mean 4.02)",
+  "measured": "0.54%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T3.mm Z=5.89 (T_sim 4.561, T_mean 4.44)",
+  "measured": "2.73%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T3.mm Z=7 (T_sim 5.254, T_mean 5.09)",
+  "measured": "3.22%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T3.mm Z=8 (T_sim 5.769, T_mean 5.69)",
+  "measured": "1.38%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T3.mm Z=9 (T_sim 6.335, T_mean 6.3)",
+  "measured": "0.55%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T3.mm Z=10 (T_sim 6.901, T_mean 6.83)",
+  "measured": "1.04%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T3.mm Z=11 (T_sim 7.467, T_mean 7.44)",
+  "measured": "0.36%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T3.mm Z=12 (T_sim 8.033, T_mean 8.08)",
+  "measured": "0.58%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T3.mm Z=13 (T_sim 8.548, T_mean 8.67)",
+  "measured": "1.41%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T3.mm Z=14 (T_sim 9.114, T_mean 9.31)",
+  "measured": "2.10%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T4 interior-cell mean particles/cell, max |m-m0|/m0 over 33 frames (m0=8.0000; walls: out-of-box neighbours not required)",
+  "measured": "1.376e-1 (frame 27, m=9.1009, 347 cells)",
+  "threshold": "<= 1e-2 every frame",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T4 same with strict reading (out-of-box neighbours disqualify wall cells)",
+  "measured": "3.750e-1 (m0=8.0000)",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T4 particle count exact",
+  "measured": "8192",
+  "threshold": "== 8192",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T4 capped estimator sum min(n,8) h^3/8: min / final rel. to V0",
+  "measured": "-1.320e-1 / -1.263e-1",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T4 fraction of particles in cells n>12: max over frames / final",
+  "measured": "1.420e-1 / 9.241e-2",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": "Poisson(8) reference 11.19%"
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T4 fraction of fluid cells n>8: max over frames / final",
+  "measured": "3.309e-1 / 2.416e-1",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T4 peak particles/cell (max over frames) and location",
+  "measured": "35 at frame 28, cell [1,6,0], column; final frame peak 27 (column)",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 T4 final-frame histogram n:cells (Poisson(5.962) expected, conditioned n>=1)",
+  "measured": "1:198(21) 2:173(63) 3:58(125) 4:82(187) 5:113(223) 6:157(221) 7:140(188) 8:121(140) 9:100(93) 10:84(55) 11:66(30) 12:39(15) 13:13(7) 14:10(3) 15:3(1) 16:1(0) 21:1(0) 22:3(0) 23:4(0) 25:3(0) 26:2(0) 27:3(0)",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 pressure stage in solver weighting (unit density rho h^3 on every m_f>0 face): steps with dKE > 0",
+  "measured": "5 of 159; max 6.500e-4 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 step 98 (t=0.3639): pressure-stage dKE, one-face-mass (m_f) vs solver weighting",
+  "measured": "1.762e-5 J (logged stage 1.762e-5) vs 6.500e-4 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 step 98 face class wall",
+  "measured": "1375 faces; dKE m_f -4.798e-5 J (positive part 0.000e+0); dKE solver -9.072e-5 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 step 98 face class fluid-fluid",
+  "measured": "575 faces; dKE m_f -1.716e-5 J (positive part 7.104e-5); dKE solver -1.371e-5 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 step 98 face class fluid-fluid [m_f<full]",
+  "measured": "1544 faces; dKE m_f 4.560e-6 J (positive part 1.910e-4); dKE solver 2.611e-5 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 step 98 face class surface-partial(air cell has particles, theta=f_a+1/2) [m_f<full]",
+  "measured": "363 faces; dKE m_f -6.225e-5 J (positive part 4.510e-5); dKE solver -1.215e-4 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 step 98 face class surface(empty air cell) [m_f<full]",
+  "measured": "491 faces; dKE m_f 1.403e-4 J (positive part 2.465e-4); dKE solver 8.498e-4 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 step 98 face class surface-partial(air cell has particles, theta=f_a+1/2)",
+  "measured": "1 faces; dKE m_f 1.313e-7 J (positive part 1.313e-7); dKE solver 9.357e-8 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 step 157 (t=0.5278): pressure-stage dKE, one-face-mass (m_f) vs solver weighting",
+  "measured": "1.993e-5 J (logged stage 1.993e-5) vs -9.521e-4 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 step 157 face class wall",
+  "measured": "1999 faces; dKE m_f -9.471e-5 J (positive part 0.000e+0); dKE solver -1.703e-3 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 step 157 face class fluid-fluid",
+  "measured": "387 faces; dKE m_f 2.968e-7 J (positive part 1.723e-5); dKE solver 7.968e-7 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 step 157 face class fluid-fluid [m_f<full]",
+  "measured": "1300 faces; dKE m_f 2.319e-5 J (positive part 2.085e-4); dKE solver 4.092e-5 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 step 157 face class surface-partial(air cell has particles, theta=f_a+1/2) [m_f<full]",
+  "measured": "507 faces; dKE m_f -7.553e-5 J (positive part 7.901e-5); dKE solver -1.578e-4 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 step 157 face class surface(empty air cell) [m_f<full]",
+  "measured": "575 faces; dKE m_f 1.730e-4 J (positive part 2.318e-4); dKE solver 8.713e-4 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 step 157 face class surface(empty air cell)",
+  "measured": "9 faces; dKE m_f -2.868e-6 J (positive part 2.282e-7); dKE solver -2.341e-6 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "a8",
+  "id": "a=8 step 157 face class surface-partial(air cell has particles, theta=f_a+1/2)",
+  "measured": "9 faces; dKE m_f -3.450e-6 J (positive part 7.629e-9); dKE solver -2.376e-6 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ }
+]

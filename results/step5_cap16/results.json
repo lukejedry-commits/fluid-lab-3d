@@ -1,0 +1,498 @@
+[
+ {
+  "part": "cap16",
+  "id": "cap16 Ritter: max front speed (section-Z front) over 278 substep samples (t=0.5106 s)",
+  "measured": "4.7149 m/s (2.2263 of limit)",
+  "threshold": "< 2.1178 m/s",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T3.E: max (E-E0)/|E0| (PE datum z=0)",
+  "measured": "-1.731e-2",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": "steps where E rose step-to-step: 9"
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 pressure-stage dE <= 0 every step",
+  "measured": "0 of 278 steps > 0",
+  "threshold": "<= 0 every step",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 P.res max true residual",
+  "measured": "9.958e-9",
+  "threshold": "<= 1e-8",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 P.div max |div u| dt",
+  "measured": "8.261e-9",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 CFL used per frame",
+  "measured": "max 0.9982, min 0.8016; frames with cap (16) binding and CFL>1: 0 of 31; substeps 278",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 energy loss vs sum 1/2 M g^2 dt^2 (section Z: info only, not leak evidence)",
+  "measured": "1.977e-2 J vs 2.280e-2 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T3.mm shift (T = t sqrt(2g/a) + shift; T=1.19 at Z=1.44)",
+  "measured": "0.3846",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T3.mm Z=1.11 (report only)",
+  "measured": "0.656 vs 0.41 (60.09%)",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T3.mm Z=1.22 (report only)",
+  "measured": "0.850 vs 0.84 (1.18%)",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T3.mm Z=1.67 (T_sim 1.479, T_mean 1.43)",
+  "measured": "3.43%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T3.mm Z=1.89 (T_sim 1.684, T_mean 1.63)",
+  "measured": "3.29%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T3.mm Z=2.11 (T_sim 1.916, T_mean 1.83)",
+  "measured": "4.72%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T3.mm Z=2.33 (T_sim 2.117, T_mean 1.98)",
+  "measured": "6.94%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T3.mm Z=2.56 (T_sim 2.280, T_mean 2.2)",
+  "measured": "3.63%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T3.mm Z=2.78 (T_sim 2.479, T_mean 2.32)",
+  "measured": "6.86%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T3.mm Z=3 (T_sim 2.623, T_mean 2.51)",
+  "measured": "4.52%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T3.mm Z=3.22 (T_sim 2.798, T_mean 2.65)",
+  "measured": "5.58%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T3.mm Z=3.44 (T_sim 2.972, T_mean 2.83)",
+  "measured": "5.03%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T3.mm Z=3.67 (T_sim 3.114, T_mean 2.97)",
+  "measured": "4.87%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T3.mm Z=3.89 (T_sim 3.275, T_mean 3.11)",
+  "measured": "5.31%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T3.mm Z=4.11 (T_sim 3.396, T_mean 3.33)",
+  "measured": "1.98%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T3.mm Z=5 (T_sim 3.953, T_mean 4.02)",
+  "measured": "1.66%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T3.mm Z=5.89 (T_sim 4.499, T_mean 4.44)",
+  "measured": "1.33%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T3.mm Z=7 (T_sim 5.140, T_mean 5.09)",
+  "measured": "0.99%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T3.mm Z=8 (T_sim 5.712, T_mean 5.69)",
+  "measured": "0.38%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T3.mm Z=9 (T_sim 6.221, T_mean 6.3)",
+  "measured": "1.25%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T3.mm Z=10 (T_sim 6.799, T_mean 6.83)",
+  "measured": "0.45%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T3.mm Z=11 (T_sim 7.333, T_mean 7.44)",
+  "measured": "1.44%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T3.mm Z=12 (T_sim 7.880, T_mean 8.08)",
+  "measured": "2.47%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T3.mm Z=13 (T_sim 8.358, T_mean 8.67)",
+  "measured": "3.60%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T3.mm Z=14 (T_sim 8.891, T_mean 9.31)",
+  "measured": "4.50%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T4 interior-cell mean particles/cell, max |m-m0|/m0 over 32 frames (m0=8.0000; walls: out-of-box neighbours not required)",
+  "measured": "1.427e-1 (frame 31, m=9.1416, 3898 cells)",
+  "threshold": "<= 1e-2 every frame",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T4 same with strict reading (out-of-box neighbours disqualify wall cells)",
+  "measured": "7.347e-2 (m0=8.0000)",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T4 particle count exact",
+  "measured": "65536",
+  "threshold": "== 65536",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T4 capped estimator sum min(n,8) h^3/8: min / final rel. to V0",
+  "measured": "-1.647e-1 / -1.647e-1",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T4 fraction of particles in cells n>12: max over frames / final",
+  "measured": "1.537e-1 / 1.537e-1",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": "Poisson(8) reference 11.19%"
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T4 fraction of fluid cells n>8: max over frames / final",
+  "measured": "3.682e-1 / 3.371e-1",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T4 peak particles/cell (max over frames) and location",
+  "measured": "39 at frame 29, cell [5,4,0], column; final frame peak 36 (column)",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 T4 final-frame histogram n:cells (Poisson(7.113) expected, conditioned n>=1)",
+  "measured": "1:690(53) 2:851(190) 3:528(450) 4:502(801) 5:567(1139) 6:845(1351) 7:989(1373) 8:1135(1221) 9:976(965) 10:779(686) 11:498(444) 12:293(263) 13:171(144) 14:83(73) 15:57(35) 16:28(15) 17:26(6) 18:15(3) 19:12(1) 20:15(0) 21:12(0) 22:14(0) 23:4(0) 24:13(0) 25:8(0) 26:15(0) 27:11(0) 28:18(0) 29:16(0) 30:9(0) 31:13(0) 32:10(0) 33:6(0) 34:3(0) 36:1(0)",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 vs cap8 (NM) Z=1.67: T 1.479 vs 1.479",
+  "measured": "0.00%",
+  "threshold": "<= 1% (NM, info run)",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 vs cap8 (NM) Z=1.89: T 1.684 vs 1.684",
+  "measured": "0.00%",
+  "threshold": "<= 1% (NM, info run)",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 vs cap8 (NM) Z=2.11: T 1.916 vs 1.916",
+  "measured": "0.00%",
+  "threshold": "<= 1% (NM, info run)",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 vs cap8 (NM) Z=2.33: T 2.117 vs 2.117",
+  "measured": "0.00%",
+  "threshold": "<= 1% (NM, info run)",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 vs cap8 (NM) Z=2.56: T 2.280 vs 2.280",
+  "measured": "0.00%",
+  "threshold": "<= 1% (NM, info run)",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 vs cap8 (NM) Z=2.78: T 2.479 vs 2.479",
+  "measured": "0.00%",
+  "threshold": "<= 1% (NM, info run)",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 vs cap8 (NM) Z=3: T 2.623 vs 2.623",
+  "measured": "0.00%",
+  "threshold": "<= 1% (NM, info run)",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 vs cap8 (NM) Z=3.22: T 2.798 vs 2.798",
+  "measured": "0.00%",
+  "threshold": "<= 1% (NM, info run)",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 vs cap8 (NM) Z=3.44: T 2.972 vs 2.972",
+  "measured": "0.00%",
+  "threshold": "<= 1% (NM, info run)",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 vs cap8 (NM) Z=3.67: T 3.114 vs 3.114",
+  "measured": "0.00%",
+  "threshold": "<= 1% (NM, info run)",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 vs cap8 (NM) Z=3.89: T 3.275 vs 3.250",
+  "measured": "0.76%",
+  "threshold": "<= 1% (NM, info run)",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 vs cap8 (NM) Z=4.11: T 3.396 vs 3.386",
+  "measured": "0.28%",
+  "threshold": "<= 1% (NM, info run)",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 vs cap8 (NM) Z=5: T 3.953 vs 3.975",
+  "measured": "0.54%",
+  "threshold": "<= 1% (NM, info run)",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 vs cap8 (NM) Z=5.89: T 4.499 vs 4.486",
+  "measured": "0.30%",
+  "threshold": "<= 1% (NM, info run)",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 vs cap8 (NM) Z=7: T 5.140 vs 5.133",
+  "measured": "0.15%",
+  "threshold": "<= 1% (NM, info run)",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 vs cap8 (NM) Z=8: T 5.712 vs 5.673",
+  "measured": "0.68%",
+  "threshold": "<= 1% (NM, info run)",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 vs cap8 (NM) Z=9: T 6.221 vs 6.265",
+  "measured": "0.70%",
+  "threshold": "<= 1% (NM, info run)",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 vs cap8 (NM) Z=10: T 6.799 vs 6.805",
+  "measured": "0.09%",
+  "threshold": "<= 1% (NM, info run)",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 vs cap8 (NM) Z=11: T 7.333 vs 7.346",
+  "measured": "0.18%",
+  "threshold": "<= 1% (NM, info run)",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 vs cap8 (NM) Z=12: T 7.880 vs 7.835",
+  "measured": "0.58%",
+  "threshold": "<= 1% (NM, info run)",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 vs cap8 (NM) Z=13: T 8.358 vs 8.375",
+  "measured": "0.21%",
+  "threshold": "<= 1% (NM, info run)",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "cap16",
+  "id": "cap16 vs cap8 (NM) Z=14: T 8.891 vs 8.928",
+  "measured": "0.42%",
+  "threshold": "<= 1% (NM, info run)",
+  "pass": true,
+  "note": ""
+ }
+]

@@ -1,0 +1,62 @@
+frame 5 t=0.0833 Z=2.125 elapsed 1 s
+frame 10 t=0.1667 Z=4.125 elapsed 2 s
+frame 15 t=0.2500 Z=6.750 elapsed 3 s
+frame 20 t=0.3333 Z=9.500 elapsed 4 s
+frame 25 t=0.4167 Z=12.250 elapsed 5 s
+frame 30 t=0.5000 Z=14.875 elapsed 6 s
+FAIL a=8 Ritter: max front speed (section-Z front) over 159 substep samples (t=0.3611 s) : 7.7153 m/s (3.6430 of limit) vs < 2.1178 m/s
+PASS a=8 T3.E: max (E-E0)/|E0| (PE datum z=0) : -1.729e-2 vs <= 1e-6 (steps where E rose step-to-step: 10)
+FAIL a=8 pressure-stage dE <= 0 every step : 2 of 159 steps > 0; max 1.993e-5 J vs <= 0 every step
+PASS a=8 P.res max true residual : 9.929e-9 vs <= 1e-8
+PASS a=8 P.div max |div u| dt : 2.871e-9 vs <= 1e-6
+INFO a=8 CFL used per frame : max 0.9918, min 0.6176; frames with cap (8) binding and CFL>1: 0 of 32; substeps 159
+INFO a=8 energy loss vs sum 1/2 M g^2 dt^2 (section Z: info only, not leak evidence) : 2.242e-2 J vs 3.751e-2 J
+INFO a=8 T3.mm shift (T = t sqrt(2g/a) + shift; T=1.19 at Z=1.44) : 0.4159
+INFO a=8 T3.mm Z=1.11 (report only) : 0.688 vs 0.41 (67.72%)
+INFO a=8 T3.mm Z=1.22 (report only) : 0.842 vs 0.84 (0.25%)
+PASS a=8 T3.mm Z=1.67 (T_sim 1.482, T_mean 1.43) : 3.66% vs <= 8%
+PASS a=8 T3.mm Z=1.89 (T_sim 1.738, T_mean 1.63) : 6.60% vs <= 8%
+PASS a=8 T3.mm Z=2.11 (T_sim 1.941, T_mean 1.83) : 6.09% vs <= 8%
+PASS a=8 T3.mm Z=2.33 (T_sim 2.087, T_mean 1.98) : 5.38% vs <= 8%
+PASS a=8 T3.mm Z=2.56 (T_sim 2.306, T_mean 2.2) : 4.81% vs <= 8%
+FAIL a=8 T3.mm Z=2.78 (T_sim 2.519, T_mean 2.32) : 8.57% vs <= 8%
+PASS a=8 T3.mm Z=3 (T_sim 2.655, T_mean 2.51) : 5.77% vs <= 8%
+FAIL a=8 T3.mm Z=3.22 (T_sim 2.868, T_mean 2.65) : 8.22% vs <= 8%
+PASS a=8 T3.mm Z=3.44 (T_sim 3.004, T_mean 2.83) : 6.14% vs <= 8%
+PASS a=8 T3.mm Z=3.67 (T_sim 3.146, T_mean 2.97) : 5.92% vs <= 8%
+PASS a=8 T3.mm Z=3.89 (T_sim 3.326, T_mean 3.11) : 6.95% vs <= 8%
+PASS a=8 T3.mm Z=4.11 (T_sim 3.435, T_mean 3.33) : 3.15% vs <= 8%
+PASS a=8 T3.mm Z=5 (T_sim 3.998, T_mean 4.02) : 0.54% vs <= 8%
+PASS a=8 T3.mm Z=5.89 (T_sim 4.561, T_mean 4.44) : 2.73% vs <= 8%
+PASS a=8 T3.mm Z=7 (T_sim 5.254, T_mean 5.09) : 3.22% vs <= 8%
+PASS a=8 T3.mm Z=8 (T_sim 5.769, T_mean 5.69) : 1.38% vs <= 8%
+PASS a=8 T3.mm Z=9 (T_sim 6.335, T_mean 6.3) : 0.55% vs <= 8%
+PASS a=8 T3.mm Z=10 (T_sim 6.901, T_mean 6.83) : 1.04% vs <= 8%
+PASS a=8 T3.mm Z=11 (T_sim 7.467, T_mean 7.44) : 0.36% vs <= 8%
+PASS a=8 T3.mm Z=12 (T_sim 8.033, T_mean 8.08) : 0.58% vs <= 8%
+PASS a=8 T3.mm Z=13 (T_sim 8.548, T_mean 8.67) : 1.41% vs <= 8%
+PASS a=8 T3.mm Z=14 (T_sim 9.114, T_mean 9.31) : 2.10% vs <= 8%
+FAIL a=8 T4 interior-cell mean particles/cell, max |m-m0|/m0 over 33 frames (m0=8.0000; walls: out-of-box neighbours not required) : 1.376e-1 (frame 27, m=9.1009, 347 cells) vs <= 1e-2 every frame
+INFO a=8 T4 same with strict reading (out-of-box neighbours disqualify wall cells) : 3.750e-1 (m0=8.0000)
+PASS a=8 T4 particle count exact : 8192 vs == 8192
+INFO a=8 T4 capped estimator sum min(n,8) h^3/8: min / final rel. to V0 : -1.320e-1 / -1.263e-1
+INFO a=8 T4 fraction of particles in cells n>12: max over frames / final : 1.420e-1 / 9.241e-2 (Poisson(8) reference 11.19%)
+INFO a=8 T4 fraction of fluid cells n>8: max over frames / final : 3.309e-1 / 2.416e-1
+INFO a=8 T4 peak particles/cell (max over frames) and location : 35 at frame 28, cell [1,6,0], column; final frame peak 27 (column)
+INFO a=8 T4 final-frame histogram n:cells (Poisson(5.962) expected, conditioned n>=1) : 1:198(21) 2:173(63) 3:58(125) 4:82(187) 5:113(223) 6:157(221) 7:140(188) 8:121(140) 9:100(93) 10:84(55) 11:66(30) 12:39(15) 13:13(7) 14:10(3) 15:3(1) 16:1(0) 21:1(0) 22:3(0) 23:4(0) 25:3(0) 26:2(0) 27:3(0)
+INFO a=8 pressure stage in solver weighting (unit density rho h^3 on every m_f>0 face): steps with dKE > 0 : 5 of 159; max 6.500e-4 J
+INFO a=8 step 98 (t=0.3639): pressure-stage dKE, one-face-mass (m_f) vs solver weighting : 1.762e-5 J (logged stage 1.762e-5) vs 6.500e-4 J
+INFO a=8 step 98 face class wall : 1375 faces; dKE m_f -4.798e-5 J (positive part 0.000e+0); dKE solver -9.072e-5 J
+INFO a=8 step 98 face class fluid-fluid : 575 faces; dKE m_f -1.716e-5 J (positive part 7.104e-5); dKE solver -1.371e-5 J
+INFO a=8 step 98 face class fluid-fluid [m_f<full] : 1544 faces; dKE m_f 4.560e-6 J (positive part 1.910e-4); dKE solver 2.611e-5 J
+INFO a=8 step 98 face class surface-partial(air cell has particles, theta=f_a+1/2) [m_f<full] : 363 faces; dKE m_f -6.225e-5 J (positive part 4.510e-5); dKE solver -1.215e-4 J
+INFO a=8 step 98 face class surface(empty air cell) [m_f<full] : 491 faces; dKE m_f 1.403e-4 J (positive part 2.465e-4); dKE solver 8.498e-4 J
+INFO a=8 step 98 face class surface-partial(air cell has particles, theta=f_a+1/2) : 1 faces; dKE m_f 1.313e-7 J (positive part 1.313e-7); dKE solver 9.357e-8 J
+INFO a=8 step 157 (t=0.5278): pressure-stage dKE, one-face-mass (m_f) vs solver weighting : 1.993e-5 J (logged stage 1.993e-5) vs -9.521e-4 J
+INFO a=8 step 157 face class wall : 1999 faces; dKE m_f -9.471e-5 J (positive part 0.000e+0); dKE solver -1.703e-3 J
+INFO a=8 step 157 face class fluid-fluid : 387 faces; dKE m_f 2.968e-7 J (positive part 1.723e-5); dKE solver 7.968e-7 J
+INFO a=8 step 157 face class fluid-fluid [m_f<full] : 1300 faces; dKE m_f 2.319e-5 J (positive part 2.085e-4); dKE solver 4.092e-5 J
+INFO a=8 step 157 face class surface-partial(air cell has particles, theta=f_a+1/2) [m_f<full] : 507 faces; dKE m_f -7.553e-5 J (positive part 7.901e-5); dKE solver -1.578e-4 J
+INFO a=8 step 157 face class surface(empty air cell) [m_f<full] : 575 faces; dKE m_f 1.730e-4 J (positive part 2.318e-4); dKE solver 8.713e-4 J
+INFO a=8 step 157 face class surface(empty air cell) : 9 faces; dKE m_f -2.868e-6 J (positive part 2.282e-7); dKE solver -2.341e-6 J
+INFO a=8 step 157 face class surface-partial(air cell has particles, theta=f_a+1/2) : 9 faces; dKE m_f -3.450e-6 J (positive part 7.629e-9); dKE solver -2.376e-6 J
