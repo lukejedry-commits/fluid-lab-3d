@@ -1,0 +1,34 @@
+[
+ {
+  "part": "sign",
+  "id": "C3.fix3.sign [production sign]: one full step, centre cell of 5x5x5 (16 particles; extra 8 uniform in the cell): particles with outward radial dx / centre count before -> after",
+  "measured": "16/16 outward (min radial dx.r 1.002e-5 m^2); count 16 -> 14",
+  "threshold": "all outward AND count drops",
+  "pass": true,
+  "note": "test verdict PASS"
+ },
+ {
+  "part": "sign",
+  "id": "C3.fix3.sign [production sign] variant: extra 8 placed in the inner [0.15,0.85] of the cell",
+  "measured": "16/16 outward; count 16 -> 16",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "sign",
+  "id": "C3.fix3.sign [sign FLIPPED (must fail)]: one full step, centre cell of 5x5x5 (16 particles; extra 8 uniform in the cell): particles with outward radial dx / centre count before -> after",
+  "measured": "0/16 outward (min radial dx.r -1.417e-4 m^2); count 16 -> 16",
+  "threshold": "all outward AND count drops",
+  "pass": true,
+  "note": "test verdict FAIL; row passes when the flipped sign fails"
+ },
+ {
+  "part": "sign",
+  "id": "C3.fix3.sign [sign FLIPPED (must fail)] variant: extra 8 placed in the inner [0.15,0.85] of the cell",
+  "measured": "0/16 outward; count 16 -> 16",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ }
+]

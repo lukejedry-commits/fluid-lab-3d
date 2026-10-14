@@ -1,0 +1,23 @@
+PASS C3.tilted_tank C3.seed: min distance of any seeded particle to any wall at t=0 : 1.9531e-3 m vs >= clearance 1.9531e-3 m
+C3.tilted_tank frame 20 peak 14 mean 7.5277 26 s
+C3.tilted_tank frame 40 peak 14 mean 7.0842 45 s
+C3.tilted_tank frame 60 peak 13 mean 6.6867 65 s
+C3.tilted_tank frame 80 peak 12 mean 6.4344 85 s
+C3.tilted_tank frame 100 peak 13 mean 6.4238 100 s
+C3.tilted_tank frame 120 peak 13 mean 6.4246 114 s
+INFO C3.tilted_tank setup : N=32, H=0.5 m, grid 32x32x40, 262144 particles, seed 3232, jitter 0.5 s (uniform in sub-cells), cap 16, 120 frames, surface z = H + 0.05 (x - L/2)
+FAIL C3.tilted_tank strict interior mean within 1% of 8, every frame : 1.970e-1 (frame 100, m=6.4238, 34200 cells) vs <= 1e-2
+FAIL C3.tilted_tank peak cell count, every frame : 17 (frame 9, cell [9,7,31]) vs <= 16
+FAIL C3.tilted_tank total energy max (E-E0)/|E0| (every step) : 2.448e-1 vs <= 1e-6
+FAIL C3.tilted_tank energy summed over all stages except push-out, max over frames / |E0| : 2.448e-1 vs <= 1e-6
+INFO C3.tilted_tank cumulative stage energy at end (J) : p2g 5.995e-2; ghost 0.000e+0; gravity 2.005e+2; pressure -2.003e+2; g2p -4.097e-1; extension 1.446e-1; advect -5.999e-3; pushout -7.963e-6; densfix 7.506e+1 (|E0| = 3.066e+2 J)
+INFO C3.tilted_tank push-out stage: cumulative / max per step / steps > 0 : -7.963e-6 J (-2.597e-8 |E0|) / -7.333e-12 J / 0 of 120
+INFO C3.tilted_tank max|u| at t=2 s / max over run : 1.564e-2 / 1.723e-1
+PASS C3.tilted_tank C3.seed: push-out dE at step 1 (t=0 step, not excluded) : -3.671e-7 J (-1.197e-9 |E0|) vs <= 1e-6 |E0|
+INFO C3.tilted_tank push-out energy spike (largest per-step push-out dE) : step 1 (t=0.0000 s): step dE 5.304e-6 J; top particle #155639 dE 2.341e-6 J, x0 [0.483878, 0.496803, 0.296661] m, dx [-1.340e-4, -5.558e-6, 5.004e-4] m, v before [-2.819e-4, -1.857e-11, -2.668e-3] -> after [-2.819e-4, -1.857e-11, -2.668e-3] m/s
+INFO C3.tilted_tank cell [2,12,1] count start / max / end : 8 / 10 / 6
+INFO C3.tilted_tank cell [0,0,0] count start / max / end : 8 / 8 / 6
+INFO C3.tilted_tank cell [31,0,0] count start / max / end : 8 / 8 / 7
+INFO C3.tilted_tank cell [0,31,0] count start / max / end : 8 / 9 / 7
+INFO C3.tilted_tank cell [31,31,0] count start / max / end : 8 / 9 / 8
+INFO C3.tilted_tank layer mean particles/cell k=0..4 at start / end : 8.000, 8.000, 8.000, 8.000, 8.000 / 6.878, 6.476, 6.537, 6.363, 6.247

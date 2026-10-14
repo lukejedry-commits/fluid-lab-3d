@@ -1,0 +1,442 @@
+[
+ {
+  "part": "t3a16",
+  "id": "a16 Ritter windowed (section Z): max over frames k>=W of [x(t)-x(t-W)]/W, W = ceil(20h/(U_R frame)) = 3 frames",
+  "measured": "2.2146 m/s (1.0457 U_R, frame 26)",
+  "threshold": "< U_R = 2.1178 m/s every frame",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 Ritter single-substep peak / frame-to-frame peak",
+  "measured": "1.2143 U_R / 1.1131 U_R",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T3.E max (E-E0)/|E0| (PE datum z=0)",
+  "measured": "1.085e-1",
+  "threshold": "<= 1e-6",
+  "pass": false,
+  "note": "step-to-step rises (below E0): 255"
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 pressure-stage dE <= 0 every step (m_f measure)",
+  "measured": "0 of 269 > 0",
+  "threshold": "<= 0 every step",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 P.res max true residual",
+  "measured": "9.938e-9",
+  "threshold": "<= 1e-8",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 P.div max |div u| dt",
+  "measured": "8.261e-9",
+  "threshold": "<= 1e-6",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 CFL / cap",
+  "measured": "max CFL 0.9996; cap 16; frames cap-bound with CFL>1: 0 of 29; substeps 269",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T3.mm shift",
+  "measured": "0.4149",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T3.mm Z=1.11 (report only)",
+  "measured": "0.687 vs 0.41 (67.47%)",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T3.mm Z=1.22 (report only)",
+  "measured": "0.880 vs 0.84 (4.78%)",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T3.mm Z=1.67 (T_sim 1.448, T_mean 1.43)",
+  "measured": "1.23%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T3.mm Z=1.89 (T_sim 1.662, T_mean 1.63)",
+  "measured": "1.99%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T3.mm Z=2.11 (T_sim 1.844, T_mean 1.83)",
+  "measured": "0.75%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T3.mm Z=2.33 (T_sim 2.060, T_mean 1.98)",
+  "measured": "4.02%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T3.mm Z=2.56 (T_sim 2.222, T_mean 2.2)",
+  "measured": "0.99%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T3.mm Z=2.78 (T_sim 2.402, T_mean 2.32)",
+  "measured": "3.54%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T3.mm Z=3 (T_sim 2.538, T_mean 2.51)",
+  "measured": "1.11%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T3.mm Z=3.22 (T_sim 2.712, T_mean 2.65)",
+  "measured": "2.36%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T3.mm Z=3.44 (T_sim 2.848, T_mean 2.83)",
+  "measured": "0.65%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T3.mm Z=3.67 (T_sim 3.013, T_mean 2.97)",
+  "measured": "1.45%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T3.mm Z=3.89 (T_sim 3.168, T_mean 3.11)",
+  "measured": "1.87%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T3.mm Z=4.11 (T_sim 3.289, T_mean 3.33)",
+  "measured": "1.24%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T3.mm Z=5 (T_sim 3.843, T_mean 4.02)",
+  "measured": "4.41%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T3.mm Z=5.89 (T_sim 4.344, T_mean 4.44)",
+  "measured": "2.16%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T3.mm Z=7 (T_sim 4.935, T_mean 5.09)",
+  "measured": "3.05%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T3.mm Z=8 (T_sim 5.468, T_mean 5.69)",
+  "measured": "3.90%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T3.mm Z=9 (T_sim 5.973, T_mean 6.3)",
+  "measured": "5.18%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T3.mm Z=10 (T_sim 6.479, T_mean 6.83)",
+  "measured": "5.14%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T3.mm Z=11 (T_sim 6.984, T_mean 7.44)",
+  "measured": "6.13%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T3.mm Z=12 (T_sim 7.461, T_mean 8.08)",
+  "measured": "7.66%",
+  "threshold": "<= 8%",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T3.mm Z=13 (T_sim 7.955, T_mean 8.67)",
+  "measured": "8.25%",
+  "threshold": "<= 8%",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T3.mm Z=14 (T_sim 8.444, T_mean 9.31)",
+  "measured": "9.30%",
+  "threshold": "<= 8%",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T4 interior mean, max |m-m0|/m0 over 30 frames (m0 8.0000)",
+  "measured": "4.142e-1 (frame 29, m=4.6862)",
+  "threshold": "<= 1e-2 every frame",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T4 particle count exact",
+  "measured": "65536",
+  "threshold": "== 65536",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T4 capped estimate final / min (rel V0)",
+  "measured": "-2.441e-4 / -4.503e-2",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T4 particles in n>12 cells (max) / fluid cells n>8 (max)",
+  "measured": "2.548e-3 / 1.795e-1",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T4 peak count",
+  "measured": "17 at frame 9 cell [12,12,1] (front x 3.94a)",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T4 final histogram n:cells(Poisson(4.425))",
+  "measured": "1:648(794) 2:1374(1757) 3:2335(2592) 4:3238(2867) 5:3242(2538) 6:2302(1872) 7:1223(1183) 8:432(654) 9:16(322)",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "C3.fix3 a=16: max per-particle move in the fix-3 stage (correction + its push-out) / h",
+  "measured": "0.1231 (correction alone 0.1000)",
+  "threshold": "<= 0.1",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "C3.fix3 a=16: stage dKE every step",
+  "measured": "max |dKE| 4.211e-8 J",
+  "threshold": "<= 1e-12 J",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "C3.fix3 a=16: cumulative stage dPE <= PE_pack every step (PE_pack = PE(actual layers) - PE(uniform 8/cell), literal section Z)",
+  "measured": "max (cum dPE - PE_pack) 3.637e-2 J at step 269 (cum dPE 4.641e-2, PE_pack 1.004e-2)",
+  "threshold": "<= 0 every step",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 fix3: same bound with PE_pack sign flipped (packing deficit = PE(uniform) - PE(actual))",
+  "measured": "max (cum dPE - deficit) 6.016e-2 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "C3.fix3 a=16: skipped regions (no air) max per step",
+  "measured": "0 (with excess: 0)",
+  "threshold": "== 0",
+  "pass": true,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 fix3 PCG iterations per step (mean / max; steps solved)",
+  "measured": "13.1 / 19; 269 of 269",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 fix3 max |dx|/h per step (mean / max)",
+  "measured": "0.0781 / 0.1000",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 fix3 fraction of moved particles hitting the cap (mean / max over steps)",
+  "measured": "9.746e-2 / 9.847e-1",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 fix3 fraction of steps where the cap binds",
+  "measured": "122 of 269 = 0.454",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 fix3 stage dPE / dKE per step (sum, max dPE), PE_pack (start, end)",
+  "measured": "sum dPE 4.641e-2 J, max 8.505e-4 J; sum dKE -4.324e-7 J; PE_pack 3.192e-3 -> 1.004e-2 J",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "C3.fix3 a=16: T3.mm worst graded row no worse than fix 1 (6.94%)",
+  "measured": "9.30%",
+  "threshold": "<= 6.94%",
+  "pass": false,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 (Physics) k=0/k=1 interface (z=h): net upward particle crossings vs grid w-face volume flux, in particles",
+  "measured": "run total -25141 vs -32481.2; column region (x<a) -6108 vs -6688.8; mean |per-step difference| 35.82",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 (Physics) APIC field at nearest wall, floor: mean u_n (positive = away from wall) / max into-wall / mean count into-wall of n, per run third",
+  "measured": "[-9.12e-4 / 2.95e-1 / 4108 of 5181] [-4.32e-4 / 3.82e-2 / 8246 of 10575] [-3.40e-4 / 5.23e-2 / 12238 of 16173]",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 (Physics) APIC field at nearest wall, back: mean u_n (positive = away from wall) / max into-wall / mean count into-wall of n, per run third",
+  "measured": "[3.50e-4 / 9.02e-2 / 453 of 2137] [2.62e-5 / 5.06e-2 / 203 of 548] [-1.22e-3 / 5.62e-2 / 192 of 241]",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 (Physics) APIC field at nearest wall, side: mean u_n (positive = away from wall) / max into-wall / mean count into-wall of n, per run third",
+  "measured": "[4.53e-5 / 1.47e-1 / 3471 of 8183] [2.43e-5 / 4.63e-2 / 3405 of 8205] [2.05e-5 / 5.06e-2 / 3859 of 8174]",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 (NM) column region (x < a) mean particles/cell, layers k=0..5, at frames 1,6,11,16,21,26,29",
+  "measured": "f1: [7.47 7.81 8.04 8.16 7.26 8.12] total 63816; f6: [5.73 6.18 5.98 6.03 6.13 5.72] total 37915; f11: [5.37 5.70 5.77 6.17 5.86 5.98] total 22131; f16: [4.95 5.05 5.06 4.89 4.86 4.95] total 13246; f21: [4.71 4.70 4.79 4.69 4.66 4.57] total 8942; f26: [4.44 4.61 4.59 4.54 4.35 3.04] total 6544; f29: [4.44 4.46 4.52 4.43 4.11 0.00] total 5620",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ },
+ {
+  "part": "t3a16",
+  "id": "a16 T3.mm vs fix-1 (Z: T now / T fix1 / delta; error now)",
+  "measured": "Z=1.11: 0.687 / 0.656 / +0.030; 67.47% | Z=1.22: 0.880 / 0.850 / +0.030; 4.78% | Z=1.44: 1.190 / 1.190 / +0.000; 0.00% | Z=1.67: 1.448 / 1.479 / -0.031; 1.23% | Z=1.89: 1.662 / 1.684 / -0.021; 1.99% | Z=2.11: 1.844 / 1.916 / -0.073; 0.75% | Z=2.33: 2.060 / 2.117 / -0.058; 4.02% | Z=2.56: 2.222 / 2.280 / -0.058; 0.99% | Z=2.78: 2.402 / 2.479 / -0.077; 3.54% | Z=3: 2.538 / 2.623 / -0.086; 1.11% | Z=3.22: 2.712 / 2.798 / -0.086; 2.36% | Z=3.44: 2.848 / 2.972 / -0.124; 0.65% | Z=3.67: 3.013 / 3.114 / -0.101; 1.45% | Z=3.89: 3.168 / 3.275 / -0.107; 1.87% | Z=4.11: 3.289 / 3.396 / -0.107; -1.24% | Z=5: 3.843 / 3.953 / -0.110; -4.41% | Z=5.89: 4.344 / 4.499 / -0.155; -2.16% | Z=7: 4.935 / 5.140 / -0.206; -3.05% | Z=8: 5.468 / 5.712 / -0.243; -3.90% | Z=9: 5.973 / 6.221 / -0.248; -5.18% | Z=10: 6.479 / 6.799 / -0.321; -5.14% | Z=11: 6.984 / 7.333 / -0.349; -6.13% | Z=12: 7.461 / 7.880 / -0.419; -7.66% | Z=13: 7.955 / 8.358 / -0.403; -8.25% | Z=14: 8.444 / 8.891 / -0.447; -9.30%",
+  "threshold": "info (not graded)",
+  "pass": null,
+  "note": ""
+ }
+]

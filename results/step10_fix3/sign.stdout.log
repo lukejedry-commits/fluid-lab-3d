@@ -1,0 +1,4 @@
+PASS C3.fix3.sign [production sign]: one full step, centre cell of 5x5x5 (16 particles; extra 8 uniform in the cell): particles with outward radial dx / centre count before -> after : 16/16 outward (min radial dx.r 1.002e-5 m^2); count 16 -> 14 vs all outward AND count drops (test verdict PASS)
+INFO C3.fix3.sign [production sign] variant: extra 8 placed in the inner [0.15,0.85] of the cell : 16/16 outward; count 16 -> 16
+PASS C3.fix3.sign [sign FLIPPED (must fail)]: one full step, centre cell of 5x5x5 (16 particles; extra 8 uniform in the cell): particles with outward radial dx / centre count before -> after : 0/16 outward (min radial dx.r -1.417e-4 m^2); count 16 -> 16 vs all outward AND count drops (test verdict FAIL; row passes when the flipped sign fails)
+INFO C3.fix3.sign [sign FLIPPED (must fail)] variant: extra 8 placed in the inner [0.15,0.85] of the cell : 0/16 outward; count 16 -> 16
