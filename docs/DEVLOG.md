@@ -61,3 +61,17 @@ What broke and the fixes:
 - Air–air faces reached by the quadratic stencil would carry unprojected gravity into G2P. Valid velocities are now extrapolated 2 layers out after every projection.
 - Padding nodes outside the box would bias G2P weights. P2G folds their mass onto the image face, and G2P reads tangential copies and a zero normal velocity there.
 - T2 iteration counts: the first solve has an exactly zero rhs (0 iterations), and after that the rhs is at roundoff (13 iterations, constant). This is logged and is not a jump under the median-of-20 rule.
+
+## Gate 1 closed (2026-10-14)
+
+The Simulation Expert Lead closed Gate 1 on the amend run: **65/65 PASS, 0 flips** (`results/step3_gate1_amend`, code at 711cb19, ASSERTS md5 3b4821c8). Potential energy is measured from the floor, z = 0.
+
+**Jacobi extension (spec section 7.4).** After each pressure solve we copy valid velocities a couple of layers out into the air, so the particle stencil never reads junk. Each layer reads only a snapshot taken before that layer, across all 26 neighbours. Nothing filled earlier in the same pass leaks into later cells. The step-2 code already worked this way, so this run only documents it. Every graded value is bit-identical.
+
+**Where is the water surface? (T1b).** In ghost-fluid form the surface sits at z_c + θh, where θ is how full the top cell is, minus one half. That height equals the expected water depth H_eff exactly in every column at every resolution: 0.1640625 m at N = 8 and 16, and 0.162109375 m at N = 32 and 64.
+
+**Why free fall loses a bit of energy (T2).** Halving the time step halves the energy drift at t = 0.4 s, from −1.4848e-2 to −7.4239e-3, a ratio of 0.5000. That is the signature of a first-order time-integration error from moving particles with the post-gravity velocity. It is not a leak in the particle–grid transfers.
+
+![T2 energy by stage, half dt](img/T2_halfdt_energy_stages.png)
+![T2 energy by stage](img/T2_energy_stages.png)
+![T1b N=64 energy by stage](img/T1b_N64_energy_stages.png)
