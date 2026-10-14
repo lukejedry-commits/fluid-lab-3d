@@ -18,7 +18,7 @@ class Sim {
   constructor(o) {
     this.nx = o.nx; this.ny = o.ny; this.nz = o.nz; this.h = o.h;
     this.rho = o.rho ?? 1000; this.g = o.g ?? 9.81;
-    this.frame = o.frame ?? 1 / 60; this.maxSub = o.maxSub ?? 8; this.cfl = o.cfl ?? 1;
+    this.frame = o.frame ?? 1 / 60; this.maxSub = o.maxSub ?? 16; this.cfl = o.cfl ?? 1;
     this.tol = o.tol ?? 1e-8; this.jitter = o.jitter ?? 0.1; this.rand = mulberry32(o.seed ?? 12345);
     this.subMul = o.subMul ?? 1; // T2 half-dt info row: multiply the substep count (cap applies before)
     this.sepFrac = o.sepFrac ?? 0.5; this.sepIters = o.sepIters ?? 1;

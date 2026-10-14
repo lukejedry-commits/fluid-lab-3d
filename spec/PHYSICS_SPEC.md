@@ -24,7 +24,7 @@ Thresholds marked PROPOSED are for Validation to set and freeze.
 **One face mass rule (NM item 1).** Gravity's face weighting and the pressure solve's face fluid fraction must come from the same m_f. Both are defined once in the spec and referenced in code.
 
 ## 3. Step size
-dt = CFL·h/(u_max + √(g·h)), with CFL = 1 and a cap of 8 substeps per frame. The rule is unchanged from 2D.
+dt = CFL·h/(u_max + √(g·h)), with CFL = 1 and a cap of 16 substeps per frame (raised from 8 on 2026-10-14 after the T3 cap-16 run; 2D used 8).
 
 ## 4. Physics tests (analytic targets)
 **T1. Still pool (first gate).** Fill a box L×W×D to depth H and start from rest.
@@ -74,7 +74,7 @@ T1 and T2 must pass before any other test runs. The rest follow: T3, T4, T5, C1,
 3. **Ghost-fill cutoff.** 5% of a full face mass, with its own C3 regression test.
 4. **Velocity extension.** Two layers, logged as its **own energy stage** and measured on what the particles pick up in grid to particle.
 5. **Family D.** Run at N = 16 to 256. Report the maximum over interior points alongside the graded centre point.
-6. **Substeps.** Each 1/60 s frame is split evenly, at most 8. The CFL number used is logged every frame, and frames where the cap binds with CFL > 1 are flagged.
+6. **Substeps.** Each 1/60 s frame is split evenly, at most 16 (v1 default, raised from 8 after T3). The CFL number used is logged every frame, and frames where the cap binds with CFL > 1 are flagged.
 7. **Precision.** Particles are stored in 64-bit.
 
 **Units.** The code runs at ρ = 1. Every force check is quoted against ρgH·LW in those same units.
